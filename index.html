@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Fluency Assessment — Scaler</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#3940F0;--blue-light:#EEF0FF;--blue-dark:#2830C0;
+  --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;
+  --gray-400:#9CA3AF;--gray-500:#6B7280;--gray-700:#374151;--gray-900:#111827;
+  --green:#10B981;--amber:#F59E0B;--red:#EF4444;
+}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#fff;color:var(--gray-900);-webkit-font-smoothing:antialiased;
+}
+
+/* NAV */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--gray-200);
+  position:fixed;top:0;left:0;right:0;z-index:100;
+}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand-text{display:flex;flex-direction:column;gap:1px}
+.nav-brand-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray-400);line-height:1}
+.nav-brand-name{font-size:14px;font-weight:700;color:var(--gray-900);line-height:1}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-progress-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-500)}
+.nav-progress-bar-bg{width:100px;height:3px;background:var(--gray-200);border-radius:99px;overflow:hidden}
+.nav-progress-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .4s ease}
+
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .3s ease}
+
+/* ── SCREEN 1: LOGIN ── */
+#screen-login{
+  min-height:100vh;
+  flex-direction:row;
+}
+.login-left{
+  flex:0 0 60%;
+  background:linear-gradient(140deg,#fff 0%,#F0F2FF 60%,#E8EBFF 100%);
+  padding:80px 64px 48px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.login-left-content{position:relative;z-index:2;padding-top:60px}
+.login-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);margin-bottom:24px;
+  background:var(--blue-light);padding:6px 12px;border-radius:99px;
+}
+.login-left h1{
+  font-size:44px;font-weight:800;line-height:1.1;letter-spacing:-.8px;
+  color:var(--gray-900);margin-bottom:20px;max-width:520px;
+}
+.login-left h1 span{
+  background:linear-gradient(135deg,var(--blue),#6366F1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.login-left-sub{font-size:17px;color:var(--gray-500);line-height:1.7;max-width:460px;margin-bottom:48px}
+.login-stats{display:flex;gap:32px;margin-bottom:0}
+.stat-item{display:flex;flex-direction:column;gap:4px}
+.stat-number{font-size:28px;font-weight:800;color:var(--gray-900);letter-spacing:-.5px}
+.stat-label{font-size:13px;color:var(--gray-500)}
+
+/* floating dots animation */
+.dots-bg{
+  position:absolute;bottom:0;left:0;right:0;height:200px;
+  overflow:hidden;z-index:1;
+}
+.dot-particle{
+  position:absolute;border-radius:50%;
+  animation:floatDot linear infinite;opacity:.5;
+}
+@keyframes floatDot{
+  0%{transform:translateY(0) translateX(0);opacity:.4}
+  50%{opacity:.7}
+  100%{transform:translateY(-180px) translateX(20px);opacity:0}
+}
+
+.login-right{
+  flex:0 0 40%;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 48px;background:#fff;
+}
+.login-card{
+  width:100%;max-width:380px;
+}
+.login-card h2{font-size:24px;font-weight:800;color:var(--gray-900);margin-bottom:6px;letter-spacing:-.3px}
+.login-card-sub{font-size:14px;color:var(--gray-500);margin-bottom:32px;line-height:1.6}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px}
+.form-input{
+  width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:10px;
+  font-size:15px;color:var(--gray-900);background:#fff;outline:none;
+  transition:border-color .15s,box-shadow .15s;font-family:inherit;
+}
+.form-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(57,64,240,.08)}
+.form-input::placeholder{color:var(--gray-400)}
+.phone-wrap{display:flex}
+.phone-prefix{
+  display:flex;align-items:center;padding:12px 14px;
+  background:var(--gray-50);border:1.5px solid var(--gray-200);border-right:none;
+  border-radius:10px 0 0 10px;font-size:15px;font-weight:600;color:var(--gray-700);white-space:nowrap;
+}
+.phone-wrap .form-input{border-radius:0 10px 10px 0}
+
+/* OTP */
+.otp-section{display:none;margin-top:4px}
+.otp-section.visible{display:block}
+.otp-note{font-size:13px;color:var(--gray-500);margin-bottom:18px}
+.otp-note span{font-weight:600;color:var(--gray-900)}
+.otp-inputs{display:flex;gap:10px;margin-bottom:20px}
+.otp-input{
+  width:58px;height:62px;border:1.5px solid var(--gray-200);border-radius:10px;
+  font-size:22px;font-weight:700;text-align:center;color:var(--gray-900);
+  outline:none;transition:border-color .15s,box-shadow .15s,background .15s;font-family:inherit;
+  -moz-appearance:textfield;
+}
+.otp-input::-webkit-outer-spin-button,.otp-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.otp-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(57,64,240,.08)}
+.otp-input.filled{border-color:var(--blue);background:var(--blue-light)}
+.otp-error{font-size:13px;color:var(--red);margin-bottom:14px;display:none}
+.otp-error.visible{display:block}
+.login-footer-note{font-size:12px;color:var(--gray-400);margin-top:20px;line-height:1.6;text-align:center}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;border:none;transition:all .15s;text-decoration:none;
+  letter-spacing:.01em;font-family:inherit;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;
+  box-shadow:0 2px 8px rgba(57,64,240,.2);
+}
+.btn-primary:hover:not(:disabled){
+  background:linear-gradient(135deg,#4A52F5,var(--blue));
+  box-shadow:0 4px 16px rgba(57,64,240,.3);transform:translateY(-1px);
+}
+.btn-primary:active:not(:disabled){transform:translateY(0)}
+.btn-primary:disabled{opacity:.38;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--gray-500);padding:12px 16px}
+.btn-ghost:hover{color:var(--gray-700)}
+.btn-outline{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-light)}
+.btn-full{width:100%;justify-content:center;padding:14px;font-size:15px}
+
+/* ── SCREEN 2: ROLE SELECT ── */
+#screen-role{
+  min-height:100vh;flex-direction:row;padding-top:60px;
+}
+.role-left{
+  flex:0 0 42%;background:linear-gradient(160deg,#fff 0%,#F0F2FF 100%);
+  padding:64px 56px;display:flex;flex-direction:column;justify-content:center;
+}
+.role-left-hey{
+  font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);margin-bottom:12px;
+}
+.role-left h2{
+  font-size:36px;font-weight:800;line-height:1.15;letter-spacing:-.5px;
+  color:var(--gray-900);margin-bottom:14px;
+}
+.role-left-sub{font-size:16px;color:var(--gray-500);line-height:1.7;margin-bottom:40px;max-width:360px}
+.role-stat-card{
+  background:#fff;border-radius:14px;padding:24px 28px;
+  box-shadow:0 4px 20px rgba(57,64,240,.08);border:1px solid var(--blue-light);
+  max-width:340px;
+}
+.role-stat-card-number{font-size:32px;font-weight:800;color:var(--blue);margin-bottom:4px}
+.role-stat-card-text{font-size:14px;color:var(--gray-500);line-height:1.6}
+
+.role-right{
+  flex:1;padding:64px 56px;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;
+}
+.role-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.role-card{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;border:1.5px solid var(--gray-200);border-radius:12px;
+  cursor:pointer;background:#fff;transition:all .15s;text-align:left;
+}
+.role-card:hover{border-color:var(--blue);background:var(--blue-light);box-shadow:0 2px 12px rgba(57,64,240,.08)}
+.role-card.selected{
+  border-color:var(--blue);background:var(--blue-light);
+  box-shadow:0 0 0 3px rgba(57,64,240,.12);
+}
+.role-card-check{
+  width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-300);
+  flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center;
+}
+.role-card.selected .role-card-check{background:var(--blue);border-color:var(--blue)}
+.role-card-check-inner{
+  width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transition:opacity .15s;
+}
+.role-card.selected .role-card-check-inner{opacity:1}
+.role-card-text{flex:1}
+.role-card-name{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:2px}
+.role-card.selected .role-card-name{color:var(--blue-dark)}
+.role-card-desc{font-size:12px;color:var(--gray-500)}
+.role-btn-row{display:flex;justify-content:flex-end}
+
+/* ── SCREEN 3: QUESTIONS ── */
+#screen-question{
+  min-height:100vh;flex-direction:column;align-items:center;
+  padding:80px 24px 24px;
+}
+.q-inner{width:100%;max-width:720px;display:flex;flex-direction:column;flex:1}
+.q-header{margin-bottom:20px}
+.q-eyebrow{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--gray-400);margin-bottom:8px;
+}
+.q-heading{
+  font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.3px;
+  color:var(--gray-900);margin-bottom:4px;
+}
+.q-instruction{font-size:13px;color:var(--gray-400)}
+
+/* level cards — compact to fit on screen */
+.level-list{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;flex:1}
+.level-card{
+  display:flex;align-items:flex-start;gap:14px;padding:11px 16px;
+  border:1.5px solid var(--gray-200);border-radius:10px;
+  cursor:pointer;background:#fff;transition:all .15s;
+}
+.level-card:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(57,64,240,.07)}
+.level-card.selected{border-color:var(--blue);background:var(--blue-light)}
+.level-badge{
+  width:28px;height:28px;border-radius:50%;background:var(--gray-100);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--gray-500);flex-shrink:0;
+  transition:background .15s,color .15s;
+}
+.level-card.selected .level-badge{background:var(--blue);color:#fff}
+.level-text{flex:1}
+.level-name{font-size:12px;font-weight:700;color:var(--gray-700);margin-bottom:2px;display:inline}
+.level-card.selected .level-name{color:var(--blue-dark)}
+.level-desc{font-size:12px;color:var(--gray-500);line-height:1.45;display:inline}
+.level-card.selected .level-desc{color:var(--gray-700)}
+.btn-row{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding-top:4px}
+
+/* ── SCREEN 4: RESULTS ── */
+#screen-results{
+  flex-direction:column;padding-top:60px;min-height:100vh;
+}
+
+/* hero */
+.results-hero{
+  background:linear-gradient(160deg,#fff 0%,#F0F2FF 40%,#EEF0FF 100%);
+  padding:56px 0 48px;
+  display:flex;justify-content:center;
+}
+.results-hero-inner{
+  max-width:900px;width:100%;padding:0 48px;
+  display:flex;align-items:center;gap:56px;
+}
+.results-hero-left{flex:1}
+.results-hero-eyebrow{
+  font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);margin-bottom:12px;
+}
+.results-hero-heading{
+  font-size:34px;font-weight:800;letter-spacing:-.5px;line-height:1.15;
+  color:var(--gray-900);margin-bottom:16px;
+}
+.result-band{
+  display:inline-block;padding:5px 16px;border-radius:99px;
+  font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:0;
+}
+.band-curious{background:#FEF3C7;color:#92400E}
+.band-aware{background:#DBEAFE;color:#1E40AF}
+.band-capable{background:#D1FAE5;color:#065F46}
+.band-leader{background:#EDE9FE;color:#4C1D95}
+
+/* SVG ring chart */
+.results-hero-right{flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ring-wrap{position:relative;width:160px;height:160px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--gray-200);stroke-width:14}
+.ring-fill{
+  fill:none;stroke-width:14;stroke-linecap:round;
+  stroke-dasharray:408;stroke-dashoffset:408;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.34,1.56,.64,1);
+}
+.ring-fill-curious{stroke:#FBBF24}
+.ring-fill-aware{stroke:#3B82F6}
+.ring-fill-capable{stroke:#10B981}
+.ring-fill-leader{stroke:var(--blue)}
+.ring-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.ring-score{font-size:34px;font-weight:800;color:var(--gray-900);line-height:1;letter-spacing:-.5px}
+.ring-denom{font-size:13px;color:var(--gray-400);font-weight:600}
+
+/* content sections */
+.results-content{max-width:900px;margin:0 auto;padding:48px 48px 120px}
+
+.meaning-card{
+  background:linear-gradient(135deg,#FAFBFF 0%,#F3F5FF 100%);
+  border:1px solid #C7CAFF;border-left:4px solid var(--blue);
+  border-radius:0 14px 14px 0;padding:28px 32px;margin-bottom:48px;
+}
+.meaning-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);margin-bottom:10px;
+}
+.meaning-text{font-size:15px;color:var(--gray-700);line-height:1.8}
+
+/* skill bars */
+.skills-section{margin-bottom:48px}
+.skills-section-heading{
+  font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--gray-400);margin-bottom:20px;
+}
+.skill-bar-row{
+  display:flex;align-items:center;gap:14px;padding:10px 0;
+  border-bottom:1px solid var(--gray-100);
+}
+.skill-bar-row:last-child{border-bottom:none}
+.skill-bar-name{font-size:13px;color:var(--gray-700);flex:1;font-weight:500;min-width:0}
+.skill-bar-track{
+  width:140px;flex-shrink:0;height:6px;background:var(--gray-100);
+  border-radius:99px;overflow:hidden;
+}
+.skill-bar-fill{height:100%;border-radius:99px;transition:width .8s ease}
+.skill-bar-fill-strong{background:linear-gradient(90deg,#34D399,#10B981)}
+.skill-bar-fill-mid{background:linear-gradient(90deg,#60A5FA,#3B82F6)}
+.skill-bar-fill-weak{background:linear-gradient(90deg,#FBBF24,#F59E0B)}
+.skill-bar-level{font-size:11px;font-weight:700;color:var(--gray-400);width:24px;text-align:right}
+.skill-group-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:6px 10px;border-radius:6px;margin-bottom:4px;display:inline-block;
+}
+.label-strong{background:#D1FAE5;color:#065F46}
+.label-weak{background:#FEF3C7;color:#92400E}
+.label-mid{background:var(--blue-light);color:var(--blue-dark)}
+
+/* career pitch */
+.pitch-section{
+  background:linear-gradient(135deg,#F0F1FF 0%,#EEF0FF 100%);
+  border:1px solid #C7CAFF;border-radius:20px;padding:40px;margin-bottom:48px;
+}
+.pitch-arrow{
+  display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;
+}
+.pitch-from{
+  font-size:16px;font-weight:700;color:var(--gray-500);
+  padding:10px 18px;background:#fff;border-radius:10px;border:1.5px solid var(--gray-200);
+}
+.pitch-arrow-icon{font-size:20px;color:var(--blue)}
+.pitch-to{
+  font-size:16px;font-weight:800;color:var(--blue);
+  padding:10px 18px;background:var(--blue-light);border-radius:10px;border:1.5px solid var(--blue);
+}
+.pitch-eyebrow{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);margin-bottom:10px;
+}
+.pitch-heading{
+  font-size:22px;font-weight:800;color:var(--gray-900);margin-bottom:10px;letter-spacing:-.3px;line-height:1.3;
+}
+.pitch-sub{font-size:14px;color:var(--gray-500);line-height:1.7;margin-bottom:24px}
+.pitch-bullets{list-style:none;display:flex;flex-direction:column;gap:10px}
+.pitch-bullets li{
+  display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--gray-700);line-height:1.5;
+}
+.pitch-bullet-dot{
+  width:6px;height:6px;background:var(--blue);border-radius:50%;
+  margin-top:7px;flex-shrink:0;
+}
+
+/* sticky CTA bar */
+.sticky-cta{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(8px);
+  border-top:1px solid var(--gray-200);
+  box-shadow:0 -4px 20px rgba(0,0,0,.07);
+  padding:14px 32px;z-index:90;
+  display:none;align-items:center;justify-content:center;gap:14px;
+}
+.sticky-cta.visible{display:flex}
+.callback-success{
+  display:flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:600;color:#065F46;
+  background:#D1FAE5;padding:10px 18px;border-radius:8px;
+}
+.callback-check-icon{
+  width:20px;height:20px;background:var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;
+}
+.retake-link{
+  font-size:13px;color:var(--gray-400);background:none;border:none;
+  cursor:pointer;font-family:inherit;text-decoration:underline;padding:0;
+}
+.retake-link:hover{color:var(--gray-700)}
+
+/* toast */
+.toast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--gray-900);color:#fff;padding:10px 20px;
+  border-radius:8px;font-size:13px;font-weight:500;
+  opacity:0;transition:transform .3s ease,opacity .3s ease;
+  pointer-events:none;white-space:nowrap;z-index:200;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* MOBILE */
+@media(max-width:768px){
+  #screen-login{flex-direction:column}
+  .login-left{flex:none;padding:80px 24px 40px;min-height:auto}
+  .login-left h1{font-size:30px}
+  .login-left-sub{font-size:15px;margin-bottom:32px}
+  .login-stats{gap:20px}
+  .stat-number{font-size:22px}
+  .login-right{flex:none;padding:40px 24px}
+  #screen-role{flex-direction:column}
+  .role-left{flex:none;padding:80px 24px 32px}
+  .role-left h2{font-size:26px}
+  .role-right{padding:32px 24px}
+  .results-hero-inner{flex-direction:column;gap:32px;padding:0 24px}
+  .results-hero-heading{font-size:26px}
+  .results-content{padding:32px 24px 120px}
+  .pitch-section{padding:28px 24px}
+  .sticky-cta{padding:12px 16px;flex-wrap:wrap}
+  #screen-question{padding:80px 16px 24px}
+  .skill-bar-track{width:90px}
+}
+@media(max-width:480px){
+  .otp-inputs{gap:8px}
+  .otp-input{width:50px;height:56px;font-size:20px}
+  .login-stats{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <svg width="140" height="32" viewBox="0 0 280 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- SCALER text -->
+      <text x="0" y="48" fill="#1A3A8F" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif" font-size="52" font-weight="800" letter-spacing="4">SCALER</text>
+      <!-- 3D Cube icon -->
+      <!-- Front face -->
+      <rect x="232" y="22" width="24" height="24" rx="2" fill="#4A7BF7"/>
+      <!-- Top face (parallelogram) -->
+      <path d="M232 22L244 10L268 10L256 22Z" fill="#2B5DD6"/>
+      <!-- Right face (parallelogram) -->
+      <path d="M256 22L268 10L268 34L256 46Z" fill="#3666E0"/>
+      <!-- White square cutout on front face -->
+      <rect x="240" y="30" width="10" height="10" rx="1" fill="white"/>
+      <!-- Small blue square inside cutout -->
+      <rect x="244" y="34" width="5" height="5" rx="0.5" fill="#4A7BF7"/>
+    </svg>
+  </div>
+  <div class="nav-right" id="nav-right" style="display:none">
+    <span class="nav-progress-label" id="nav-progress-label">Skill 1 of 10</span>
+    <div class="nav-progress-bar-bg">
+      <div class="nav-progress-bar-fill" id="nav-progress-bar-fill" style="width:0%"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- SCREEN 1: LOGIN -->
+<div id="screen-login" class="screen active fade-in">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#3940F0" opacity=".2"/><circle cx="6" cy="6" r="3" fill="#3940F0"/></svg>
+        AI Fluency Assessment
+      </div>
+      <h1>Are you ready for the <span>AI decade?</span></h1>
+      <p class="login-left-sub">Take this 3-minute assessment to find out exactly where you stand — and what to do next.</p>
+      <div class="login-stats">
+        <div class="stat-item">
+          <span class="stat-number">3 min</span>
+          <span class="stat-label">to complete</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <span class="stat-label">skill areas tested</span>
+        </div>
+      </div>
+    </div>
+    <div class="dots-bg" id="dots-bg"></div>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Let's get started</h2>
+      <p class="login-card-sub">Enter your details to begin the assessment</p>
+      <div id="login-form-section">
+        <div class="form-group">
+          <label class="form-label" for="input-name">Full Name</label>
+          <input class="form-input" type="text" id="input-name" placeholder="Your full name" autocomplete="name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="input-phone">Phone Number</label>
+          <div class="phone-wrap">
+            <div class="phone-prefix">+91</div>
+            <input class="form-input" type="tel" id="input-phone" placeholder="10-digit mobile number" autocomplete="tel" maxlength="10"/>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" id="btn-send-otp" onclick="sendOtp()">Send OTP &rarr;</button>
+      </div>
+      <div class="otp-section" id="otp-section">
+        <p class="otp-note">OTP sent to <span id="otp-phone-display"></span></p>
+        <div class="otp-inputs">
+          <input class="otp-input" type="number" maxlength="1" id="otp-0" inputmode="numeric"/>
+          <input class="otp-input" type="number" maxlength="1" id="otp-1" inputmode="numeric"/>
+          <input class="otp-input" type="number" maxlength="1" id="otp-2" inputmode="numeric"/>
+          <input class="otp-input" type="number" maxlength="1" id="otp-3" inputmode="numeric"/>
+        </div>
+        <p class="otp-error" id="otp-error">Enter any 4-digit code to continue.</p>
+        <button class="btn btn-primary btn-full" onclick="verifyOtp()">Verify &amp; Continue &rarr;</button>
+      </div>
+      <p class="login-footer-note">Your data is secure and never shared with third parties.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: ROLE SELECT -->
+<div id="screen-role" class="screen">
+  <div class="role-left">
+    <p class="role-left-hey" id="role-hey">Hey there,</p>
+    <h2>What do you do?</h2>
+    <p class="role-left-sub">Pick the role closest to your current job. We'll tailor every question to your actual day-to-day.</p>
+    <div class="role-stat-card">
+      <div class="role-stat-card-number">3x</div>
+      <div class="role-stat-card-text">Professionals who know their AI gaps grow 3x faster. This takes 3 minutes.</div>
+    </div>
+  </div>
+  <div class="role-right">
+    <div class="role-grid" id="role-grid"></div>
+    <div class="role-btn-row">
+      <button class="btn btn-primary" id="btn-start" disabled onclick="startAssessment()">Start Assessment &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: QUESTIONS -->
+<div id="screen-question" class="screen">
+  <div class="q-inner">
+    <div class="q-header">
+      <p class="q-eyebrow" id="q-eyebrow">Skill Area 1 of 10</p>
+      <h2 class="q-heading" id="q-heading"></h2>
+      <p class="q-instruction">Select the level that best describes where you are today.</p>
+    </div>
+    <div class="level-list" id="level-list"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-primary" id="btn-next" disabled onclick="goNext()">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-hero">
+    <div class="results-hero-inner">
+      <div class="results-hero-left">
+        <p class="results-hero-eyebrow">Your AI Fluency Score</p>
+        <h1 class="results-hero-heading" id="results-heading">Here's where you stand</h1>
+        <span class="result-band" id="result-band"></span>
+      </div>
+      <div class="results-hero-right">
+        <div class="ring-wrap">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle class="ring-bg" cx="80" cy="80" r="65"/>
+            <circle class="ring-fill" id="ring-fill" cx="80" cy="80" r="65"/>
+          </svg>
+          <div class="ring-center">
+            <span class="ring-score" id="ring-score">0</span>
+            <span class="ring-denom">/ 50</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <div class="meaning-card">
+      <p class="meaning-label">What this means</p>
+      <p class="meaning-text" id="meaning-text"></p>
+    </div>
+
+    <div class="skills-section">
+      <p class="skills-section-heading">Your AI profile — all 10 skills</p>
+      <div id="skills-all-list"></div>
+    </div>
+
+    <div class="pitch-section" id="pitch-section">
+      <p class="pitch-eyebrow">Where you are &rarr; Where you could be</p>
+      <div class="pitch-arrow">
+        <span class="pitch-from" id="pitch-from"></span>
+        <span class="pitch-arrow-icon">&#8594;</span>
+        <span class="pitch-to" id="pitch-to"></span>
+      </div>
+      <p class="pitch-heading">Scaler's Online PGP in Business &amp; AI is a 12-month program that bridges this gap.</p>
+      <p class="pitch-sub">Not theory. Not tutorials. Real frameworks, real projects, real peers.</p>
+      <ul class="pitch-bullets">
+        <li><span class="pitch-bullet-dot"></span>50 professionals per cohort — curated, not mass-enrolled</li>
+        <li><span class="pitch-bullet-dot"></span>Live sessions + hands-on projects, not pre-recorded lectures</li>
+        <li><span class="pitch-bullet-dot"></span>Covers strategy, product, ops, marketing, finance — through an AI lens</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta" id="sticky-cta">
+  <button class="btn btn-primary" id="btn-callback" onclick="requestCallback()">Request a Callback</button>
+  <button class="btn btn-outline" onclick="shareScore()">Share your score</button>
+  <button class="retake-link" onclick="retake()">Retake assessment</button>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+/* ==========================================================
+   GOOGLE SHEETS WEBHOOK
+   ----------------------------------------------------------
+   Setup instructions:
+   1. Go to script.google.com and create a new project
+   2. Paste this Apps Script function:
+
+   function doPost(e) {
+     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+     var data = JSON.parse(e.postData.contents);
+     var row = [
+       data.timestamp, data.name, data.phone, data.role,
+       data.score, data.band
+     ];
+     for (var i = 1; i <= 10; i++) {
+       row.push(data['skill_' + i + '_name'], data['skill_' + i + '_level']);
+     }
+     sheet.appendRow(row);
+     return ContentService.createTextOutput('ok');
+   }
+
+   3. Deploy > New deployment > Web App
+      - Execute as: Me
+      - Who has access: Anyone
+   4. Copy the deployment URL and paste it below
+   ========================================================== */
+const SHEET_WEBHOOK = 'YOUR_GOOGLE_SHEET_WEBHOOK_URL';
+
+function sendToSheet(name, phone, role, score, band, skills, answers) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    name, phone, role, score, band
+  };
+  skills.forEach((s, i) => {
+    payload[`skill_${i+1}_name`] = s.area;
+    payload[`skill_${i+1}_level`] = answers[i] || 1;
+  });
+  fetch(SHEET_WEBHOOK, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+}
+
+/* ==========================================================
+   DATA
+   ========================================================== */
+const ROLES = [
+  "Product Manager",
+  "Business / Strategy Consultant",
+  "Operations / Supply Chain Manager",
+  "Marketing / Growth Manager",
+  "Tech Professional transitioning to Business",
+  "Founder / Entrepreneur",
+  "Finance / Commercial Manager",
+];
+
+const ROLE_DESCS = {
+  "Product Manager": "Building products, defining roadmaps",
+  "Business / Strategy Consultant": "Advising clients, driving strategy",
+  "Operations / Supply Chain Manager": "Optimizing processes, managing logistics",
+  "Marketing / Growth Manager": "Running campaigns, driving growth",
+  "Tech Professional transitioning to Business": "Moving from code to commerce",
+  "Founder / Entrepreneur": "Building a company from scratch",
+  "Finance / Commercial Manager": "Managing money, driving deals",
+};
+
+const ROLE_TRANSITIONS = {
+  "Product Manager": "AI-First Product Leader",
+  "Business / Strategy Consultant": "AI Strategy Advisor",
+  "Operations / Supply Chain Manager": "AI-Driven Operations Leader",
+  "Marketing / Growth Manager": "AI-Powered Growth Strategist",
+  "Tech Professional transitioning to Business": "Technical Business Leader",
+  "Founder / Entrepreneur": "AI-Native Founder",
+  "Finance / Commercial Manager": "AI-Augmented Finance Leader",
+};
+
+const ROLE_SKILLS = {
+  "Product Manager": [
+    {
+      area: "AI-assisted PRD & spec writing",
+      levels: [
+        "You write PRDs manually in Google Docs. AI hasn't entered your spec workflow.",
+        "You've used ChatGPT to brainstorm feature ideas or clean up PRD language. You copy-paste and edit.",
+        "You have a go-to prompt that generates PRD sections — problem statement, user stories, success metrics, edge cases. You iterate with the model until the spec is tight. Your PRDs come out 2x faster.",
+        "You've built a PRD template as a system prompt. You feed it customer research, ticket data, and competitive context — and it generates a first draft that your engineering team actually reviews seriously. You use AI to stress-test your own specs by asking \"what will break?\"",
+        "Your team's spec process runs through AI. New PMs on your team use your prompt templates. You've integrated spec generation into your workflow tools (Notion AI, Linear, etc.) and the output quality is indistinguishable from a senior PM's manual work.",
+      ],
+    },
+    {
+      area: "Using AI agents for product research & discovery",
+      levels: [
+        "You Google for competitor info and manually read through reviews, forums, and reports.",
+        "You've asked ChatGPT or Perplexity to summarize a competitor's product page or a market report.",
+        "You run structured research sessions — you prompt AI with specific research briefs (\"Analyze the onboarding flows of these 5 competitors and identify the 3 biggest UX gaps\"). You use Perplexity for real-time data and Claude for synthesis.",
+        "You've built a research workflow: competitive monitoring prompts you run weekly, customer feedback synthesis pipelines (app reviews → themes → opportunities), and you combine multiple AI tools to triangulate insights.",
+        "You've built or spec'd an AI-powered research system for your product team. Agents auto-monitor competitor changelogs, synthesize NPS verbatims, and surface opportunity areas. You've moved from \"I use AI to research\" to \"AI runs our research layer.\"",
+      ],
+    },
+    {
+      area: "Prompt engineering for product workflows",
+      levels: [
+        "You type natural language into ChatGPT and take whatever comes out.",
+        "You've learned to add context — \"You are a senior PM at a B2B SaaS company\" — and you get noticeably better outputs.",
+        "You write structured prompts with role, context, constraints, and output format. You test variations. You've written 10+ prompts you reuse regularly — for user story generation, bug triage summaries, release notes, and stakeholder updates.",
+        "You design prompt chains — discovery prompt → PRD prompt → edge case finder → test case generator. You anticipate hallucination risks and add guardrails (\"Only cite data from the attached document\"). Your team uses your prompts.",
+        "You've built a prompt playbook for your PM org. You understand when to use system prompts vs. few-shot examples vs. chain-of-thought. You've debugged enough prompts to predict which design choices matter for product work. You shape how your org interacts with LLMs.",
+      ],
+    },
+    {
+      area: "AI for user data analysis & product metrics",
+      levels: [
+        "You look at dashboards someone else built. You maybe pull basic numbers from Amplitude or Mixpanel.",
+        "You've asked AI to explain a metric trend or write a SQL query for you.",
+        "You regularly use AI to write SQL, analyze funnel data, build cohort analyses, and identify patterns in user behavior. You paste data into Claude and get actionable insights in minutes instead of waiting for the analytics team.",
+        "You've built an analytics workflow where AI handles the heavy lifting — you feed it raw event data, retention tables, or survey responses, and it produces structured analyses with recommendations. You validate AI outputs against your product intuition and business logic.",
+        "You've built or spec'd AI-powered analytics features into your product. Your team uses AI to run automated cohort analyses, churn prediction models, or feature adoption scoring. You've moved analytics from \"pull request to data team\" to \"self-serve with AI guardrails.\"",
+      ],
+    },
+    {
+      area: "Building & speccing AI-powered features",
+      levels: [
+        "You haven't been involved in defining or shipping AI features.",
+        "You've seen AI features in other products and have opinions, but haven't written specs for one.",
+        "You've written a PRD for an AI-powered feature — defined the user problem, the AI's role, success metrics, and edge cases. You understand that AI features need evaluation criteria, not just acceptance criteria.",
+        "You actively collaborate with ML/AI engineers on feature design. You define fallback behavior, confidence thresholds, human-in-the-loop flows, and feedback loops. You've shipped at least one AI feature and learned from its failure modes.",
+        "You lead AI product strategy at your company. You evaluate build vs. buy vs. fine-tune decisions. You've designed evaluation frameworks for AI features (accuracy, latency, cost, user trust). Your AI features have measurable business impact and you can articulate exactly why each design choice was made.",
+      ],
+    },
+    {
+      area: "AI agents: from basic automation to orchestrated systems",
+      levels: [
+        "You've heard of AI agents but haven't used or built one.",
+        "You've tried a basic agent — maybe a GPT with custom instructions, or a simple Zapier AI workflow.",
+        "You've built or spec'd an agent that handles a real task end-to-end: a customer support triage agent, a bug classification bot, or a research assistant that pulls data from multiple sources. It works, but it's brittle.",
+        "Your agents are robust — they handle errors, have fallback paths, and you've tested them against edge cases. You chain agents together (Agent A's output feeds Agent B). You understand tool-use, function calling, and context window management.",
+        "You've built an integrated agent system — a multi-agent workflow where specialized agents collaborate. You've designed the orchestration layer, defined agent boundaries, and measured system-level performance. You're the person your org comes to for \"how should we use agents for X?\"",
+      ],
+    },
+    {
+      area: "AI for stakeholder communication & alignment",
+      levels: [
+        "You write all your stakeholder emails, updates, and presentations manually.",
+        "You've used AI to draft a status update or clean up a presentation.",
+        "You use AI to generate weekly product updates, executive summaries, and board-ready narratives from raw data. You edit for voice and accuracy, but AI does the first 80%.",
+        "You've built communication templates — AI generates your sprint reviews from Jira data, your monthly business reviews from metrics dashboards, and your strategy narratives from research docs. Your stakeholders don't know (or care) that AI helped.",
+        "You've systematized product communication with AI. New PMs on your team use your templates. You've built workflows where AI translates technical updates into business language, customizes messaging for different audiences (eng vs. exec vs. customer), and maintains a consistent product narrative.",
+      ],
+    },
+    {
+      area: "AI-powered user feedback synthesis",
+      levels: [
+        "You read user feedback manually — support tickets, NPS comments, app reviews — one by one.",
+        "You've pasted a batch of feedback into ChatGPT and asked for themes.",
+        "You run structured feedback analysis — you prompt AI with your product context and taxonomy, feed it hundreds of reviews or tickets, and get a prioritized list of themes with supporting quotes. You do this monthly.",
+        "You've built a feedback pipeline: raw data (Intercom, Zendesk, app reviews, Gong calls) → AI-powered theme extraction → opportunity scoring → prioritization input for your roadmap. It runs with minimal manual effort.",
+        "You've productized feedback synthesis for your org. PMs, designers, and CS teams use the system you built. It auto-surfaces emerging issues, tracks sentiment trends over time, and connects user pain to revenue impact. Your roadmap decisions are visibly data-backed because of this system.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system",
+      levels: [
+        "You open ChatGPT occasionally when you're stuck on something.",
+        "You use 1–2 AI tools regularly — maybe ChatGPT for writing and Perplexity for research.",
+        "You have a personal AI stack — specific tools for specific tasks. Claude for deep analysis, Perplexity for research, Notion AI for docs, Granola or Otter for meetings. You save 5+ hours/week.",
+        "You've built a personal productivity OS. AI handles your meeting prep (auto-generates briefs from past notes + agenda), your writing (first drafts of everything from emails to strategy docs), and your research (competitive monitoring, market analysis). You've measured the time savings.",
+        "You've built an integrated system — your personal AI workflow feeds your product work seamlessly. Meeting notes auto-generate action items that create Jira tickets. Research auto-populates your competitive dashboard. Your productivity system is something other PMs ask you about and try to replicate.",
+      ],
+    },
+    {
+      area: "Leading AI adoption in your product org",
+      levels: [
+        "You use AI individually. Your team doesn't have shared AI practices.",
+        "You've shared an AI tip or tool recommendation in a team Slack channel.",
+        "You've piloted an AI tool for your team — maybe an AI-powered user research tool, a Copilot setup, or an AI writing assistant. You got at least 3 teammates to adopt it.",
+        "You've led AI adoption for your product team — defined which tools to use for what, created prompt templates, run training sessions, and measured adoption metrics. Your team is measurably more productive.",
+        "You drive AI strategy for your product org. You've defined the AI toolkit policy, created an internal AI playbook, and built a culture where AI-assisted work is the default. You present AI productivity gains to leadership and influence org-wide AI adoption.",
+      ],
+    },
+  ],
+
+  "Marketing / Growth Manager": [
+    {
+      area: "AI for ad copy & creative production",
+      levels: [
+        "You write all ad copy manually. Every headline, description, and CTA is crafted from scratch.",
+        "You've used ChatGPT to brainstorm headlines or generate copy variations for a campaign.",
+        "You generate first-draft copy for all channels (Google, Meta, LinkedIn, email) with AI. You prompt with your ICP, value props, tone guidelines, and character limits. You produce 20 variations in the time it took to write 3 manually.",
+        "You've built a copy generation system — you feed AI your best-performing ads, brand voice guidelines, and campaign brief, and it generates platform-specific copy that consistently beats your baseline CTR. You A/B test AI-generated vs. human-written copy.",
+        "You run creative production at scale with AI. Your entire ad copy pipeline is AI-assisted — from brief to first draft to variations to localization. You've built prompt templates your team uses daily. You track which AI-generated hooks outperform and feed that back into the prompts.",
+      ],
+    },
+    {
+      area: "AI-powered campaign strategy & audience targeting",
+      levels: [
+        "You define audiences based on demographics, past campaign data, and gut feel.",
+        "You've used AI to analyze past campaign performance or brainstorm new audience segments.",
+        "You use AI to analyze your CRM/campaign data, identify high-converting segments, and suggest targeting strategies. You prompt with your funnel data and AI maps out audience-channel-message combinations you hadn't considered.",
+        "You've built an AI-assisted campaign planning workflow — AI ingests your historical performance data, competitive landscape, and market signals, then generates a prioritized campaign plan with budget allocation recommendations.",
+        "You've built an AI-powered growth intelligence system. It monitors campaign performance in real-time, surfaces anomalies, recommends reallocation, and generates strategic recommendations. Your marketing team operates on AI-generated insights, not just dashboards.",
+      ],
+    },
+    {
+      area: "AI for content marketing at scale",
+      levels: [
+        "You write all blog posts, newsletters, and content pieces manually.",
+        "You've used AI to outline a blog post or generate a first draft that you heavily edited.",
+        "You use AI to research topics, generate detailed outlines, write first drafts, and create social media repurposing — all from a single content brief. Your content output has 3x'd without adding headcount.",
+        "You've built a content engine — AI generates content briefs from SEO data, writes drafts in your brand voice, creates social media snippets, email teasers, and meta descriptions. You edit for quality and publish. Your cost per content piece has dropped 60%.",
+        "You run a full AI-powered content operation. Programmatic SEO pages, personalized email sequences, dynamic landing page copy — all AI-generated with human QA. You've built the prompts, templates, and workflows that your entire content team runs on.",
+      ],
+    },
+    {
+      area: "AI for creative benchmarking & design direction",
+      levels: [
+        "You brief designers manually and provide subjective feedback on creatives.",
+        "You've used AI to generate mood boards, analyze competitor creatives, or get design feedback.",
+        "You use AI to systematically benchmark competitor creatives — you feed it landing pages, ad creatives, and email designs and get structured analyses of visual patterns, copy frameworks, and UX choices. This directly informs your creative briefs.",
+        "You've built a creative intelligence workflow — AI analyzes your top-performing creatives, identifies winning patterns (color, copy length, CTA placement, imagery style), and generates data-backed creative briefs for your design team.",
+        "You've built an AI-assisted creative system where design briefs are auto-generated from performance data, AI generates creative variations (via Midjourney/DALL-E), and you test at a velocity that was previously impossible. Your creative hit rate has measurably improved.",
+      ],
+    },
+    {
+      area: "AI for conversion rate optimization",
+      levels: [
+        "You run A/B tests occasionally based on best practices or gut feel.",
+        "You've used AI to analyze A/B test results or brainstorm landing page improvements.",
+        "You use AI to audit landing pages — you feed it your page, funnel data, and competitor pages, and get specific recommendations for headline, CTA, social proof placement, and form optimization. You implement and test these systematically.",
+        "You've built a CRO workflow with AI — it analyzes heatmap data, session recording summaries, and funnel metrics to generate prioritized optimization hypotheses. You run 3x more experiments because AI handles the analysis and ideation.",
+        "You've built an AI-powered CRO system. AI generates landing page variations, writes test hypotheses from user behavior data, and prioritizes experiments by expected impact. Your conversion rates improve month-over-month because the system compounds learnings.",
+      ],
+    },
+    {
+      area: "Prompt engineering for marketing workflows",
+      levels: [
+        "You type basic requests into ChatGPT — \"Write me an email about X.\"",
+        "You've learned to provide brand voice, audience context, and desired tone in your prompts.",
+        "You write structured prompts with persona, brand guidelines, channel constraints, and performance benchmarks. You have 10+ reusable prompts for different marketing tasks — launch emails, ad copy, social posts, PR pitches.",
+        "You build prompt chains for campaigns — audience research prompt → messaging framework prompt → copy generation prompt → variation prompt. You test across models (GPT-4 for strategy, Claude for long-form, etc.). Your team uses your prompts daily.",
+        "You've built a marketing prompt playbook that your entire team runs on. Every campaign type has a prompt workflow. You've measured which prompts produce copy that converts vs. copy that just sounds good. You train new marketers on prompt-first workflows.",
+      ],
+    },
+    {
+      area: "AI for marketing analytics & attribution",
+      levels: [
+        "You look at dashboards in Google Analytics or your ad platform. You pull reports manually.",
+        "You've used AI to explain a metric trend, build a UTM structure, or analyze campaign data.",
+        "You regularly use AI to analyze multi-channel campaign data — you paste performance data into Claude and get channel-by-channel breakdowns, ROAS analysis, and budget reallocation recommendations. Decisions that took a day now take 30 minutes.",
+        "You've built an analytics workflow where AI ingests your marketing data (ad spend, conversions, LTV, cohort data), generates weekly performance narratives, flags anomalies, and recommends actions. Your weekly reporting is 80% automated.",
+        "You've built an AI-powered marketing intelligence layer. It connects to your data sources, generates real-time insights, predicts campaign performance, and auto-generates stakeholder reports. Your CMO gets AI-generated briefs that are more insightful than what the BI team manually produced.",
+      ],
+    },
+    {
+      area: "AI for email & lifecycle marketing",
+      levels: [
+        "You write every email manually and send to broad segments.",
+        "You've used AI to draft email sequences or generate subject line variations.",
+        "You use AI to generate complete lifecycle sequences — welcome series, nurture flows, re-engagement campaigns — with personalized copy for different segments. You test AI-generated subject lines against your manual ones.",
+        "You've built an AI-powered email system — AI generates personalized content blocks based on user behavior, optimizes send times, and creates dynamic sequences that adapt based on engagement. Your email revenue per send has measurably increased.",
+        "You run hyper-personalized lifecycle marketing with AI. Every email is dynamically generated based on user data, behavior signals, and predicted intent. You've built the content generation layer, the personalization logic, and the measurement framework. This is a competitive moat, not just an optimization.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for marketers",
+      levels: [
+        "You open ChatGPT when you need help writing something.",
+        "You use 1–2 AI tools regularly — ChatGPT for copy, maybe Canva AI for quick graphics.",
+        "You have a marketing AI stack — ChatGPT/Claude for copy and strategy, Perplexity for competitive research, Midjourney for creative concepts, AI transcription for customer call analysis. You save 6+ hours/week.",
+        "You've built a marketing productivity OS — AI drafts your campaign briefs from meeting notes, generates your weekly reports from platform data, handles first-draft copy for every channel, and monitors competitors. You've measured and can prove the time savings.",
+        "You've built an integrated system that other marketers want to copy. Your workflow is: AI monitors → AI analyzes → AI drafts → you decide → AI executes. You've become the \"AI marketing person\" in your org and others model their workflows on yours.",
+      ],
+    },
+    {
+      area: "Leading AI adoption in your marketing team",
+      levels: [
+        "You use AI individually. Your team writes and plans manually.",
+        "You've shared an AI trick with your team — a prompt for ad copy, a tool for social scheduling.",
+        "You've piloted AI tools for your marketing team — got 3+ people using AI for copy generation, research, or analytics. You've shown it saves time on real campaigns.",
+        "You've restructured your team's workflow around AI — defined which tools to use for each stage of campaign production, created prompt libraries, and run training sessions. Campaign turnaround time has measurably decreased.",
+        "You've built an AI-first marketing org. Every campaign runs through AI-assisted workflows. You've defined the AI toolkit, created the playbooks, and built a culture where AI-assisted output is the baseline. You present AI-driven efficiency gains and performance improvements to leadership.",
+      ],
+    },
+  ],
+
+  "Business / Strategy Consultant": [
+    {
+      area: "AI for client research & industry analysis",
+      levels: [
+        "You Google client companies, read annual reports, and manually build research decks.",
+        "You've used ChatGPT to summarize an earnings call or a market report.",
+        "You run structured research briefs through AI — \"Analyze this company's last 3 annual reports, identify strategic themes, map them against industry trends.\" You synthesize across multiple sources in hours, not days. Your research quality has visibly improved.",
+        "You've built a client research workflow — AI ingests public filings, competitor data, news, and market reports, then generates structured analysis decks with themes, risks, and strategic options. You focus on insight, not information gathering.",
+        "You've built an AI-powered research capability for your practice. Analysts use your prompt templates and workflows. Client research that took a team 2 weeks now takes 3 days. Partners notice the speed and depth improvement.",
+      ],
+    },
+    {
+      area: "AI for strategy framework application & synthesis",
+      levels: [
+        "You manually apply frameworks — Porter's Five Forces, SWOT, value chain analysis — building slides from scratch.",
+        "You've used AI to populate a strategy framework with data or generate a first draft of a SWOT analysis.",
+        "You prompt AI with structured inputs (industry data, competitive landscape, client specifics) and it generates framework-ready analysis that you refine. Your first-draft strategy decks are ready in half the time.",
+        "You've built prompt chains for strategy work — data ingestion → framework application → insight extraction → recommendation generation. AI handles the analytical heavy-lifting, you focus on the \"so what\" and client-specific judgment.",
+        "You've codified your firm's strategy methodology into AI workflows. Junior consultants use your system to generate first-draft analyses that would normally require a senior associate. You've changed how your team approaches strategy work.",
+      ],
+    },
+    {
+      area: "AI for financial modeling & business case development",
+      levels: [
+        "You build financial models in Excel from scratch. Every assumption, formula, and scenario is manual.",
+        "You've used AI to explain a financial concept, check a formula, or brainstorm model assumptions.",
+        "You use AI to build model structures — you describe the business case, and AI generates the assumption framework, revenue build-up logic, and sensitivity variables. You still build the model, but AI saves you 40% of the design work.",
+        "You feed AI your data tables and it generates scenario analyses, waterfall charts, and executive summaries. You use AI to stress-test your assumptions — \"What breaks this business case? What are the hidden risks in these projections?\"",
+        "You've built AI-assisted financial analysis workflows for your team. Analysts use your templates to generate model structures, validate assumptions against industry benchmarks, and produce board-ready financial narratives. The quality floor has risen across your practice.",
+      ],
+    },
+    {
+      area: "AI for presentation & deliverable production",
+      levels: [
+        "You build every client deck manually — writing, structuring, formatting, iterating.",
+        "You've used AI to draft slide copy or reorganize a presentation narrative.",
+        "You use AI to generate presentation narratives from raw analysis — you feed it your findings and it produces a storyline with slide-by-slide content, key messages, and supporting data points. You format and refine, but the thinking structure comes fast.",
+        "You've built a deliverable production system — AI generates storyboards from project briefs, drafts executive summaries from detailed analyses, and creates appendix content from raw data. Your team delivers faster with higher narrative quality.",
+        "You've systematized deliverable production for your practice. Templates, prompt workflows, and quality standards are codified. A 50-page strategy report that took 2 weeks of production work now takes 4 days. Clients consistently praise the insight density.",
+      ],
+    },
+    {
+      area: "AI for market sizing & opportunity assessment",
+      levels: [
+        "You research market sizes through Google, Statista, and industry reports — manually triangulating numbers.",
+        "You've used AI to find market data or calculate a basic TAM/SAM/SOM.",
+        "You use AI to build bottom-up and top-down market sizing models — you provide the logic framework and data sources, AI generates the calculations, sensitivity ranges, and comparable benchmarks. Your market sizing is faster and more rigorous.",
+        "You've built a market sizing workflow — AI pulls comparable data, generates multiple estimation approaches, flags where your assumptions are weakest, and produces presentation-ready outputs with confidence intervals.",
+        "You've codified market sizing into an AI-powered capability. Your team uses prompt templates that enforce rigor — multiple approaches, explicit assumptions, sensitivity analysis, and source tracking. Junior consultants produce partner-quality market sizing on their first try.",
+      ],
+    },
+    {
+      area: "Prompt engineering for consulting workflows",
+      levels: [
+        "You ask ChatGPT basic questions and accept whatever it gives you.",
+        "You've learned to give detailed context — client industry, project scope, desired output format.",
+        "You write structured prompts for each phase of consulting work — research, analysis, synthesis, recommendation. You have reusable prompts for client briefs, competitive analysis, and stakeholder interviews. You iterate until outputs are client-ready.",
+        "You build prompt chains for complete workstreams — intake prompt → research prompt → analysis prompt → recommendation prompt → executive summary prompt. You anticipate where AI will hallucinate (made-up market data, fake company info) and add verification steps.",
+        "You've built a consulting prompt playbook. Your firm uses your workflows. You train new consultants on prompt-first approaches. You understand which consulting tasks benefit from AI (research, synthesis, first-draft analysis) and which don't (client judgment, relationship nuance, political navigation).",
+      ],
+    },
+    {
+      area: "AI for interview synthesis & qualitative research",
+      levels: [
+        "You take manual notes in stakeholder interviews and write up findings by hand.",
+        "You've used AI to transcribe an interview or summarize meeting notes.",
+        "You run all client interviews through AI — transcription → theme extraction → quote identification → cross-interview pattern analysis. What took 2 hours of synthesis per interview now takes 20 minutes.",
+        "You've built an interview analysis system — AI processes multiple interviews, identifies patterns across stakeholders, flags contradictions, and generates a structured findings report with supporting quotes. Your qualitative research is more rigorous because AI catches patterns humans miss.",
+        "You've productized qualitative research for your practice. The interview-to-insight pipeline is systematized. Stakeholder research that took weeks now produces richer, better-structured findings in days. Partners use your system for every engagement.",
+      ],
+    },
+    {
+      area: "AI for competitive & due diligence analysis",
+      levels: [
+        "You manually research competitors — reading websites, analyst reports, and news articles one by one.",
+        "You've used AI to summarize a competitor's strategy or compare two companies.",
+        "You use AI to run structured competitive analyses — you feed it a framework (capabilities matrix, feature comparison, market positioning) and it generates a comprehensive competitive landscape from public data. You verify and add judgment.",
+        "You've built competitive intelligence workflows — AI monitors competitor moves (product launches, hiring patterns, partnership announcements, pricing changes), generates weekly intelligence briefs, and flags strategic implications for your client.",
+        "You've built a competitive intelligence capability for your firm. Due diligence analyses that required 3 analysts for 2 weeks now take 1 analyst for 4 days. Your AI-powered approach has become a differentiator in how your firm wins engagements.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for consultants",
+      levels: [
+        "You use ChatGPT occasionally when you're stuck.",
+        "You use AI regularly for writing — email drafts, meeting summaries, brainstorming.",
+        "You have a consultant's AI stack — Claude for deep analysis and writing, Perplexity for real-time research, Granola for meeting notes, Gamma or Beautiful.ai for deck drafts. You save 8+ hours/week.",
+        "You've built a consulting productivity OS — AI auto-generates meeting briefs before client calls, synthesizes your notes after, drafts follow-up emails, and maintains your project knowledge base. Your utilization rate is higher because non-billable work takes half the time.",
+        "You've built an integrated system that makes you measurably faster than peers. Research → analysis → synthesis → deliverable → client communication — AI assists at every stage. Other consultants ask you to teach them your setup. You're the go-to \"AI-powered consultant\" in your firm.",
+      ],
+    },
+    {
+      area: "Leading AI adoption in your consulting practice",
+      levels: [
+        "You use AI individually. Your team does consulting the traditional way.",
+        "You've shared an AI tool recommendation or prompt trick with your project team.",
+        "You've piloted AI tools on a client engagement — used AI for research, analysis, or deliverable production and demonstrated time/quality improvements to your team lead.",
+        "You've driven AI adoption for your practice — created AI usage guidelines, prompt templates for common deliverables, and trained analysts on AI-first workflows. Engagement margins have improved because your team produces faster.",
+        "You've shaped your firm's AI strategy. You've defined how AI should be used across engagement types, created the playbooks, and built a culture where AI-assisted work is the standard. You present AI efficiency gains to partners and influence firm-wide adoption.",
+      ],
+    },
+  ],
+
+  "Operations / Supply Chain Manager": [
+    {
+      area: "AI for demand forecasting & planning",
+      levels: [
+        "You forecast demand using historical averages and Excel models. Adjustments are based on gut feel and sales input.",
+        "You've used AI to analyze past demand patterns or generate a simple forecast from historical data.",
+        "You use AI to build multi-variable demand models — you feed it historical sales, seasonality data, promotional calendars, and external factors. AI generates forecasts with confidence intervals and flags anomalies. Your forecast accuracy has improved 10–15%.",
+        "You've built a demand planning workflow where AI ingests POS data, inventory levels, lead times, and market signals to generate SKU-level forecasts with automated reorder recommendations. You review exceptions, not every SKU.",
+        "You've built an AI-powered demand planning system for your organization. It auto-adjusts forecasts based on real-time signals, generates scenario plans for disruptions, and has reduced stockouts and excess inventory measurably. Your planning team operates on AI recommendations, not spreadsheets.",
+      ],
+    },
+    {
+      area: "AI for process optimization & efficiency",
+      levels: [
+        "You identify process bottlenecks through observation and manual time studies.",
+        "You've used AI to analyze process data or brainstorm efficiency improvements.",
+        "You regularly feed process data (cycle times, throughput, defect rates, downtime logs) into AI and get structured analyses — bottleneck identification, root cause hypotheses, and improvement recommendations. You implement the top suggestions.",
+        "You've built an AI-assisted continuous improvement workflow — AI monitors process KPIs, detects anomalies, generates root cause analyses, and recommends corrective actions. Your improvement cycle time has halved.",
+        "You've deployed AI-powered process optimization across your operations. AI models simulate process changes before implementation, predict failure points, and optimize schedules dynamically. Your operation runs on data-driven decisions, not experience-based guesses.",
+      ],
+    },
+    {
+      area: "AI for supplier management & procurement",
+      levels: [
+        "You manage suppliers through spreadsheets, emails, and manual performance tracking.",
+        "You've used AI to draft RFQs, analyze supplier quotes, or summarize vendor performance data.",
+        "You use AI to evaluate suppliers — you feed it performance data (quality, delivery, pricing history) and it generates scorecards, risk assessments, and negotiation briefs. Your supplier reviews are faster and more data-driven.",
+        "You've built a procurement intelligence workflow — AI analyzes market pricing trends, flags cost-saving opportunities, generates negotiation strategies based on supplier dependency and market conditions, and auto-drafts contract terms.",
+        "You've built an AI-powered procurement system. It monitors commodity prices, predicts cost movements, auto-generates RFQs, evaluates bids against multi-dimensional criteria, and surfaces strategic sourcing opportunities. Your procurement team makes better decisions faster.",
+      ],
+    },
+    {
+      area: "AI for inventory & warehouse optimization",
+      levels: [
+        "You manage inventory with basic min/max levels and manual cycle counts.",
+        "You've used AI to analyze inventory data or calculate optimal reorder points.",
+        "You use AI to optimize inventory levels — dynamic safety stock calculations, ABC-XYZ analysis, and dead stock identification. AI processes your SKU-level data and recommends actions you'd never get to manually across thousands of items.",
+        "You've built an AI-assisted inventory system — it monitors stock levels in real-time, predicts stockouts before they happen, optimizes warehouse slotting based on pick patterns, and generates exception reports. Your carrying costs have dropped measurably.",
+        "You've deployed AI-driven inventory optimization across your network. Multiple warehouses, dynamic allocation, predictive replenishment — AI manages the complexity that humans can't handle at scale. You've reduced working capital while improving service levels.",
+      ],
+    },
+    {
+      area: "AI for logistics & transportation optimization",
+      levels: [
+        "You plan routes and shipments manually or using basic tools. Carrier selection is based on rate sheets.",
+        "You've used AI to analyze shipping data or optimize a route plan.",
+        "You use AI to optimize transportation — you feed it shipment data, carrier rates, constraints, and delivery windows, and it generates optimized load plans and route recommendations. You save 10–15% on freight costs on routes you've optimized.",
+        "You've built a logistics optimization workflow — AI consolidates orders, selects optimal carriers, plans routes considering real-time constraints (traffic, weather, capacity), and generates cost-benefit analyses for logistics decisions.",
+        "You've deployed an AI-powered logistics system. It dynamically optimizes your transportation network — real-time route adjustments, predictive capacity booking, automated carrier negotiations, and continuous cost optimization. Your logistics cost per unit has improved quarter over quarter.",
+      ],
+    },
+    {
+      area: "Prompt engineering for operations workflows",
+      levels: [
+        "You ask ChatGPT basic questions about operational challenges.",
+        "You've learned to provide specific data and context — \"Given these lead times and demand patterns, how should I adjust safety stock?\"",
+        "You write structured prompts for operational analysis — demand analysis, supplier evaluation, process mapping, root cause analysis. You have go-to prompts for recurring operational tasks that produce consistent, useful outputs.",
+        "You build prompt chains for complex operational decisions — data analysis prompt → scenario modeling prompt → recommendation prompt → implementation plan prompt. You know where AI hallucinates in operations (fake benchmarks, unrealistic efficiency numbers) and add verification steps.",
+        "You've built an operations prompt playbook. Your team uses these workflows for standard analyses. New ops managers can produce senior-quality analyses using your prompt templates. You've fundamentally changed how your team approaches operational problem-solving.",
+      ],
+    },
+    {
+      area: "AI for quality management & compliance",
+      levels: [
+        "You track quality through manual inspections and spreadsheet-based reports.",
+        "You've used AI to analyze quality data or generate a non-conformance report.",
+        "You use AI to analyze quality trends — defect patterns, Pareto analysis, process capability calculations. AI identifies correlations you'd miss in manual analysis and generates structured improvement recommendations.",
+        "You've built an AI-assisted quality system — it monitors quality KPIs in real-time, predicts quality risks based on process parameters, generates corrective action plans, and auto-drafts compliance documentation.",
+        "You've deployed AI-powered quality management. Predictive quality models flag issues before they reach customers. Compliance documentation is auto-generated and audit-ready. Your quality costs have dropped while customer satisfaction has improved.",
+      ],
+    },
+    {
+      area: "AI for operational reporting & communication",
+      levels: [
+        "You compile operational reports manually — pulling data from multiple systems into Excel and PowerPoint.",
+        "You've used AI to draft an operational summary or format a report.",
+        "You use AI to generate operational reports — you feed it raw KPI data and it produces narrative summaries with trend analysis, exception highlights, and recommendations. Your weekly ops review prep takes 30 minutes instead of half a day.",
+        "You've built a reporting workflow — AI auto-ingests operational data, generates daily/weekly/monthly reports with context-aware narratives, and highlights only what needs human attention. Your leadership gets better information faster.",
+        "You've systematized operational reporting with AI. Every operational review — from daily standups to quarterly business reviews — runs on AI-generated analyses and narratives. The data-to-decision cycle has compressed from days to hours.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for ops managers",
+      levels: [
+        "You use ChatGPT occasionally for ad-hoc questions.",
+        "You use AI regularly for writing and basic analysis.",
+        "You have an ops manager's AI stack — Claude for analysis and reporting, Perplexity for benchmarking and research, AI transcription for supplier calls and team meetings. You save 5+ hours/week on administrative and analytical tasks.",
+        "You've built a productivity OS for operations — AI handles your daily reporting, meeting summaries, supplier communication drafts, and exception analysis. You focus on decisions and relationships, not data wrangling.",
+        "You've built an integrated system where AI is your operational co-pilot. It surfaces what needs your attention each morning, generates the analyses you need before you ask, and handles the documentation you used to spend hours on. Other ops managers want your setup.",
+      ],
+    },
+    {
+      area: "Leading AI adoption in your operations team",
+      levels: [
+        "You use AI individually. Your operations team runs on spreadsheets and legacy systems.",
+        "You've shown your team an AI tool — maybe for report generation or data analysis.",
+        "You've piloted AI tools in your operations — demand planning, quality analysis, or reporting — and demonstrated measurable improvements to your leadership.",
+        "You've driven AI adoption across your operations function — defined use cases, deployed tools, created SOPs, and trained your team. At least 3 operational processes now run faster or more accurately because of AI.",
+        "You've transformed your operations with AI. It's embedded in how your team forecasts, plans, monitors, and reports. You've measured and presented the ROI. You're the person leadership asks about \"how should we use AI in operations?\"",
+      ],
+    },
+  ],
+
+  "Tech Professional transitioning to Business": [
+    {
+      area: "AI for business communication & storytelling",
+      levels: [
+        "You communicate in technical terms. Business stakeholders often ask you to \"translate\" what you mean.",
+        "You've used AI to rewrite technical content in business language — emails, updates, presentations.",
+        "You use AI to bridge the tech-business gap — you feed it technical details and get business-ready narratives. You prompt with audience context (\"Write this for a VP of Sales who cares about revenue impact, not architecture\") and the output lands.",
+        "You've built communication templates — AI translates your technical work into business cases, executive summaries, and stakeholder updates. You customize for different audiences automatically. Non-technical leaders now understand your impact clearly.",
+        "You've mastered AI-assisted business communication. You produce executive-quality strategy narratives, board decks, and business cases that no one would guess came from an engineer. AI handles the translation, you bring the technical depth that gives your business arguments an unfair advantage.",
+      ],
+    },
+    {
+      area: "AI for understanding business metrics & P&L",
+      levels: [
+        "You know revenue and costs exist but haven't analyzed a P&L or business metrics dashboard yourself.",
+        "You've used AI to explain financial concepts — unit economics, gross margin, CAC/LTV, burn rate.",
+        "You regularly use AI to analyze business data — you paste revenue reports, funnel data, or financial summaries into Claude and get structured analyses. You ask \"What would a CFO flag in this data?\" and get useful answers.",
+        "You've built a business analysis workflow — AI helps you build financial models, analyze cohort economics, and prepare business reviews. You participate in P&L discussions with confidence because AI helps you prep.",
+        "You've become fluent in business metrics with AI as your accelerator. You build business cases, analyze ROI, and present financial arguments that earn credibility from business leaders. Your technical background + business fluency makes you a rare, valuable profile.",
+      ],
+    },
+    {
+      area: "AI for product thinking & strategy",
+      levels: [
+        "You think about features and code, not user problems or business strategy.",
+        "You've used AI to brainstorm product ideas or understand a product strategy framework.",
+        "You use AI to develop product thinking — you prompt it with user problems and get structured analyses of market opportunity, competitive landscape, and solution approaches. You write product notes that PMs take seriously.",
+        "You've built product strategy skills with AI — you generate competitive analyses, write mini-PRDs, and create product proposals that include market sizing, user segmentation, and success metrics. AI bridges the gap between your technical intuition and formal product thinking.",
+        "You lead product strategy discussions. You combine your technical depth with AI-powered business analysis to propose products others can't — you see technical feasibility AND business viability simultaneously. You're the \"technical PM\" everyone wants on their team.",
+      ],
+    },
+    {
+      area: "AI for market research & competitive intelligence",
+      levels: [
+        "You don't actively track market trends or competitors in your domain.",
+        "You've used AI to summarize a competitor's product or a market trend article.",
+        "You use AI to run structured competitive analyses — you prompt with specific comparison frameworks and get analyses of how your product compares on features, pricing, positioning, and technical architecture. You bring insights to product discussions.",
+        "You've built a research workflow — AI monitors competitors, synthesizes industry reports, and generates strategic summaries. You show up to business meetings with market context that surprises non-technical leaders.",
+        "You've become the person who bridges technical and market intelligence. Your AI-powered research connects technology trends to business opportunities. You write the analysis that shapes your company's product strategy.",
+      ],
+    },
+    {
+      area: "AI for stakeholder management & influence",
+      levels: [
+        "You work with stakeholders but struggle to align business and technical priorities.",
+        "You've used AI to prepare for a stakeholder meeting — generating talking points or anticipating questions.",
+        "You use AI to prepare for every important meeting — it generates stakeholder briefs, anticipates objections, and helps you frame technical decisions in business terms. Your meetings are more productive because you come prepared.",
+        "You've built a stakeholder management system — AI helps you map influence, track priorities across stakeholders, and generate tailored communication for each. You manage cross-functional alignment more effectively than most pure business people.",
+        "You've become an exceptional cross-functional leader. AI handles the prep, you bring the judgment. You navigate business politics, build executive relationships, and drive decisions that balance technical excellence with business outcomes.",
+      ],
+    },
+    {
+      area: "Prompt engineering for business-technical bridge roles",
+      levels: [
+        "You use AI for coding tasks but haven't applied it to business problems.",
+        "You've started prompting AI for business tasks — drafting emails to non-technical stakeholders, summarizing business meetings.",
+        "You write structured prompts for both technical and business tasks. You leverage your technical understanding to write better prompts than most business people — you understand context windows, model limitations, and prompt structure at a deeper level.",
+        "You build sophisticated prompt workflows that bridge tech and business — translating architecture decisions into business impact assessments, converting sprint outputs into stakeholder updates, and generating business cases from technical specs.",
+        "You've built prompt systems that make you a force multiplier. Your technical understanding of LLMs combined with your growing business acumen means your AI outputs are more accurate and nuanced than what pure business or pure tech people produce.",
+      ],
+    },
+    {
+      area: "AI for building business cases & ROI analysis",
+      levels: [
+        "You build features but can't articulate their business value in financial terms.",
+        "You've used AI to understand what a business case should include or to estimate the impact of a project.",
+        "You use AI to build business cases for technical projects — you describe the project and AI helps you frame the ROI, model the cost savings, and articulate the business value. Your proposals get approved more often because they speak the language of business.",
+        "You've built a business case workflow — AI helps you model different scenarios, calculate payback periods, and generate executive summaries. You present technical investments as business investments, complete with financial projections and risk analysis.",
+        "You're the engineer who can sell technical projects to the board. Your AI-assisted business cases are rigorous, credible, and compelling. Leadership funds your proposals because you quantify impact in terms they care about — revenue, cost, risk, time-to-market.",
+      ],
+    },
+    {
+      area: "AI for understanding operations, marketing & sales",
+      levels: [
+        "You know these functions exist but don't understand their workflows or metrics.",
+        "You've used AI to learn about go-to-market strategies, sales funnels, or operational metrics.",
+        "You use AI to actively build cross-functional knowledge — you analyze marketing campaigns, understand sales pipeline metrics, and learn operational workflows. When you sit in cross-functional meetings, you contribute meaningfully.",
+        "You've built a learning system — AI helps you prepare for cross-functional interactions, understand the metrics each team cares about, and contribute technical solutions to business problems. You're no longer \"just the tech person\" in the room.",
+        "You're a true generalist-specialist. You understand how every business function works, can analyze their data, and propose AI-powered solutions for their problems. Your technical background + business breadth makes you a future COO/CPO candidate.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for career transitioners",
+      levels: [
+        "You use AI for coding assistance but not for business skill-building.",
+        "You use AI for both technical and business tasks — coding help AND email drafting.",
+        "You have a dual-purpose AI stack — Copilot/Cursor for code, Claude for business analysis, Perplexity for market research, AI transcription for meetings. You save 6+ hours/week AND you're building business skills simultaneously.",
+        "You've built a career transition OS — AI accelerates your learning (explains business concepts on demand, simulates stakeholder conversations), handles your communication gap (translates tech to business), and makes you productive in business tasks faster than a typical MBA grad.",
+        "You've built an integrated system that makes your transition seamless. AI is your real-time business mentor, communication coach, and analytical assistant. You're equally effective in technical deep-dives and business strategy sessions because AI covers your gaps while you build the real skills.",
+      ],
+    },
+    {
+      area: "Leading AI adoption as a tech-business bridge",
+      levels: [
+        "You use AI individually for your own work.",
+        "You've helped a non-technical colleague use AI for the first time.",
+        "You've identified and piloted AI tools for a business team — helping marketing use AI for copy, or helping ops use AI for reporting. Your technical understanding lets you evaluate and deploy AI tools faster than non-technical teams can.",
+        "You've become the AI champion across functions — you lead AI adoption not just for your engineering team but for business teams who need someone technical to guide them. You evaluate tools, create workflows, and train people.",
+        "You drive AI strategy across the organization. Your unique position — understanding both the technology and the business applications — makes you the most valuable person in the AI adoption conversation. You shape the company's AI roadmap.",
+      ],
+    },
+  ],
+
+  "Founder / Entrepreneur": [
+    {
+      area: "AI for GTM strategy & launch execution",
+      levels: [
+        "You plan go-to-market manually — brainstorming, competitor googling, and writing everything from scratch.",
+        "You've used AI to brainstorm positioning ideas, draft a launch plan, or research competitors.",
+        "You use AI to build complete GTM strategies — you prompt with your product, ICP, market context, and AI generates positioning options, channel strategies, launch timelines, and messaging frameworks. Your launches are more structured and faster.",
+        "You've built a GTM workflow — AI generates your competitive positioning, creates launch messaging per channel, drafts PR pitches, writes landing page copy, and creates investor-ready launch decks. You focus on strategy and relationships, AI handles production.",
+        "You run your entire GTM through AI-assisted workflows. From market research to positioning to launch execution to post-launch analysis. Your launches are faster, more data-driven, and better-messaged than startups with 3x your team size.",
+      ],
+    },
+    {
+      area: "AI for fundraising & investor communication",
+      levels: [
+        "You write pitch decks and investor updates manually.",
+        "You've used AI to draft a section of a pitch deck or clean up an investor update.",
+        "You use AI to generate investor-quality narratives — you feed it your metrics, milestones, and market context, and it produces pitch deck copy, update emails, and Q&A prep that anticipates investor concerns. Your communication is sharper.",
+        "You've built an investor communication workflow — AI generates your monthly updates from raw metrics, prepares you for board meetings with briefing docs, and creates data rooms with narrative context. You spend time on relationships, not production.",
+        "You've systematized investor relations with AI. Updates auto-generate from your dashboards. Board prep is AI-assisted. Your narrative consistency across all touchpoints (deck, updates, one-on-ones) is airtight because AI maintains it. Investors comment on your communication quality.",
+      ],
+    },
+    {
+      area: "AI for hiring, team building & people management",
+      levels: [
+        "You write job descriptions from scratch and screen resumes manually.",
+        "You've used AI to draft JDs, screening criteria, or interview questions.",
+        "You use AI for your entire hiring workflow — AI generates JDs from role requirements, creates screening rubrics, drafts outreach messages for candidates, and generates structured interview scorecards. Your hiring moves 2x faster.",
+        "You've built a people management system with AI — AI helps you write performance reviews, generate 1-on-1 agendas based on team OKRs, draft difficult feedback conversations, and create onboarding materials for new hires. You manage a growing team more effectively.",
+        "You've built AI-powered people operations for your startup. From hiring pipeline to onboarding to performance management — AI handles the admin so you can focus on culture and strategy. Your team of 10 runs like a team of 20 operationally.",
+      ],
+    },
+    {
+      area: "AI for financial planning & runway management",
+      levels: [
+        "You manage finances in a basic spreadsheet. Burn rate calculations are rough.",
+        "You've used AI to build a basic financial model or analyze your burn rate.",
+        "You use AI to build financial models — revenue projections, scenario planning, cash flow forecasts. You feed it your actuals and assumptions, and it generates models with sensitivity analysis. You make better funding and spending decisions.",
+        "You've built a financial planning workflow — AI monitors your actuals vs. projections, flags variance, generates board-ready financial updates, and models the impact of hiring/pricing/expansion decisions on your runway.",
+        "You run financial operations with AI as your virtual CFO. Monthly close reports, budget vs. actuals, fundraising scenarios, pricing optimization — all AI-assisted. You make financial decisions with the rigor of a funded startup twice your size.",
+      ],
+    },
+    {
+      area: "AI for product development & iteration",
+      levels: [
+        "You build product based on intuition and direct customer conversations. No systematic process.",
+        "You've used AI to brainstorm features, write user stories, or prioritize a backlog.",
+        "You use AI throughout your product process — generating user stories from customer interviews, prioritizing features based on impact/effort analysis, writing specs that your developers can actually build from. Your product velocity has increased.",
+        "You've built a product development system — AI synthesizes customer feedback into opportunities, generates PRDs, creates test scenarios, and writes release notes. You make product decisions faster because the analytical prep work is automated.",
+        "You run product development like a senior PM org with AI as force multiplier. Customer insights → opportunity identification → spec → build → measure — AI accelerates every stage. Your startup iterates faster than competitors with dedicated product teams.",
+      ],
+    },
+    {
+      area: "Prompt engineering for founder workflows",
+      levels: [
+        "You type whatever comes to mind into ChatGPT.",
+        "You've learned to give context about your startup — stage, market, customers — and get better outputs.",
+        "You have a library of founder-specific prompts — for investor emails, customer research, team communication, strategy sessions. You've written 15+ prompts you use weekly. AI is a daily tool, not an occasional novelty.",
+        "You build prompt workflows for end-to-end tasks — pitch deck creation, GTM planning, financial modeling, hiring. You chain prompts together and test across models (Claude for long analysis, GPT for creative, Perplexity for research).",
+        "You've codified your entire startup's AI-first approach. Every repeating process has a prompt workflow. New team members get a startup AI playbook on day one. Your prompt engineering skill is a legitimate competitive advantage in speed and quality.",
+      ],
+    },
+    {
+      area: "AI for customer development & sales",
+      levels: [
+        "You talk to customers informally and track feedback in your head or scattered notes.",
+        "You've used AI to draft sales emails, prepare for customer calls, or summarize feedback.",
+        "You use AI for structured customer development — AI synthesizes call notes into patterns, generates discovery questions for different customer segments, drafts sales proposals, and creates follow-up sequences. Your sales cycle is more systematic.",
+        "You've built a customer intelligence system — AI analyzes all customer touchpoints (calls, emails, support tickets, usage data), identifies churn signals, surfaces upsell opportunities, and generates personalized outreach. You understand your customers better than you could manually.",
+        "You've built AI-powered customer operations. From first touch to retention — AI handles the analytical layer. You know which customer segments are growing, which are churning, and why. Your sales process is data-driven despite having no sales ops team.",
+      ],
+    },
+    {
+      area: "AI for operations & scaling",
+      levels: [
+        "You handle operations manually — everything from vendor management to compliance is ad hoc.",
+        "You've used AI to draft SOPs, vendor emails, or process documentation.",
+        "You use AI to systematize your startup's operations — generating SOPs from your ad-hoc processes, creating vendor evaluation frameworks, drafting contracts, and building operational dashboards. Your chaos starts to look like a real company.",
+        "You've built operational systems with AI — automated reporting, vendor management workflows, compliance checklists, and team playbooks. You spend less time firefighting and more time on strategy because processes actually exist.",
+        "You've built a scalable operating system for your startup with AI. Operations that would normally require an ops hire run on AI-assisted workflows. Investors notice your operational maturity. You're ready to scale because the operational foundation is solid.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for founders",
+      levels: [
+        "You're overwhelmed and barely have time to try AI tools.",
+        "You use ChatGPT for quick tasks — drafting emails, brainstorming, research.",
+        "You have a founder's AI stack — Claude for deep thinking and analysis, Perplexity for market research, AI for meeting notes, Notion AI for documentation. You save 8+ hours/week and those hours go back into building.",
+        "You've built a founder productivity OS — AI drafts your investor updates from metrics, prepares you for board meetings, generates your weekly team communication, handles first drafts of everything. You've measured: AI saves you 12+ hours/week.",
+        "You've built an integrated system that makes you operate like a founder with a full C-suite. AI is your virtual co-founder — it helps you think strategically, communicate clearly, analyze deeply, and move fast. Other founders ask how you get so much done with a small team. This is your answer.",
+      ],
+    },
+    {
+      area: "Leading AI-first culture in your startup",
+      levels: [
+        "You use AI personally but your team doesn't.",
+        "You've encouraged your team to try AI tools.",
+        "You've defined which AI tools your startup uses and gotten the whole team on board. At least 3 workflows now run through AI — writing, research, customer analysis.",
+        "You've built an AI-first startup — every team member has AI in their workflow, you've created shared prompt libraries, and you measure the productivity impact. New hires are selected partly for AI fluency.",
+        "AI-first is your startup's competitive advantage. It's in your culture, your hiring criteria, your processes, and your product. You operate with the output of a team 3x your size because AI amplifies every person. This is a deliberate strategy, not just tool adoption.",
+      ],
+    },
+  ],
+
+  "Finance / Commercial Manager": [
+    {
+      area: "AI for financial analysis & modeling",
+      levels: [
+        "You build financial models in Excel from scratch. Every formula, scenario, and assumption is manual work.",
+        "You've used AI to check a formula, explain a financial concept, or brainstorm model assumptions.",
+        "You use AI to accelerate financial modeling — it generates model structures from your description, writes Excel formulas, builds scenario frameworks, and creates sensitivity analysis templates. Your models get built in half the time.",
+        "You've built financial analysis workflows — you feed AI your raw data (P&L, balance sheet, cash flow) and it generates variance analysis, trend identification, and executive narratives. You focus on judgment and recommendations, AI handles the analytical grunt work.",
+        "You've systematized financial analysis with AI for your team. Standard analyses (monthly close commentary, budget vs. actuals, forecasts) are AI-assisted with human validation. Your finance team produces faster, more insightful work because AI handles the routine analytical layer.",
+      ],
+    },
+    {
+      area: "AI for budgeting & forecasting",
+      levels: [
+        "You build annual budgets in spreadsheets using last year's numbers plus adjustments.",
+        "You've used AI to analyze budget variances or build a basic forecast model.",
+        "You use AI to build dynamic forecasts — feeding it historical data, growth assumptions, and market context. AI generates scenario-based budgets (bull/base/bear), identifies where your assumptions are weakest, and creates presentation-ready output.",
+        "You've built a forecasting system — AI monitors actuals vs. budget in real-time, adjusts rolling forecasts based on trend data, flags material variances before month-end, and generates management commentaries. Your forecasting is continuous, not quarterly.",
+        "You've deployed AI-powered financial planning for your organization. FP&A that required a team of 5 runs with 2 people and AI. Forecasts are more accurate, faster, and more granular. Leadership trusts your numbers because the analytical rigor is visible.",
+      ],
+    },
+    {
+      area: "AI for commercial deal analysis & pricing",
+      levels: [
+        "You evaluate deals using standard spreadsheet models and gut feel for pricing.",
+        "You've used AI to analyze a deal structure or brainstorm pricing strategies.",
+        "You use AI to analyze commercial deals — you feed it deal terms, comparable transactions, and market benchmarks, and it generates deal assessments, risk flags, and negotiation recommendations. You evaluate deals faster and catch risks earlier.",
+        "You've built a deal analysis workflow — AI models deal economics under different scenarios, benchmarks pricing against market data, generates term sheet analyses, and creates internal approval documents. Your deal velocity has increased without sacrificing diligence.",
+        "You've built an AI-powered commercial intelligence system. Pricing optimization uses AI-driven market analysis. Deal evaluation is systematic and data-rich. Your commercial team makes better pricing and deal decisions because the analytical foundation is stronger.",
+      ],
+    },
+    {
+      area: "AI for audit, compliance & risk management",
+      levels: [
+        "You handle compliance manually — checklist-driven reviews, manual documentation, and spreadsheet tracking.",
+        "You've used AI to draft compliance documentation or understand a new regulation.",
+        "You use AI to accelerate compliance work — analyzing regulatory changes for impact, generating audit checklists, reviewing contracts for compliance gaps, and creating documentation frameworks. Compliance prep that took weeks now takes days.",
+        "You've built a compliance workflow — AI monitors regulatory changes, assesses their impact on your business, generates compliance action plans, and drafts policy updates. Your audit preparation is largely AI-assisted with human validation at key checkpoints.",
+        "You've deployed AI-powered compliance for your organization. Regulatory monitoring is automated, audit trails are AI-generated, and risk assessments are continuous rather than periodic. Your compliance function is more thorough and faster than before AI.",
+      ],
+    },
+    {
+      area: "AI for management reporting & business intelligence",
+      levels: [
+        "You compile management reports manually — pulling data from multiple systems and building slides.",
+        "You've used AI to format a report or draft an executive summary from data.",
+        "You use AI to generate management reports — you feed it raw financial data and it produces narrative commentaries, trend analyses, and variance explanations. Your monthly reporting cycle is 40% faster.",
+        "You've built a reporting workflow — AI auto-generates standard reports from your data, creates different versions for different audiences (board, exec team, ops), and flags the issues that need human attention. You spend time on insights, not formatting.",
+        "You've systematized business intelligence with AI. Every recurring report is AI-generated with human QA. Your leadership gets more timely, more insightful financial narratives. The data-to-decision cycle has compressed from days to hours.",
+      ],
+    },
+    {
+      area: "Prompt engineering for finance workflows",
+      levels: [
+        "You ask ChatGPT basic finance questions.",
+        "You've learned to provide specific financial context — \"Analyze this P&L for a SaaS company with 80% gross margins.\"",
+        "You write structured prompts for finance tasks — variance analysis, ratio calculations, forecast generation, and audit preparation. You have 10+ reusable prompts that produce consistent, professional outputs.",
+        "You build prompt chains for complex financial work — data ingestion prompt → analysis prompt → recommendation prompt → presentation prompt. You know where AI hallucinates in finance (making up benchmark data, incorrect formulas) and you add verification steps.",
+        "You've built a finance prompt playbook for your team. Every recurring financial analysis has a prompt workflow. Junior analysts produce senior-quality outputs using your templates. You've fundamentally changed how your finance team approaches analytical work.",
+      ],
+    },
+    {
+      area: "AI for treasury & cash flow management",
+      levels: [
+        "You manage cash flow in spreadsheets with basic projections.",
+        "You've used AI to build a cash flow forecast or analyze working capital trends.",
+        "You use AI to build dynamic cash flow models — it factors in receivable aging, payable schedules, seasonal patterns, and growth assumptions. Your cash forecasting is more granular and accurate.",
+        "You've built a cash management workflow — AI monitors daily cash positions, projects short-term and long-term liquidity, flags potential shortfalls weeks in advance, and generates financing recommendations.",
+        "You've deployed AI-powered treasury management. Cash flow forecasting is continuous, scenario-aware, and integrated with your operational data. Your CFO makes capital allocation decisions based on AI-generated projections that have proven more accurate than manual forecasts.",
+      ],
+    },
+    {
+      area: "AI for vendor & cost management",
+      levels: [
+        "You track vendor costs in spreadsheets and negotiate contracts based on experience and market knowledge.",
+        "You've used AI to analyze vendor spend data or draft a contract review.",
+        "You use AI to analyze vendor performance and costs — benchmarking against market rates, identifying consolidation opportunities, and generating negotiation strategies based on contract terms and spend patterns.",
+        "You've built a procurement analytics workflow — AI monitors spend categories, identifies cost reduction opportunities, benchmarks vendor pricing, and generates executive summaries of procurement performance. Your cost savings pipeline is data-driven.",
+        "You've deployed AI-powered cost management. Spend analytics are automated, vendor risk is continuously monitored, and procurement decisions are supported by AI-generated market intelligence. Your cost-to-revenue ratio has improved measurably because of systematic AI-powered analysis.",
+      ],
+    },
+    {
+      area: "Personal AI productivity system for finance professionals",
+      levels: [
+        "You use ChatGPT occasionally for ad-hoc questions.",
+        "You use AI regularly — for writing, basic calculations, and report formatting.",
+        "You have a finance professional's AI stack — Claude for analysis and narrative writing, AI for Excel/Sheets automation, Perplexity for market research and benchmarks. You save 6+ hours/week on reporting and analysis.",
+        "You've built a finance productivity OS — AI handles your recurring reports, generates your meeting briefs, drafts your emails, and helps you analyze any dataset in minutes. Your throughput has doubled.",
+        "You've built an integrated system that makes you the most productive finance person in your org. AI handles 80% of your analytical work, and you focus on judgment, relationships, and strategy. Other finance professionals want to learn your setup.",
+      ],
+    },
+    {
+      area: "Leading AI adoption in your finance team",
+      levels: [
+        "You use AI individually. Your finance team runs on Excel and manual processes.",
+        "You've shown a teammate an AI trick — generating formulas, drafting reports.",
+        "You've piloted AI tools for your finance team — maybe AI-assisted reporting, automated reconciliation, or intelligent forecasting. You've demonstrated measurable time savings.",
+        "You've driven AI adoption across your finance function — defined AI use cases per finance process, created prompt templates, and trained your team. At least 3 finance workflows run faster because of AI.",
+        "You've transformed your finance function with AI. From close processes to forecasting to reporting — AI is embedded. You've measured and presented the efficiency gains. You're the person leadership consults on \"how should finance use AI?\"",
+      ],
+    },
+  ],
+};
+
+const BANDS = [
+  {
+    min:10,max:18,label:"AI Curious",cls:"band-curious",ringCls:"ring-fill-curious",
+    meaning:"Right now, AI is changing how every industry works — and you haven't started using it yet. That's not a criticism, it's a fact. The people in your role who figure this out in the next 12 months will pull ahead. The ones who don't will struggle to stay relevant. The good news? You don't need to become a coder. You need the right framework.",
+  },
+  {
+    min:19,max:28,label:"AI Aware",cls:"band-aware",ringCls:"ring-fill-aware",
+    meaning:"You've started using AI, which puts you ahead of many. But there's a big difference between using ChatGPT once a week and actually transforming how you work. Right now, you're scratching the surface. Professionals who go deeper — who learn to build workflows, automate decisions, and lead with AI — will be the ones who get promoted, hired, and trusted with bigger roles.",
+  },
+  {
+    min:29,max:38,label:"AI Capable",cls:"band-capable",ringCls:"ring-fill-capable",
+    meaning:"You're already better at AI than most people in your role. That's the good news. The not-so-good news? Everyone is catching up fast. The gap between 'good with AI' and 'irreplaceable because of AI' is exactly where career acceleration happens. You need peers at your level and structured challenges to push further.",
+  },
+  {
+    min:39,max:50,label:"AI Leader",cls:"band-leader",ringCls:"ring-fill-leader",
+    meaning:"You're in the top tier. Most people in your role aren't close to where you are. But here's what separates leaders from legends: scaling your impact beyond yourself. Building systems, training teams, driving org-wide change. That's the next level — and it's hard to do alone.",
+  },
+];
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+const state = { name:"", phone:"", role:null, currentQ:0, answers:new Array(10).fill(null) };
+
+/* ==========================================================
+   INIT
+   ========================================================== */
+(function init(){
+  // floating dots
+  const bg = document.getElementById('dots-bg');
+  const colors = ['#3940F0','#6366F1','#818CF8','#A5B4FC','#C7D2FE'];
+  for(let i=0;i<22;i++){
+    const d = document.createElement('span');
+    d.className = 'dot-particle';
+    const size = 4 + Math.random()*10;
+    d.style.cssText = `
+      width:${size}px;height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*40}px;
+      animation-duration:${4+Math.random()*6}s;
+      animation-delay:${Math.random()*5}s;
+    `;
+    bg.appendChild(d);
+  }
+
+  // role cards
+  const grid = document.getElementById('role-grid');
+  ROLES.forEach((role,i)=>{
+    const card = document.createElement('button');
+    card.className = 'role-card';
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="role-card-check"><div class="role-card-check-inner"></div></div>
+      <div class="role-card-text">
+        <div class="role-card-name">${role}</div>
+        <div class="role-card-desc">${ROLE_DESCS[role]}</div>
+      </div>
+    `;
+    card.addEventListener('click',()=>selectRole(i,card));
+    grid.appendChild(card);
+  });
+
+  // OTP
+  for(let i=0;i<4;i++){
+    const inp = document.getElementById(`otp-${i}`);
+    inp.addEventListener('input',e=>{
+      const val = e.target.value.replace(/\D/g,'').slice(-1);
+      e.target.value = val;
+      val ? e.target.classList.add('filled') : e.target.classList.remove('filled');
+      if(val && i<3) document.getElementById(`otp-${i+1}`).focus();
+      document.getElementById('otp-error').classList.remove('visible');
+    });
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!inp.value&&i>0) document.getElementById(`otp-${i-1}`).focus();
+    });
+  }
+})();
+
+/* ==========================================================
+   LOGIN
+   ========================================================== */
+function sendOtp(){
+  const name = document.getElementById('input-name').value.trim();
+  const phone = document.getElementById('input-phone').value.trim();
+  if(!name){ document.getElementById('input-name').focus(); return; }
+  if(!phone||phone.length<10){ document.getElementById('input-phone').focus(); return; }
+  state.name = name; state.phone = phone;
+  document.getElementById('otp-phone-display').textContent = `+91 ${phone}`;
+  document.getElementById('otp-section').classList.add('visible');
+  document.getElementById('btn-send-otp').textContent = 'Resend OTP';
+  document.getElementById('otp-0').focus();
+  for(let i=0;i<4;i++){
+    const inp=document.getElementById(`otp-${i}`);
+    inp.value=''; inp.classList.remove('filled');
+  }
+}
+
+function verifyOtp(){
+  const digits = [0,1,2,3].map(i=>document.getElementById(`otp-${i}`).value);
+  if(digits.join('').length<4||digits.some(d=>d==='')){
+    document.getElementById('otp-error').classList.add('visible'); return;
+  }
+  document.getElementById('role-hey').textContent = `Hey ${state.name.split(' ')[0]},`;
+  showNav();
+  showScreen('screen-role');
+}
+
+/* ==========================================================
+   ROLE
+   ========================================================== */
+function selectRole(idx,el){
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.role = ROLES[idx];
+  document.getElementById('btn-start').disabled = false;
+}
+
+/* ==========================================================
+   NAVIGATION
+   ========================================================== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active','fade-in'));
+  const el = document.getElementById(id);
+  void el.offsetWidth;
+  el.classList.add('active','fade-in');
+  window.scrollTo(0,0);
+}
+function showNav(){ document.getElementById('nav-right').style.display='flex'; }
+function setNavProgress(label,pct){
+  document.getElementById('nav-progress-label').textContent=label;
+  document.getElementById('nav-progress-bar-fill').style.width=pct+'%';
+}
+
+function startAssessment(){
+  state.currentQ=0; state.answers=new Array(10).fill(null);
+  renderQuestion(); showScreen('screen-question');
+}
+function goNext(){
+  if(state.answers[state.currentQ]===null) return;
+  if(state.currentQ<9){ state.currentQ++; renderQuestion(); }
+  else { renderResults(); showScreen('screen-results'); document.getElementById('sticky-cta').classList.add('visible'); }
+}
+function goBack(){
+  if(state.currentQ===0){ setNavProgress('Role',5); showScreen('screen-role'); }
+  else { state.currentQ--; renderQuestion(); }
+}
+function retake(){
+  state.role=null; state.currentQ=0; state.answers=new Array(10).fill(null);
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('btn-start').disabled=true;
+  document.getElementById('sticky-cta').classList.remove('visible');
+  document.getElementById('btn-callback').disabled=false;
+  document.getElementById('btn-callback').textContent='Request a Callback';
+  document.getElementById('btn-callback').style.display='';
+  document.getElementById('sticky-cta').querySelector('.callback-success')&&
+    document.getElementById('sticky-cta').querySelector('.callback-success').remove();
+  setNavProgress('Role',5);
+  showScreen('screen-role');
+}
+
+/* ==========================================================
+   RENDER QUESTION
+   ========================================================== */
+function renderQuestion(){
+  const skills = ROLE_SKILLS[state.role];
+  const q = skills[state.currentQ];
+  const qNum = state.currentQ+1;
+  const pct = Math.round((state.currentQ/10)*100);
+  setNavProgress(`Skill ${qNum} of 10`, pct);
+  document.getElementById('q-eyebrow').textContent=`Skill Area ${qNum} of 10`;
+  document.getElementById('q-heading').textContent=q.area;
+  document.getElementById('btn-back').textContent=state.currentQ===0?'Change role':'Back';
+  const btnNext=document.getElementById('btn-next');
+  btnNext.disabled=state.answers[state.currentQ]===null;
+  btnNext.textContent=state.currentQ===9?'See Results →':'Next →';
+  const list=document.getElementById('level-list');
+  list.innerHTML='';
+  q.levels.forEach((desc,i)=>{
+    const level=i+1;
+    const card=document.createElement('div');
+    card.className='level-card'+(state.answers[state.currentQ]===level?' selected':'');
+    card.innerHTML=`
+      <div class="level-badge">${level}</div>
+      <div class="level-text">
+        <span class="level-name">Level ${level} — </span><span class="level-desc">${desc}</span>
+      </div>`;
+    card.addEventListener('click',()=>selectLevel(level));
+    list.appendChild(card);
+  });
+}
+
+function selectLevel(level){
+  state.answers[state.currentQ]=level;
+  document.querySelectorAll('.level-card').forEach((c,i)=>c.classList.toggle('selected',i+1===level));
+  document.getElementById('btn-next').disabled=false;
+}
+
+/* ==========================================================
+   RENDER RESULTS
+   ========================================================== */
+function renderResults(){
+  const total = state.answers.reduce((s,v)=>s+(v||0),0);
+  const band = BANDS.find(b=>total>=b.min&&total<=b.max)||BANDS[BANDS.length-1];
+  const firstName = state.name.split(' ')[0];
+
+  document.getElementById('results-heading').textContent=`Here's where you stand, ${firstName}`;
+  const bandEl=document.getElementById('result-band');
+  bandEl.textContent=band.label; bandEl.className=`result-band ${band.cls}`;
+  document.getElementById('meaning-text').textContent=band.meaning;
+  setNavProgress('Results',100);
+
+  // ring chart
+  const ringEl=document.getElementById('ring-fill');
+  ringEl.className=`ring-fill ${band.ringCls}`;
+  const circumference=2*Math.PI*65; // ~408.4
+  ringEl.style.strokeDasharray=circumference;
+  ringEl.style.strokeDashoffset=circumference;
+  const scoreEl=document.getElementById('ring-score');
+  scoreEl.textContent='0';
+
+  setTimeout(()=>{
+    const offset=circumference-(total/50)*circumference;
+    ringEl.style.strokeDashoffset=offset;
+    animateNumber(scoreEl,0,total,900);
+  },150);
+
+  // skill bars
+  const skills=ROLE_SKILLS[state.role];
+  const ranked=skills.map((s,i)=>({name:s.area,score:state.answers[i]||1,index:i}));
+  const sorted=[...ranked].sort((a,b)=>b.score-a.score);
+  const strong=sorted.slice(0,3);
+  const weak=sorted.slice(-3).reverse();
+  const mid=sorted.slice(3,7);
+
+  const container=document.getElementById('skills-all-list');
+  container.innerHTML='';
+
+  function makeGroup(items,labelText,labelCls,fillCls){
+    const label=document.createElement('div');
+    label.className=`skill-group-label ${labelCls}`;
+    label.textContent=labelText;
+    container.appendChild(label);
+    items.forEach(item=>{
+      const row=document.createElement('div');
+      row.className='skill-bar-row';
+      const pct=(item.score/5)*100;
+      row.innerHTML=`
+        <span class="skill-bar-name">${item.name}</span>
+        <div class="skill-bar-track"><div class="skill-bar-fill ${fillCls}" style="width:0%" data-w="${pct}"></div></div>
+        <span class="skill-bar-level">L${item.score}</span>`;
+      container.appendChild(row);
+    });
+  }
+  makeGroup(strong,'Where you\'re strong','label-strong','skill-bar-fill-strong');
+  makeGroup(mid,'Other skills','label-mid','skill-bar-fill-mid');
+  makeGroup(weak,'Where you need work','label-weak','skill-bar-fill-weak');
+
+  setTimeout(()=>{
+    document.querySelectorAll('.skill-bar-fill[data-w]').forEach(el=>{
+      el.style.transition='width .8s ease';
+      el.style.width=el.dataset.w+'%';
+    });
+  },200);
+
+  // career pitch
+  document.getElementById('pitch-from').textContent=state.role;
+  document.getElementById('pitch-to').textContent=ROLE_TRANSITIONS[state.role]||'AI-First Professional';
+
+  // send to sheet
+  sendToSheet(state.name,'91'+state.phone,state.role,total,band.label,skills,state.answers);
+}
+
+/* ==========================================================
+   CALLBACKS / SHARE
+   ========================================================== */
+function requestCallback(){
+  const btn=document.getElementById('btn-callback');
+  btn.style.display='none';
+  const success=document.createElement('div');
+  success.className='callback-success';
+  success.innerHTML=`<div class="callback-check-icon">&#10003;</div>We'll call you within 24 hours at +91 ${state.phone}`;
+  btn.parentNode.insertBefore(success,btn);
+}
+
+function shareScore(){
+  const total=state.answers.reduce((s,v)=>s+(v||0),0);
+  const band=BANDS.find(b=>total>=b.min&&total<=b.max)||BANDS[BANDS.length-1];
+  const text=`I scored ${total}/50 (${band.label}) on the AI Fluency Assessment by Scaler. How AI-ready are you? Take it here: https://www.scaler.com/online-pgp-in-business-and-ai`;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(showToast).catch(()=>fallbackCopy(text));
+  } else { fallbackCopy(text); }
+}
+
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;left:-9999px;top:-9999px;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); showToast(); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+function showToast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ==========================================================
+   UTILS
+   ========================================================== */
+function animateNumber(el,from,to,dur){
+  const start=performance.now();
+  function step(now){
+    const t=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-t,3);
+    el.textContent=Math.round(from+(to-from)*eased);
+    if(t<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>
