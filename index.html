@@ -374,19 +374,29 @@ body{
   font-size:22px;font-weight:800;color:var(--gray-900);margin-bottom:10px;letter-spacing:-.3px;line-height:1.3;
 }
 .transition-skills{
-  display:flex;flex-direction:column;gap:8px;margin-bottom:28px;
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;
 }
-.transition-skill-item{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 16px;background:var(--gray-50);border-radius:10px;
-  border:1px solid var(--gray-100);
+.skill-tag{
+  display:inline-flex;flex-direction:column;gap:2px;
+  padding:10px 16px;border-radius:10px;
+  background:var(--gray-50);border:1px solid var(--gray-200);
+  transition:border-color .15s,background .15s,transform .15s;
+  cursor:default;
 }
-.transition-skill-num{
-  width:22px;height:22px;border-radius:50%;background:var(--blue);
-  color:#fff;font-size:11px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+.skill-tag:hover{
+  border-color:var(--blue);background:var(--blue-light);transform:translateY(-1px);
 }
-.transition-skill-text{font-size:13px;color:var(--gray-700);line-height:1.55}
+.skill-tag-label{
+  font-size:13px;font-weight:700;color:var(--gray-900);line-height:1.2;
+}
+.skill-tag-detail{
+  font-size:11px;color:var(--gray-500);line-height:1.3;
+}
+.skill-tag.tools-tag{
+  background:linear-gradient(135deg,#EEF0FF,#E0E4FF);border-color:#C7CCFF;
+}
+.skill-tag.tools-tag .skill-tag-label{color:var(--blue);font-size:12px}
+.skill-tag.tools-tag .skill-tag-detail{color:var(--blue-dark);font-weight:600;font-size:12px;letter-spacing:.3px}
 .curriculum-coverage{
   background:linear-gradient(135deg,#EEF0FF 0%,#E8EBFF 100%);
   border:1px solid #D5D8FF;border-radius:12px;padding:20px 24px;margin-bottom:28px;
@@ -742,67 +752,95 @@ const ROLE_TRANSITIONS = {
 
 const ROLE_TRANSITION_SKILLS = {
   "Product Manager": [
-    "Write production-grade system prompts and prompt chains for PRD generation, user story creation, and spec review — using Claude, GPT-4, and Gemini",
-    "Build AI-powered research workflows — competitor monitoring agents, NPS synthesis pipelines, and automated customer feedback analysis using Perplexity + Claude",
-    "Spec and ship AI-powered product features — define evaluation criteria, confidence thresholds, fallback behavior, and human-in-the-loop flows",
-    "Design multi-agent systems — orchestrate specialized agents for support triage, bug classification, and research using tool-use and function calling",
-    "Build AI-assisted analytics — write SQL with AI, run cohort analyses, set up churn prediction, and create self-serve dashboards without waiting for the data team",
-    "Create an AI productivity OS — auto-generate meeting briefs, sprint reviews, stakeholder updates, and competitive reports from raw data sources",
-    "Lead AI adoption in your product org — build prompt playbooks, define AI tool policies, run training, and measure team-wide productivity impact",
+    {label:"Prompt Engineering", detail:"System prompts, prompt chains, few-shot patterns"},
+    {label:"AI-Powered PRDs", detail:"Spec generation with Claude & GPT-4"},
+    {label:"Multi-Agent Systems", detail:"Orchestration, tool-use, function calling"},
+    {label:"AI Product Strategy", detail:"Build vs. buy, evaluation frameworks"},
+    {label:"Data Analysis with AI", detail:"SQL generation, cohort analysis, churn prediction"},
+    {label:"Competitive Intelligence", detail:"Automated monitoring with Perplexity"},
+    {label:"AI Feature Design", detail:"Confidence thresholds, fallback flows, feedback loops"},
+    {label:"Feedback Synthesis", detail:"NPS → themes → roadmap pipeline"},
+    {label:"AI Productivity OS", detail:"Meeting briefs, sprint reviews, stakeholder updates"},
+    {label:"AI Adoption Leadership", detail:"Playbooks, team training, adoption metrics"},
+    {label:"Tools", detail:"Claude · GPT-4 · Perplexity · Notion AI · Cursor"},
   ],
   "Marketing / Growth Manager": [
-    "Generate high-converting ad copy at scale — use AI to produce 50+ platform-specific variations (Google, Meta, LinkedIn) with ICP targeting, tone control, and character limits",
-    "Build AI-powered campaign planning — feed historical ROAS data, audience segments, and market signals to generate prioritized campaign plans with budget allocation",
-    "Run AI-assisted CRO — audit landing pages with AI, generate test hypotheses from heatmap data, and build an experiment velocity that compounds learnings month-over-month",
-    "Design AI content engines — from SEO-driven briefs to first draft to social repurposing to email teasers, all in your brand voice with 60% lower cost per piece",
-    "Build creative intelligence workflows — analyze top-performing ads, extract winning patterns (hooks, CTAs, imagery), and auto-generate data-backed creative briefs",
-    "Automate email & lifecycle marketing — AI-generated personalized sequences, dynamic content blocks based on behavior signals, and optimized send times",
-    "Master marketing analytics with AI — paste multi-channel data into Claude, get instant ROAS breakdowns, anomaly flags, and reallocation recommendations in 30 minutes instead of a day",
+    {label:"AI Ad Copy at Scale", detail:"50+ variations per campaign, per platform"},
+    {label:"Prompt Engineering", detail:"Brand voice prompts, campaign chains"},
+    {label:"AI Campaign Planning", detail:"ROAS data → budget allocation → channel strategy"},
+    {label:"Content Engine Design", detail:"SEO brief → draft → social → email in one flow"},
+    {label:"Creative Benchmarking", detail:"Pattern extraction from top-performing ads"},
+    {label:"CRO with AI", detail:"Landing page audits, hypothesis generation, test velocity"},
+    {label:"Lifecycle Automation", detail:"Personalized sequences, dynamic content blocks"},
+    {label:"Marketing Analytics", detail:"Multi-channel ROAS, anomaly detection, attribution"},
+    {label:"AI Productivity OS", detail:"Campaign briefs from notes, auto-reporting"},
+    {label:"AI Adoption Leadership", detail:"Team playbooks, prompt libraries, training"},
+    {label:"Tools", detail:"Claude · Midjourney · Perplexity · Canva AI · Meta Ads"},
   ],
   "Business / Strategy Consultant": [
-    "Build AI-powered client research — ingest annual reports, competitor filings, and market data to generate structured analysis decks in hours instead of weeks",
-    "Apply strategy frameworks with AI — prompt chains for Porter's Five Forces, SWOT, value chain analysis that produce first-draft strategy decks in half the time",
-    "Build financial models with AI — generate assumption frameworks, revenue build-ups, sensitivity analyses, and board-ready financial narratives from raw data",
-    "Systematize deliverable production — AI generates storyboards from project briefs, executive summaries from analyses, and 50-page reports in 4 days instead of 2 weeks",
-    "Run AI-powered market sizing — bottom-up and top-down models with multiple estimation approaches, confidence intervals, and source-tracked comparable benchmarks",
-    "Build interview synthesis pipelines — transcription → theme extraction → cross-interview pattern analysis → structured findings report with supporting quotes",
-    "Create competitive intelligence workflows — AI monitors competitor moves, hiring patterns, pricing changes, and auto-generates weekly intelligence briefs with strategic implications",
+    {label:"AI Client Research", detail:"Annual reports → structured analysis in hours"},
+    {label:"Strategy Frameworks + AI", detail:"Porter's, SWOT, value chain via prompt chains"},
+    {label:"Financial Modeling", detail:"Assumption frameworks, sensitivity analysis, scenarios"},
+    {label:"Deliverable Production", detail:"50-page reports in 4 days, not 2 weeks"},
+    {label:"Market Sizing with AI", detail:"Bottom-up, top-down, confidence intervals"},
+    {label:"Interview Synthesis", detail:"Transcription → themes → cross-interview patterns"},
+    {label:"Competitive Intelligence", detail:"Auto-monitoring, weekly intel briefs"},
+    {label:"Prompt Engineering", detail:"Client-ready prompt chains per workstream"},
+    {label:"AI Productivity OS", detail:"Meeting briefs, follow-ups, project knowledge base"},
+    {label:"AI Adoption Leadership", detail:"Practice-wide playbooks, analyst training"},
+    {label:"Tools", detail:"Claude · Perplexity · Gamma · Granola · Beautiful.ai"},
   ],
   "Operations / Supply Chain Manager": [
-    "Build AI-powered demand forecasting — multi-variable models with seasonality, promotions, and external factors that improve forecast accuracy by 10-15%",
-    "Run AI-assisted process optimization — feed cycle times, throughput, and defect rates into AI for bottleneck identification, root cause analysis, and improvement recommendations",
-    "Automate supplier evaluation with AI — generate performance scorecards, risk assessments, negotiation strategies, and contract terms from vendor data",
-    "Optimize inventory with AI — dynamic safety stock calculations, ABC-XYZ analysis, dead stock identification, and predictive stockout alerts across thousands of SKUs",
-    "Build logistics optimization workflows — AI-generated load plans, carrier selection, route optimization considering real-time constraints, saving 10-15% on freight",
-    "Systematize quality management — AI monitors quality KPIs, predicts risks from process parameters, generates corrective action plans, and auto-drafts compliance docs",
-    "Automate operational reporting — AI ingests raw KPI data and produces narrative summaries with trend analysis, exception highlights, and recommendations in 30 minutes",
+    {label:"AI Demand Forecasting", detail:"Multi-variable models, seasonality, confidence intervals"},
+    {label:"Process Optimization", detail:"Bottleneck detection, root cause analysis with AI"},
+    {label:"Supplier Intelligence", detail:"Scorecards, risk assessment, negotiation strategies"},
+    {label:"Inventory Optimization", detail:"Dynamic safety stock, ABC-XYZ, stockout prediction"},
+    {label:"Logistics & Routing", detail:"AI load planning, carrier selection, cost optimization"},
+    {label:"Quality Management", detail:"Predictive quality, compliance auto-documentation"},
+    {label:"Prompt Engineering", detail:"Structured ops prompts, verification workflows"},
+    {label:"Operational Reporting", detail:"KPI data → narrative summaries in 30 min"},
+    {label:"AI Productivity OS", detail:"Daily reporting, exception analysis, supplier comms"},
+    {label:"AI Adoption Leadership", detail:"Use case mapping, SOPs, team training"},
+    {label:"Tools", detail:"Claude · Perplexity · Zapier · Make · ERP integrations"},
   ],
   "Tech Professional transitioning to Business": [
-    "Master AI-powered business communication — feed technical details and get executive-quality strategy narratives, board decks, and business cases automatically",
-    "Build financial fluency with AI — analyze P&Ls, calculate unit economics, model CAC/LTV, and prepare business reviews using Claude as your virtual CFO tutor",
-    "Develop product thinking with AI — generate competitive analyses, write mini-PRDs, create proposals with market sizing, user segmentation, and success metrics",
-    "Build business cases for technical projects — model ROI, calculate payback periods, and articulate business value in terms leadership cares about (revenue, cost, risk)",
-    "Learn cross-functional operations with AI — analyze marketing campaigns, understand sales pipelines, and learn ops workflows to contribute meaningfully in any meeting",
-    "Create stakeholder management systems — AI-generated meeting briefs, objection anticipation, influence mapping, and tailored communication per audience",
-    "Bridge tech and business with prompt engineering — translate architecture decisions into business impact, convert sprint outputs into stakeholder updates, generate business cases from specs",
+    {label:"Business Communication", detail:"Tech details → exec narratives, board decks"},
+    {label:"Financial Fluency", detail:"P&L analysis, unit economics, CAC/LTV modeling"},
+    {label:"Product Thinking", detail:"Mini-PRDs, market sizing, competitive analysis"},
+    {label:"Business Case Building", detail:"ROI modeling, payback periods, risk quantification"},
+    {label:"Cross-Functional Ops", detail:"Marketing, sales, ops workflows & metrics"},
+    {label:"Stakeholder Management", detail:"Influence mapping, objection handling, alignment"},
+    {label:"Prompt Engineering", detail:"Tech-to-business translation, spec-to-case conversion"},
+    {label:"Strategy & GTM", detail:"Go-to-market frameworks, positioning, channel strategy"},
+    {label:"AI Productivity OS", detail:"Career transition toolkit, dual-purpose AI stack"},
+    {label:"AI Adoption Leadership", detail:"Bridge role — enable AI across functions"},
+    {label:"Tools", detail:"Claude · Cursor · Perplexity · Notion AI · Copilot"},
   ],
   "Founder / Entrepreneur": [
-    "Build AI-powered GTM — generate positioning frameworks, channel strategies, launch messaging per platform, PR pitches, and landing page copy from a single brief",
-    "Systematize investor communication with AI — auto-generate monthly updates from metrics, board prep docs, pitch deck narratives, and Q&A prep that anticipates investor concerns",
-    "Run AI-powered hiring — generate JDs, screening rubrics, outreach messages, interview scorecards, performance reviews, and onboarding materials 2x faster",
-    "Build financial planning with AI — revenue projections, scenario planning, cash flow forecasts, and sensitivity analysis with the rigor of a startup twice your size",
-    "Accelerate product development — AI-generated user stories from customer interviews, impact/effort prioritization, specs developers can build from, and release notes",
-    "Systematize customer development — AI synthesizes call notes into patterns, generates discovery questions per segment, drafts proposals, and identifies churn signals",
-    "Build a scalable operating system — AI generates SOPs, vendor evaluation frameworks, contracts, compliance checklists, and operational dashboards from your ad-hoc processes",
+    {label:"AI-Powered GTM", detail:"Positioning, channel strategy, launch messaging"},
+    {label:"Investor Communication", detail:"Auto-generated updates, board prep, pitch decks"},
+    {label:"AI Hiring Pipeline", detail:"JDs, screening rubrics, interview scorecards"},
+    {label:"Financial Planning", detail:"Revenue projections, scenario modeling, runway mgmt"},
+    {label:"Product Development", detail:"User stories, prioritization, specs, release notes"},
+    {label:"Customer Intelligence", detail:"Call synthesis, churn signals, upsell detection"},
+    {label:"Operations at Scale", detail:"SOPs, vendor frameworks, compliance checklists"},
+    {label:"Prompt Engineering", detail:"Founder prompt library, cross-function workflows"},
+    {label:"AI Productivity OS", detail:"Virtual co-founder setup, 12+ hrs/week saved"},
+    {label:"AI-First Culture", detail:"Team playbooks, hiring for AI fluency"},
+    {label:"Tools", detail:"Claude · Perplexity · Notion AI · Zapier · Make"},
   ],
   "Finance / Commercial Manager": [
-    "Accelerate financial modeling with AI — generate model structures, Excel formulas, scenario frameworks, and sensitivity analysis templates in half the time",
-    "Build dynamic forecasting — AI monitors actuals vs. budget in real-time, adjusts rolling forecasts, flags material variances before month-end, and generates management commentary",
-    "Run AI-powered deal analysis — model deal economics under different scenarios, benchmark pricing against market data, generate term sheet analyses and approval docs",
-    "Automate compliance workflows — AI monitors regulatory changes, assesses business impact, generates compliance action plans, audit checklists, and policy updates",
-    "Systematize management reporting — AI auto-generates reports from raw data with narrative commentaries, trend analyses, and different versions for board, exec, and ops audiences",
-    "Build treasury management with AI — dynamic cash flow models factoring receivable aging, payable schedules, seasonal patterns, and short-term liquidity projections",
-    "Run AI-powered cost management — automated spend analytics, vendor risk monitoring, procurement benchmarking, and negotiation strategies from contract and spend data",
+    {label:"AI Financial Modeling", detail:"Model structures, formulas, scenario frameworks"},
+    {label:"Dynamic Forecasting", detail:"Rolling forecasts, variance flags, management commentary"},
+    {label:"Deal Analysis", detail:"Scenario modeling, pricing benchmarks, term sheet analysis"},
+    {label:"Compliance Automation", detail:"Regulatory monitoring, audit checklists, policy updates"},
+    {label:"Management Reporting", detail:"Auto-generated narratives for board, exec, ops"},
+    {label:"Treasury & Cash Flow", detail:"Receivable aging, liquidity projection, shortfall alerts"},
+    {label:"Cost Management", detail:"Spend analytics, vendor risk, procurement benchmarking"},
+    {label:"Prompt Engineering", detail:"Finance-specific chains with hallucination guardrails"},
+    {label:"AI Productivity OS", detail:"Recurring reports, meeting briefs, dataset analysis"},
+    {label:"AI Adoption Leadership", detail:"Use case mapping per finance process, team training"},
+    {label:"Tools", detail:"Claude · Perplexity · Excel AI · Sheets AI · Copilot"},
   ],
 };
 
@@ -1800,11 +1838,12 @@ function renderResults(){
   const transSkills=ROLE_TRANSITION_SKILLS[state.role]||[];
   const transContainer=document.getElementById('transition-skills');
   transContainer.innerHTML='';
-  transSkills.forEach((skill,i)=>{
-    const item=document.createElement('div');
-    item.className='transition-skill-item';
-    item.innerHTML=`<span class="transition-skill-num">${i+1}</span><span class="transition-skill-text">${skill}</span>`;
-    transContainer.appendChild(item);
+  transSkills.forEach((skill)=>{
+    const tag=document.createElement('div');
+    const isTools=skill.label==='Tools';
+    tag.className='skill-tag'+(isTools?' tools-tag':'');
+    tag.innerHTML=`<span class="skill-tag-label">${skill.label}</span><span class="skill-tag-detail">${skill.detail}</span>`;
+    transContainer.appendChild(tag);
   });
   // animate coverage bar
   setTimeout(()=>{
