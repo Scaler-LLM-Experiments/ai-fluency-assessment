@@ -540,38 +540,44 @@
 
     .results-hero {
       background: linear-gradient(160deg, #ffffff 0%, #F0F1FF 100%);
-      padding: 52px 24px 48px;
-      text-align: center;
+      padding: 36px 24px 32px;
     }
 
     .results-hero-inner {
       max-width: 680px;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .hero-left {
+      flex: 1;
     }
 
     .hero-eyebrow {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--gray-500);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .hero-title {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--gray-900);
-      line-height: 1.25;
-      margin-bottom: 36px;
+      line-height: 1.3;
+      margin-bottom: 10px;
     }
 
     /* Ring chart */
     .ring-wrap {
       position: relative;
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 24px;
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
     }
 
     .ring-wrap svg { width: 100%; height: 100%; }
@@ -584,14 +590,14 @@
     }
 
     .ring-score {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--gray-900);
       line-height: 1;
     }
 
     .ring-max {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--gray-400);
       font-weight: 500;
     }
@@ -601,11 +607,10 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 18px;
+      padding: 6px 14px;
       border-radius: 99px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 12px;
     }
 
     .band-curious  { background: #FEF3C7; color: #92400E; }
@@ -740,13 +745,22 @@
     }
 
     .skill-tag {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 99px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 12px 16px;
+      flex: 0 0 calc(50% - 4px);
+    }
+    .skill-tag-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 3px;
+    }
+    .skill-tag-detail {
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.4;
     }
 
     .coverage-row { margin-bottom: 24px; }
@@ -1058,9 +1072,11 @@
 
   <div class="results-hero">
     <div class="results-hero-inner">
-      <div class="hero-eyebrow">AI FLUENCY ASSESSMENT COMPLETE</div>
-      <div class="hero-title" id="results-hero-title">Your AI Fluency Report</div>
-
+      <div class="hero-left">
+        <div class="hero-eyebrow">AI FLUENCY ASSESSMENT COMPLETE</div>
+        <div class="hero-title" id="results-hero-title">Your AI Fluency Report</div>
+        <div id="band-badge-wrap"></div>
+      </div>
       <div class="ring-wrap">
         <svg viewBox="0 0 160 160" fill="none">
           <circle cx="80" cy="80" r="66" stroke="#E5E7EB" stroke-width="12"/>
@@ -1079,8 +1095,6 @@
           <div class="ring-max">/50</div>
         </div>
       </div>
-
-      <div id="band-badge-wrap"></div>
     </div>
   </div>
 
@@ -1102,17 +1116,21 @@
       <div class="transition-label">SKILLS YOU'LL BUILD</div>
       <div class="skill-tags" id="skill-tags"></div>
       <div class="coverage-row">
-        <div class="coverage-label-row">
-          <span>Curriculum coverage for your transition</span>
-          <span>96%</span>
+        <div style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.6;margin-bottom:12px;">
+          <strong style="color:white;">96% of these skills</strong> are covered in the <strong style="color:white;">Scaler Online PGP in Business &amp; AI</strong> curriculum — through live sessions, hands-on projects, and real-world case studies across 12 months.
         </div>
         <div class="coverage-bar-outer">
           <div class="coverage-bar-inner"></div>
         </div>
       </div>
-      <button class="btn-primary" style="margin-top:0;width:auto;padding:0 28px;font-size:12px;" onclick="handleCurriculumClick()">
-        EXPLORE CURRICULUM &rarr;
-      </button>
+      <div style="margin-top:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <button class="btn-primary" style="margin-top:0;width:auto;padding:0 28px;font-size:12px;" onclick="handleCallbackClick()">
+          REQUEST A CALLBACK &rarr;
+        </button>
+        <a href="https://www.scaler.com/online-pgp-in-business-and-ai" target="_blank" rel="noopener" onclick="handleCurriculumClick()" style="font-size:13px;color:rgba(255,255,255,0.7);text-decoration:underline;cursor:pointer;">
+          Explore the full curriculum &rarr;
+        </a>
+      </div>
     </div>
 
   </div>
@@ -1409,8 +1427,7 @@ function buildResultsScreen() {
   transSkills.forEach(s => {
     const tag = document.createElement('div');
     tag.className = 'skill-tag';
-    tag.title = s.detail;
-    tag.textContent = s.label;
+    tag.innerHTML = `<div class="skill-tag-label">${escHtml(s.label)}</div><div class="skill-tag-detail">${escHtml(s.detail)}</div>`;
     tagsEl.appendChild(tag);
   });
 }
@@ -1442,12 +1459,29 @@ function animateResults() {
 ───────────────────────────────────────────────────── */
 function handleCallbackClick() {
   trackEvent('requested_callback');
-  alert('Thanks! A Scaler advisor will reach out to you shortly.');
+  // Show popup overlay
+  const existing = document.getElementById('callback-popup');
+  if (existing) existing.remove();
+  const popup = document.createElement('div');
+  popup.id = 'callback-popup';
+  popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeUp .2s ease;';
+  popup.innerHTML = `
+    <div style="background:white;border-radius:16px;padding:36px 40px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="width:56px;height:56px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div style="font-size:20px;font-weight:700;color:#111827;margin-bottom:8px;">We'll reach out shortly!</div>
+      <div style="font-size:15px;color:#6B7280;line-height:1.6;margin-bottom:24px;">A Scaler program advisor will call you at <strong style="color:#111827;">+91 ${escHtml(state.phone)}</strong> within 24 hours to help you plan your AI learning path.</div>
+      <button onclick="document.getElementById('callback-popup').remove()" style="background:#3940F0;color:white;border:none;border-radius:8px;padding:12px 32px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Got it</button>
+    </div>
+  `;
+  popup.addEventListener('click', (e) => { if (e.target === popup) popup.remove(); });
+  document.body.appendChild(popup);
 }
 
 function handleCurriculumClick() {
   trackEvent('clicked_curriculum');
-  window.open('https://www.scaler.com/ai-mba/', '_blank');
+  window.open('https://www.scaler.com/online-pgp-in-business-and-ai', '_blank');
 }
 
 function handleShare() {
