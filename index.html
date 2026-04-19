@@ -1068,28 +1068,34 @@
         width: 100%;
         padding: 24px 20px 20px;
       }
-      .login-logo-bar { margin-bottom: 16px; }
-      .login-heading { font-size: 24px; margin-bottom: 8px; }
-      .login-desc { font-size: 13px; margin-bottom: 0; max-width: none;
-        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-      }
-      .login-eyebrow { margin-bottom: 8px; }
+      .login-logo-bar { margin-bottom: 14px; }
+      .login-heading { font-size: 22px; margin-bottom: 6px; }
+      .login-desc { font-size: 12px; margin-bottom: 14px; max-width: none; line-height: 1.5; }
+      .login-eyebrow { margin-bottom: 6px; font-size: 10px; }
       .login-stat-cards { display: none; }
-      .login-checks { display: none; }
+      .login-checks {
+        display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px 14px;
+      }
+      .login-check { font-size: 11px; gap: 5px; }
+      .login-check-icon { width: 14px; height: 14px; }
+      .login-check-icon svg { width: 8px; height: 8px; }
 
       .login-right {
         width: 100%;
-        padding: 16px 20px 24px;
-        flex: 1;
+        padding: 20px 20px 28px;
+        background: var(--gray-50);
       }
-      .login-form-icon { display: none; }
-      .login-form-title { font-size: 18px; }
-      .login-form-sub { font-size: 12px; margin-bottom: 16px; }
+      .login-form-box { max-width: none; }
+      .login-form-icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 12px; }
+      .login-form-icon svg { width: 18px; height: 18px; }
+      .login-form-title { font-size: 17px; margin-bottom: 2px; }
+      .login-form-sub { font-size: 12px; margin-bottom: 14px; }
       .login-field { margin-bottom: 10px; }
-      .login-input { height: 44px; }
-      .login-phone-row { flex-direction: column; gap: 0; }
-      .login-phone-prefix { display: none; }
-      .login-btn { height: 46px; margin-top: 12px; }
+      .login-label { font-size: 11px; margin-bottom: 4px; }
+      .login-input { height: 42px; font-size: 13px; }
+      .login-phone-prefix { height: 42px; font-size: 13px; padding: 0 10px; }
+      .login-btn { height: 44px; margin-top: 10px; font-size: 12px; }
+      .login-footer-text { margin-top: 10px; font-size: 10px; }
 
       .split-left {
         width: 100%;
