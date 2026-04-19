@@ -38,220 +38,317 @@
     .screen { display: none; }
     .screen.active { display: flex; }
 
-    /* ── LOGIN LAYOUT (two-column full-screen) ── */
+    /* ── LOGIN SCREEN — full-page dark layout ── */
     .login-screen {
       min-height: 100vh;
       width: 100%;
-      flex-direction: row;
-      align-items: stretch;
-      background: var(--white);
-      overflow: hidden;
-    }
-
-    /* Left column */
-    .login-left {
-      width: 55%;
-      min-height: 100vh;
-      background: linear-gradient(145deg, #0F1629 0%, #1a2040 100%);
-      display: flex;
       flex-direction: column;
-      padding: 40px 52px;
+      align-items: stretch;
+      background: #0C1220;
+      overflow-x: hidden;
+    }
+
+    /* ── LOGIN NAV ── */
+    .login-nav {
+      position: sticky;
+      top: 0;
+      height: 56px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      z-index: 50;
+    }
+
+    .login-nav-center {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ── LOGIN HERO ── */
+    .login-hero {
       position: relative;
+      text-align: center;
+      padding: 80px 24px 48px;
       overflow: hidden;
     }
 
-    /* Subtle grid pattern overlay on left panel */
-    .login-left::before {
+    .login-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(57,64,240,0.15) 0%, transparent 60%);
       pointer-events: none;
     }
 
-    .login-left-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .login-left-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .login-eyebrow {
+    .login-pill {
+      display: inline-block;
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 1.8px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 16px;
+      letter-spacing: 1.2px;
+      color: #818CF8;
+      border: 1px solid rgba(57,64,240,0.4);
+      background: rgba(57,64,240,0.1);
+      border-radius: 99px;
+      padding: 5px 14px;
+      margin-bottom: 24px;
     }
 
-    .login-heading {
-      font-size: 36px;
+    .login-hero-heading {
+      font-size: 48px;
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.18;
-      margin-bottom: 18px;
+      line-height: 1.1;
       letter-spacing: -0.5px;
+      margin-bottom: 20px;
     }
 
-    .login-subheading {
+    .login-hero-sub {
       font-size: 16px;
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.5);
       line-height: 1.65;
-      max-width: 400px;
-      margin-bottom: 36px;
+      max-width: 520px;
+      margin: 0 auto;
     }
 
-    .login-divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(255,255,255,0.08);
-      margin-bottom: 32px;
-    }
-
-    /* Value props 2x2 grid */
-    .login-props {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px 32px;
-    }
-
-    .login-prop {
+    /* ── LOGIN TWO-COL ── */
+    .login-two-col {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
       display: flex;
+      gap: 24px;
       align-items: flex-start;
-      gap: 12px;
     }
 
-    .login-prop-icon {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      margin-top: 2px;
-      opacity: 0.6;
+    /* Left card */
+    .login-overview-card {
+      flex: 0 0 45%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
     }
 
-    .login-prop-text {}
-
-    .login-prop-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-
-    .login-prop-desc {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.55;
-    }
-
-    /* Right column */
-    .login-right {
-      width: 45%;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 48px;
-      position: relative;
-    }
-
-    .login-form-inner {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .login-form-title {
-      font-size: 22px;
+    .login-overview-title {
+      font-size: 20px;
       font-weight: 700;
-      color: var(--gray-900);
-      margin-bottom: 6px;
-    }
-
-    .login-form-sub {
-      font-size: 14px;
-      color: var(--gray-400);
+      color: #ffffff;
       margin-bottom: 28px;
     }
 
-    .login-powered {
-      position: absolute;
-      bottom: 24px;
-      left: 0; right: 0;
-      text-align: center;
-      font-size: 11px;
-      color: var(--gray-400);
+    .login-overview-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 28px;
     }
 
-    /* Override shared form-group styles for login context */
-    .login-form-inner .form-group {
+    .login-overview-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .login-overview-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .login-overview-item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+
+    .login-overview-item-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+    }
+
+    .login-testimonial {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+    }
+
+    .login-testimonial-quote {
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+
+    .login-testimonial-attr {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Right card */
+    .login-form-card {
+      flex: 0 0 55%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 36px;
+    }
+
+    .login-form-card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .login-form-card-sub {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 28px;
+    }
+
+    /* Dark form fields */
+    .login-form-card .form-group {
+      margin-bottom: 0;
+    }
+
+    .login-field-row {
+      display: flex;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
-    .login-form-inner .form-group label {
-      font-size: 12px;
+    .login-field-row .login-field-wrap {
+      flex: 1;
+    }
+
+    .login-field-wrap {
+      margin-bottom: 16px;
+    }
+
+    .login-field-wrap:last-child {
+      margin-bottom: 0;
+    }
+
+    .login-label {
+      display: block;
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--gray-500);
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.5);
       margin-bottom: 6px;
     }
 
-    .login-form-inner .form-group input {
+    .login-input {
+      width: 100%;
       height: 50px;
-      font-size: 15px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.1);
       border-radius: 10px;
+      color: #ffffff;
+      font-size: 15px;
+      font-family: inherit;
       padding: 0 16px;
-      border: 1.5px solid #E5E7EB;
+      outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
 
-    .login-form-inner .form-group input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(57,64,240,0.1);
+    .login-input::placeholder {
+      color: rgba(255,255,255,0.25);
     }
 
-    .login-form-inner .phone-prefix {
-      height: 50px;
-      border-radius: 10px;
+    .login-input:focus {
+      border-color: rgba(57,64,240,0.6);
+      box-shadow: 0 0 0 3px rgba(57,64,240,0.15);
     }
 
-    .login-form-inner .btn-primary {
+    .login-btn {
+      width: 100%;
       height: 52px;
+      background: linear-gradient(135deg, #3940F0, #5B6EF0);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
       font-size: 13px;
       font-weight: 700;
+      text-transform: uppercase;
       letter-spacing: 1.5px;
-      border-radius: 10px;
+      cursor: pointer;
       margin-top: 24px;
-      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+      transition: box-shadow 0.15s, transform 0.1s, filter 0.15s;
     }
 
-    .login-form-inner .btn-primary:hover {
-      background: #2c32d4;
-      box-shadow: 0 4px 16px rgba(57,64,240,0.3);
+    .login-btn:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 4px 20px rgba(57,64,240,0.4);
     }
 
-    .login-form-inner .form-footer {
+    .login-btn:active {
+      transform: scale(0.99);
+    }
+
+    .login-form-disclaimer {
       font-size: 11px;
-      color: var(--gray-400);
+      color: rgba(255,255,255,0.3);
       text-align: center;
-      margin-top: 16px;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── STATS BAR ── */
+    .login-stats-bar {
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 36px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .login-stat {
+      text-align: center;
+      padding: 0 52px;
+    }
+
+    .login-stat + .login-stat {
+      border-left: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .login-stat-num {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .login-stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── LOGIN FOOTER ── */
+    .login-footer {
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
     }
 
     /* Kept for backward compat — login-header and login-form-wrap
@@ -1174,43 +1271,50 @@
     @media (max-width: 768px) {
       .screen.active { flex-direction: column; }
 
-      /* Login screen mobile: stacked */
-      .login-screen { flex-direction: column; min-height: 100vh; overflow: auto; }
+      /* Login screen mobile */
+      .login-nav { padding: 0 16px; }
+      .login-nav-center { display: none; }
 
-      .login-left {
+      .login-hero { padding: 48px 20px 36px; }
+      .login-hero-heading { font-size: 32px; }
+      .login-hero-sub { font-size: 15px; }
+
+      .login-two-col {
+        flex-direction: column;
+        padding: 0 16px 48px;
+      }
+
+      .login-overview-card,
+      .login-form-card {
+        flex: none;
         width: 100%;
-        min-height: auto;
-        padding: 28px 24px 24px;
       }
 
-      .login-left-content { justify-content: flex-start; }
-
-      .login-eyebrow { display: none; }
-
-      .login-heading {
-        font-size: 24px;
-        margin-bottom: 10px;
+      .login-field-row {
+        flex-direction: column;
+        gap: 0;
       }
 
-      .login-subheading {
-        font-size: 14px;
-        margin-bottom: 0;
+      .login-field-row .login-field-wrap {
+        margin-bottom: 16px;
       }
 
-      .login-divider { display: none; }
-      .login-props { display: none; }
-
-      .login-right {
-        width: 100%;
-        padding: 28px 20px 64px;
-        justify-content: flex-start;
+      .login-stats-bar {
+        flex-wrap: wrap;
+        gap: 24px;
+        padding: 28px 20px;
       }
 
-      .login-form-inner { max-width: 100%; }
+      .login-stat {
+        padding: 0 20px;
+        flex: 0 0 calc(33.33% - 14px);
+      }
 
-      .login-form-title { font-size: 20px; }
+      .login-stat + .login-stat {
+        border-left: none;
+      }
 
-      .login-powered { bottom: 16px; }
+      .login-stat-num { font-size: 24px; }
 
       .split-left {
         width: 100%;
@@ -1253,100 +1357,128 @@
 ══════════════════════════════════════════════════════ -->
 <div id="screen-login" class="screen login-screen active">
 
-  <!-- Left column: brand + value props -->
-  <div class="login-left">
-    <div class="login-left-logo">
-      <img src="scaler-logo-white.svg" alt="Scaler" height="24" />
-      <div class="logo-divider"></div>
-      <span class="logo-sub">AI Fluency</span>
-    </div>
+  <!-- Nav -->
+  <nav class="login-nav">
+    <img src="scaler-logo-white.svg" alt="Scaler" height="22" />
+    <span class="login-nav-center">AI Fluency Assessment</span>
+  </nav>
 
-    <div class="login-left-content">
-      <div class="login-eyebrow">FREE &middot; 3 MINUTES &middot; 10 SKILLS</div>
-      <div class="login-heading">Find out how AI-ready you really are.</div>
-      <p class="login-subheading">Most professionals think they're keeping up with AI. This assessment shows you exactly where you stand — and what's missing.</p>
+  <!-- Hero -->
+  <div class="login-hero">
+    <div class="login-pill">AI Fluency Assessment</div>
+    <h1 class="login-hero-heading">How AI-ready are you?</h1>
+    <p class="login-hero-sub">Take a 3-minute assessment to find out exactly where you stand in AI — tailored to your role, your workflows, and the tools you should be using.</p>
+  </div>
 
-      <div class="login-divider"></div>
+  <!-- Two-column cards -->
+  <div class="login-two-col">
 
-      <div class="login-props">
+    <!-- Left: overview -->
+    <div class="login-overview-card">
+      <div class="login-overview-title">What You'll Get</div>
+      <div class="login-overview-items">
 
-        <div class="login-prop">
-          <svg class="login-prop-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/>
-            <path d="M7 10l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="login-overview-item">
+          <svg class="login-overview-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="6" height="6" rx="1"/>
+            <rect x="11" y="3" width="6" height="6" rx="1"/>
+            <rect x="3" y="11" width="6" height="6" rx="1"/>
+            <rect x="11" y="11" width="6" height="6" rx="1"/>
           </svg>
-          <div class="login-prop-text">
-            <div class="login-prop-title">Skill Gap Analysis</div>
-            <div class="login-prop-desc">See exactly where you're strong and where you're falling behind</div>
+          <div>
+            <div class="login-overview-item-title">10 skill areas</div>
+            <div class="login-overview-item-desc">Role-specific questions across AI + business domains</div>
           </div>
         </div>
 
-        <div class="login-prop">
-          <svg class="login-prop-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="3" width="14" height="14" rx="3" stroke="white" stroke-width="1.5"/>
-            <path d="M7 7h6M7 10h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <div class="login-overview-item">
+          <svg class="login-overview-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="7"/>
+            <path d="M10 6v4l2.5 2.5"/>
           </svg>
-          <div class="login-prop-text">
-            <div class="login-prop-title">Role-Specific Questions</div>
-            <div class="login-prop-desc">Tailored to your actual job — PM, marketing, ops, finance, founder</div>
+          <div>
+            <div class="login-overview-item-title">3 minutes</div>
+            <div class="login-overview-item-desc">Quick assessment designed for busy professionals</div>
           </div>
         </div>
 
-        <div class="login-prop">
-          <svg class="login-prop-icon" viewBox="0 0 20 20" fill="none">
-            <path d="M4 10h12M10 4l6 6-6 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="login-overview-item">
+          <svg class="login-overview-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 14l4-4 3 3 4-5 3 3"/>
+            <rect x="3" y="3" width="14" height="14" rx="2"/>
           </svg>
-          <div class="login-prop-text">
-            <div class="login-prop-title">Career Transition Path</div>
-            <div class="login-prop-desc">See your AI-upgraded role and the skills to get there</div>
+          <div>
+            <div class="login-overview-item-title">Instant results</div>
+            <div class="login-overview-item-desc">Visual score, skill breakdown, and personalized roadmap</div>
           </div>
         </div>
 
-        <div class="login-prop">
-          <svg class="login-prop-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="7" stroke="white" stroke-width="1.5"/>
-            <path d="M10 6v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <div class="login-overview-item">
+          <svg class="login-overview-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="9" width="10" height="8" rx="1"/>
+            <path d="M7 9V7a3 3 0 016 0v2"/>
+            <circle cx="10" cy="13" r="1" fill="currentColor"/>
           </svg>
-          <div class="login-prop-text">
-            <div class="login-prop-title">Curriculum Match</div>
-            <div class="login-prop-desc">95% of identified gaps map to a structured learning path</div>
+          <div>
+            <div class="login-overview-item-title">Completely free</div>
+            <div class="login-overview-item-desc">No payment, no commitment — just clarity</div>
           </div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <!-- Right column: form -->
-  <div class="login-right">
-    <div class="login-form-inner">
-      <div class="login-form-title">Start your assessment</div>
-      <div class="login-form-sub">Takes 3 minutes. Results are instant.</div>
+      <div class="login-testimonial">
+        <p class="login-testimonial-quote">"This assessment gave me a clear picture of where I actually stand with AI. I thought I was ahead — turns out I had blind spots I didn't even know about."</p>
+        <div class="login-testimonial-attr">— Product Manager, 8 years experience</div>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="login-form-card">
+      <div class="login-form-card-title">Start Your Assessment</div>
+      <div class="login-form-card-sub">Enter your details to get your personalized AI fluency report.</div>
 
       <form id="login-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label for="inp-name">Full Name</label>
-          <input id="inp-name" type="text" placeholder="Anil Sharma" autocomplete="name" required />
+        <div class="login-field-wrap">
+          <label class="login-label" for="inp-name">Full Name</label>
+          <input class="login-input" id="inp-name" type="text" placeholder="Anil Sharma" autocomplete="name" required />
         </div>
-        <div class="form-group">
-          <label for="inp-email">Work Email</label>
-          <input id="inp-email" type="email" placeholder="anil@company.com" autocomplete="email" required />
-        </div>
-        <div class="form-group">
-          <label for="inp-phone">Phone Number</label>
-          <div class="phone-wrap">
-            <div class="phone-prefix">+91</div>
-            <input id="inp-phone" type="tel" placeholder="98765 43210" autocomplete="tel" required />
+        <div class="login-field-row">
+          <div class="login-field-wrap">
+            <label class="login-label" for="inp-email">Work Email</label>
+            <input class="login-input" id="inp-email" type="email" placeholder="anil@company.com" autocomplete="email" required />
+          </div>
+          <div class="login-field-wrap">
+            <label class="login-label" for="inp-phone">Phone Number</label>
+            <input class="login-input" id="inp-phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel" required />
           </div>
         </div>
-        <button type="submit" class="btn-primary">START ASSESSMENT &rarr;</button>
+        <button type="submit" class="login-btn">START ASSESSMENT &rarr;</button>
       </form>
 
-      <p class="form-footer">Your information is secure and never shared with third parties.</p>
+      <p class="login-form-disclaimer">By proceeding, you agree to our Terms. Your data is encrypted and handled securely.</p>
     </div>
 
-    <div class="login-powered">Powered by Scaler</div>
   </div>
+
+  <!-- Stats bar -->
+  <div class="login-stats-bar">
+    <div class="login-stat">
+      <div class="login-stat-num">2.5x</div>
+      <div class="login-stat-label">Career Growth</div>
+    </div>
+    <div class="login-stat">
+      <div class="login-stat-num">73%</div>
+      <div class="login-stat-label">Roles Need AI</div>
+    </div>
+    <div class="login-stat">
+      <div class="login-stat-num">12 mo</div>
+      <div class="login-stat-label">To Close the Gap</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="login-footer">&copy; 2026 Scaler. All rights reserved.</div>
 
 </div>
 
