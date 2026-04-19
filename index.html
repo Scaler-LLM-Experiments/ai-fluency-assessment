@@ -38,7 +38,41 @@
     .screen { display: none; }
     .screen.active { display: flex; }
 
-    /* ── SPLIT LAYOUT ── */
+    /* ── LOGIN LAYOUT (centered form) ── */
+    .login-screen {
+      min-height: 100vh;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      background: var(--gray-50);
+    }
+
+    .login-header {
+      width: 100%;
+      background: var(--navy);
+      padding: 32px 32px 48px;
+      text-align: center;
+    }
+    .login-header .logo-bar { justify-content: center; margin-bottom: 24px; }
+    .login-header .panel-title { color: white; font-size: 28px; margin-bottom: 8px; }
+    .login-header .panel-desc { color: var(--gray-400); max-width: 500px; margin: 0 auto 20px; font-size: 14px; line-height: 1.6; }
+    .login-header .login-pills {
+      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    }
+    .login-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;
+    }
+    .login-pill svg { flex-shrink: 0; }
+
+    .login-form-wrap {
+      width: 100%;
+      max-width: 440px;
+      padding: 0 24px;
+      margin-top: -24px;
+    }
+
+    /* ── SPLIT LAYOUT (role screen) ── */
     .split {
       min-height: 100vh;
       width: 100%;
@@ -953,6 +987,10 @@
     @media (max-width: 768px) {
       .screen.active { flex-direction: column; }
 
+      .login-header { padding: 24px 20px 40px; }
+      .login-header .panel-title { font-size: 22px; }
+      .login-form-wrap { padding: 0 16px; margin-top: -20px; }
+
       .split-left {
         width: 100%;
         padding: 28px 24px;
@@ -992,63 +1030,37 @@
 <!-- ══════════════════════════════════════════════════════
      SCREEN 1 — LOGIN
 ══════════════════════════════════════════════════════ -->
-<div id="screen-login" class="screen split active">
+<div id="screen-login" class="screen login-screen active">
 
-  <div class="split-left">
+  <div class="login-header">
     <div class="logo-bar">
-      <img src="scaler-logo-white.svg" alt="Scaler" height="28" />
+      <img src="scaler-logo-white.svg" alt="Scaler" height="26" />
       <div class="logo-divider"></div>
-      <span class="logo-sub">AI Fluency</span>
+      <span class="logo-sub">AI Fluency Assessment</span>
     </div>
-
-    <div class="eyebrow">FREE &middot; TAKES 3 MINUTES</div>
-    <div class="panel-title">Your AI Fluency Report</div>
-    <p class="panel-desc">Get a comprehensive evaluation of your AI skills for your role. Discover strengths, identify gaps, and get a personalized roadmap.</p>
-
-    <div class="stat-cards">
-      <div class="stat-card">
-        <div class="stat-num">2.5x</div>
-        <div class="stat-label">average career growth for AI-fluent professionals</div>
+    <div class="panel-title">How AI-ready are you?</div>
+    <p class="panel-desc">Take a 3-minute assessment tailored to your role. Get your score, see your gaps, and find out what to learn next.</p>
+    <div class="login-pills">
+      <div class="login-pill">
+        <svg width="14" height="14" viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        10 skill areas
       </div>
-      <div class="stat-card">
-        <div class="stat-num">73%</div>
-        <div class="stat-label">of business roles now require AI fluency</div>
+      <div class="login-pill">
+        <svg width="14" height="14" viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        3 minutes
       </div>
-      <div class="stat-card">
-        <div class="stat-num">12 months</div>
-        <div class="stat-label">before the gap becomes uncatchable</div>
+      <div class="login-pill">
+        <svg width="14" height="14" viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Instant results
       </div>
-    </div>
-
-    <div class="check-list">
-      <div class="check-item">
-        <div class="check-icon">
-          <svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        Skill Gap Assessment
-      </div>
-      <div class="check-item">
-        <div class="check-icon">
-          <svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        Personalized AI Roadmap
-      </div>
-      <div class="check-item">
-        <div class="check-icon">
-          <svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        Curriculum Match Score
-      </div>
-      <div class="check-item">
-        <div class="check-icon">
-          <svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        Career Transition Path
+      <div class="login-pill">
+        <svg width="14" height="14" viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Free
       </div>
     </div>
   </div>
 
-  <div class="split-right">
+  <div class="login-form-wrap">
     <div class="form-card">
       <div class="form-icon">
         <svg viewBox="0 0 26 26" fill="none">
