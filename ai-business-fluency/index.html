@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Fluency Assessment — Scaler</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1B2145;
+      --blue: #3940F0;
+      --blue-light: #EEF0FF;
+      --blue-dim: #2B5DD6;
+      --blue-bright: #5B6EF0;
+      --white: #ffffff;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --green: #10B981;
+      --amber: #F59E0B;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--white);
+      color: var(--gray-900);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SCREEN SYSTEM ── */
+    .screen { display: none; }
+    .screen.active { display: flex; }
+
+    /* ── LOGIN SCREEN (dark left / white right split) ── */
+    .login-screen {
+      min-height: 100vh;
+      width: 100%;
+      flex-direction: row;
+    }
+
+    .login-left {
+      width: 55%;
+      background: var(--navy);
+      padding: 44px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-logo-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+    .login-logo-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
+    .login-logo-sub { color: white; font-size: 13px; font-weight: 500; opacity: 0.8; }
+
+    .login-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 12px;
+    }
+    .login-heading {
+      font-size: 32px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 14px;
+    }
+    .login-desc {
+      font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 32px; max-width: 420px;
+    }
+
+    .login-stat-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .login-stat-card {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    }
+    .login-stat-num { font-size: 22px; font-weight: 700; color: white; white-space: nowrap; }
+    .login-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+    .login-checks { display: flex; flex-direction: column; gap: 8px; }
+    .login-check {
+      display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.8);
+    }
+    .login-check-icon {
+      width: 18px; height: 18px; border-radius: 50%; background: rgba(57,64,240,0.35);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .login-check-icon svg { width: 10px; height: 10px; }
+
+    .login-right {
+      width: 45%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .login-form-box {
+      width: 100%; max-width: 400px;
+    }
+    .login-form-icon {
+      width: 48px; height: 48px; border-radius: 12px; background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .login-form-icon svg { width: 24px; height: 24px; }
+    .login-form-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+    .login-form-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 24px; }
+
+    .login-field { margin-bottom: 14px; }
+    .login-label {
+      display: block; font-size: 12px; font-weight: 500; color: var(--gray-700); margin-bottom: 5px;
+    }
+    .login-input {
+      width: 100%; height: 46px; border: 1.5px solid var(--gray-200); border-radius: 8px;
+      font-size: 14px; font-family: inherit; color: var(--gray-900); padding: 0 14px;
+      outline: none; transition: border-color 0.15s; background: white;
+    }
+    .login-input::placeholder { color: var(--gray-400); }
+    .login-input:focus { border-color: var(--blue); }
+
+    .login-phone-row { display: flex; gap: 8px; align-items: center; }
+    .login-phone-prefix {
+      height: 46px; padding: 0 12px; background: var(--gray-100); border: 1.5px solid var(--gray-200);
+      border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--gray-700);
+      display: flex; align-items: center; flex-shrink: 0;
+    }
+    .login-phone-row input { flex: 1; }
+
+    .login-btn {
+      width: 100%; height: 50px; background: var(--blue); color: white; border: none;
+      border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      margin-top: 18px; transition: background 0.15s, transform 0.1s;
+    }
+    .login-btn:hover { background: #2c32d4; }
+    .login-btn:active { transform: scale(0.99); }
+
+    .login-footer-text { margin-top: 14px; font-size: 11px; color: var(--gray-400); text-align: center; }
+
+    /* ── SPLIT LAYOUT (role screen) ── */
+    .split {
+      min-height: 100vh;
+      width: 100%;
+      flex-direction: row;
+    }
+
+    .split-left {
+      width: 55%;
+      background: var(--navy);
+      padding: 48px 52px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .split-right {
+      width: 45%;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      min-height: 100vh;
+    }
+
+    /* ── LOGO ── */
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 52px;
+    }
+
+    .logo-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 2px;
+    }
+
+    .logo-sub {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      opacity: 0.85;
+    }
+
+    /* ── LEFT PANEL CONTENT ── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .panel-desc {
+      font-size: 15px;
+      color: var(--gray-400);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 420px;
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .stat-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      line-height: 1.5;
+      padding-top: 3px;
+    }
+
+    /* ── CHECKLIST ── */
+    .check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--white);
+    }
+
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(57,64,240,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-icon svg { width: 11px; height: 11px; }
+
+    /* ── RIGHT PANEL CARD ── */
+    .form-card {
+      border: 1.5px dashed var(--gray-200);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .form-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .form-icon svg { width: 26px; height: 26px; }
+
+    .form-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 48px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--gray-900);
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      background: var(--white);
+    }
+
+    .form-group input:focus { border-color: var(--blue); }
+    .form-group input::placeholder { color: var(--gray-400); }
+
+    .phone-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .phone-prefix {
+      height: 48px;
+      padding: 0 12px;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-700);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .phone-wrap input { flex: 1; }
+
+    .btn-primary {
+      width: 100%;
+      height: 50px;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-primary:hover { background: #2c32d4; }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+
+    .form-footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--gray-400);
+      text-align: center;
+    }
+
+    /* ── ROLE SELECTION ── */
+    #screen-role.split { align-items: stretch; }
+
+    .role-right {
+      flex: 1;
+      padding: 40px 44px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .role-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .role-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .role-card:hover { border-color: #c7cafc; background: #fafaff; }
+
+    .role-card.selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .role-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #D1D5DB;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .role-card.selected .role-radio {
+      border-color: var(--blue);
+      background: var(--blue);
+    }
+
+    .role-card.selected .role-radio::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .role-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 3px;
+    }
+
+    .role-desc-text {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .role-right-footer {
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-100);
+      margin-top: 12px;
+    }
+
+    /* ── QUESTION SCREEN ── */
+    #screen-questions {
+      flex-direction: column;
+      background: var(--white);
+    }
+
+    .q-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .q-nav-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+
+    .q-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+    }
+
+    .progress-bar-wrap {
+      width: 180px;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    .q-content {
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 96px 24px 80px;
+    }
+
+    .q-area-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .q-area-subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+
+    .level-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .level-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .level-card:hover { border-color: #c7cafc; background: #fafaff; }
+
+    .level-card.selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .level-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .level-card.selected .level-badge {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .level-text {
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.55;
+    }
+
+    .level-text strong {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .q-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .btn-ghost {
+      height: 44px;
+      padding: 0 20px;
+      background: transparent;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .btn-ghost:hover { border-color: var(--gray-400); }
+
+    .btn-next {
+      height: 44px;
+      padding: 0 28px;
+      background: var(--blue);
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-next:hover { background: #2c32d4; }
+    .btn-next:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+
+    /* ── RESULTS SCREEN ── */
+    #screen-results {
+      flex-direction: column;
+      background: var(--white);
+      padding-bottom: 100px;
+    }
+
+    .results-hero {
+      background: linear-gradient(160deg, #ffffff 0%, #F0F1FF 100%);
+      padding: 36px 24px 32px;
+    }
+
+    .results-hero-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .hero-left {
+      flex: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    /* Stage thermometer */
+    .stage-thermometer {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-left: 28px;
+      flex-shrink: 0;
+    }
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      padding: 6px 0;
+    }
+    .stage-dot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 14px;
+      position: relative;
+    }
+    .stage-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .stage-dot.active { width: 14px; height: 14px; }
+    .stage-line {
+      width: 2px;
+      height: 18px;
+      background: var(--gray-200);
+    }
+    .stage-line.active-line { background: var(--blue); }
+    .stage-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-400);
+      white-space: nowrap;
+    }
+    .stage-label.active-label { color: var(--gray-900); font-weight: 700; }
+
+    /* Ring chart */
+    .ring-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+    }
+
+    .ring-wrap svg { width: 100%; height: 100%; }
+
+    .ring-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .ring-score {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1;
+    }
+
+    .ring-max {
+      font-size: 12px;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+
+    /* Band badge */
+    .band-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .band-curious  { background: #FEF3C7; color: #92400E; }
+    .band-aware    { background: #DBEAFE; color: #1E40AF; }
+    .band-capable  { background: #D1FAE5; color: #065F46; }
+    .band-leader   { background: #EDE9FE; color: #5B21B6; }
+
+    .band-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .band-curious  .band-dot { background: #D97706; }
+    .band-aware    .band-dot { background: #2563EB; }
+    .band-capable  .band-dot { background: #059669; }
+    .band-leader   .band-dot { background: #7C3AED; }
+
+    /* Meaning card */
+    .results-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 0;
+    }
+
+    .meaning-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+
+    .meaning-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+
+    .meaning-card p {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    /* Skill bars */
+    .skill-bars { margin-bottom: 40px; }
+
+    .skill-group-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+    .label-strong { background: #D1FAE5; color: #065F46; }
+    .label-mid { background: #DBEAFE; color: #1E40AF; }
+    .label-weak { background: #FEF3C7; color: #92400E; }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .skill-name {
+      font-size: 13px;
+      color: var(--gray-900);
+      font-weight: 500;
+      flex: 1;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .skill-bar-outer {
+      flex: 0 0 180px;
+      height: 10px;
+      background: var(--gray-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .skill-bar-inner {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+
+    .bar-strong { background: var(--green); }
+    .bar-mid    { background: var(--blue); }
+    .bar-weak   { background: var(--amber); }
+
+    .skill-level-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      flex: 0 0 32px;
+      text-align: left;
+    }
+
+    /* Transition section */
+    .transition-card {
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 40px;
+      color: var(--gray-900);
+    }
+
+    .transition-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .transition-roles {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .transition-role-pill {
+      padding: 10px 20px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      background: white;
+    }
+    .transition-role-pill.target {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--blue-light);
+    }
+    .transition-arrow {
+      font-size: 18px;
+      color: var(--gray-400);
+    }
+
+    .transition-heading {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .transition-sub {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .transition-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .skill-tag {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 10px 14px;
+      flex: 0 0 calc(50% - 4px);
+    }
+    .skill-tag-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 2px;
+    }
+    .skill-tag-detail {
+      font-size: 11px;
+      color: var(--gray-500);
+      line-height: 1.4;
+    }
+
+    .coverage-block {
+      background: var(--blue-light);
+      border: 1px solid #D5D8FF;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .coverage-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .coverage-text strong { color: var(--gray-900); }
+
+    .coverage-bar-outer {
+      height: 6px;
+      background: rgba(57,64,240,0.12);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .coverage-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: var(--blue);
+      border-radius: 99px;
+      transition: width 1s ease;
+    }
+
+    /* Sticky CTA bar */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 200;
+    }
+
+    .btn-cta-primary {
+      height: 44px;
+      padding: 0 24px;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-cta-primary:hover { background: #2c32d4; }
+
+    .btn-cta-ghost {
+      height: 44px;
+      padding: 0 20px;
+      background: transparent;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .btn-cta-ghost:hover { border-color: var(--gray-400); }
+
+    /* Ring fill class — color set by JS */
+    .ring-fill-curious { stroke: #D97706; }
+    .ring-fill-aware   { stroke: #2563EB; }
+    .ring-fill-capable { stroke: #059669; }
+    .ring-fill-leader  { stroke: #7C3AED; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .screen.active { flex-direction: column; }
+
+      /* Login screen mobile */
+      .login-screen {
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .login-left {
+        width: 100%;
+        padding: 24px 20px 20px;
+      }
+      .login-logo-bar { margin-bottom: 14px; }
+      .login-heading { font-size: 22px; margin-bottom: 6px; }
+      .login-desc { font-size: 12px; margin-bottom: 14px; max-width: none; line-height: 1.5; }
+      .login-eyebrow { margin-bottom: 6px; font-size: 10px; }
+      .login-stat-cards { display: none; }
+      .login-checks {
+        display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px 14px;
+      }
+      .login-check { font-size: 11px; gap: 5px; }
+      .login-check-icon { width: 14px; height: 14px; }
+      .login-check-icon svg { width: 8px; height: 8px; }
+
+      .login-right {
+        width: 100%;
+        padding: 20px 20px 28px;
+        background: var(--gray-50);
+      }
+      .login-form-box { max-width: none; }
+      .login-form-icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 12px; }
+      .login-form-icon svg { width: 18px; height: 18px; }
+      .login-form-title { font-size: 17px; margin-bottom: 2px; }
+      .login-form-sub { font-size: 12px; margin-bottom: 14px; }
+      .login-field { margin-bottom: 10px; }
+      .login-label { font-size: 11px; margin-bottom: 4px; }
+      .login-input { height: 42px; font-size: 13px; }
+      .login-phone-prefix { height: 42px; font-size: 13px; padding: 0 10px; }
+      .login-btn { height: 44px; margin-top: 10px; font-size: 12px; }
+      .login-footer-text { margin-top: 10px; font-size: 10px; }
+
+      .split-left {
+        width: 100%;
+        padding: 28px 24px;
+      }
+
+      .logo-bar { margin-bottom: 20px; }
+      .panel-title { font-size: 24px; margin-bottom: 10px; }
+      .panel-desc { font-size: 14px; margin-bottom: 0; }
+      .stat-cards { display: none; }
+      .check-list { display: none; }
+
+      .split-right {
+        width: 100%;
+        min-height: unset;
+        padding: 32px 20px;
+      }
+
+      .form-card { padding: 28px 20px; }
+
+      .role-right { padding: 24px 20px; }
+
+      .q-nav { padding: 0 16px; }
+      .q-content { padding: 80px 16px 80px; }
+      .skill-name { flex: 0 0 130px; font-size: 11px; }
+
+      .sticky-cta { flex-wrap: wrap; gap: 8px; }
+      .btn-cta-primary, .btn-cta-ghost { font-size: 12px; padding: 0 14px; }
+
+      .results-hero { padding: 36px 16px 32px; }
+      .results-body { padding: 24px 16px 0; }
+      .transition-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 1 — LOGIN
+══════════════════════════════════════════════════════ -->
+<div id="screen-login" class="screen login-screen active">
+
+  <!-- Left: dark navy panel -->
+  <div class="login-left">
+    <div class="login-logo-bar">
+      <img src="scaler-logo-white.svg" alt="Scaler" height="24" />
+      <div class="login-logo-divider"></div>
+      <span class="login-logo-sub">AI Fluency</span>
+    </div>
+
+    <div class="login-eyebrow">FREE &middot; TAKES 3 MINUTES</div>
+    <h1 class="login-heading">Your AI Fluency Report</h1>
+    <p class="login-desc">Find out exactly where you stand with AI — tailored to your role, your workflows, and the tools you should be using.</p>
+
+    <div class="login-stat-cards">
+      <div class="login-stat-card">
+        <div class="login-stat-num">2.5x</div>
+        <div class="login-stat-label">average career growth for AI-fluent professionals</div>
+      </div>
+      <div class="login-stat-card">
+        <div class="login-stat-num">73%</div>
+        <div class="login-stat-label">of business roles now require AI fluency</div>
+      </div>
+      <div class="login-stat-card">
+        <div class="login-stat-num">12 mo</div>
+        <div class="login-stat-label">before the gap becomes uncatchable</div>
+      </div>
+    </div>
+
+    <div class="login-checks">
+      <div class="login-check">
+        <div class="login-check-icon"><svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Skill Gap Assessment
+      </div>
+      <div class="login-check">
+        <div class="login-check-icon"><svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Personalized AI Roadmap
+      </div>
+      <div class="login-check">
+        <div class="login-check-icon"><svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Curriculum Match Score
+      </div>
+      <div class="login-check">
+        <div class="login-check-icon"><svg viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Career Transition Path
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: white form panel -->
+  <div class="login-right">
+    <div class="login-form-box">
+      <div class="login-form-icon">
+        <svg viewBox="0 0 26 26" fill="none"><circle cx="13" cy="9" r="5" stroke="#3940F0" stroke-width="2"/><path d="M4 22c0-4.418 4.03-8 9-8s9 3.582 9 8" stroke="#3940F0" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="login-form-title">Start Your Assessment</div>
+      <div class="login-form-sub">Takes 3 minutes. Results are instant.</div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label class="login-label" for="inp-name">Full Name</label>
+          <input class="login-input" id="inp-name" type="text" placeholder="Anil Sharma" autocomplete="name" required />
+        </div>
+        <div class="login-field">
+          <label class="login-label" for="inp-email">Work Email</label>
+          <input class="login-input" id="inp-email" type="email" placeholder="anil@company.com" autocomplete="email" required />
+        </div>
+        <div class="login-field">
+          <label class="login-label" for="inp-phone">Phone Number</label>
+          <div class="login-phone-row">
+            <div class="login-phone-prefix">+91</div>
+            <input class="login-input" id="inp-phone" type="tel" placeholder="98765 43210" autocomplete="tel" required />
+          </div>
+        </div>
+        <button type="submit" class="login-btn">START ASSESSMENT &rarr;</button>
+      </form>
+
+      <p class="login-footer-text">Your data is secure and never shared.</p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 2 — ROLE SELECTION
+══════════════════════════════════════════════════════ -->
+<div id="screen-role" class="screen split">
+
+  <div class="split-left" style="justify-content: space-between;">
+    <div>
+      <div class="logo-bar">
+        <img src="scaler-logo-white.svg" alt="Scaler" height="28" />
+      </div>
+      <div style="font-size:14px;color:var(--gray-400);margin-bottom:6px;" id="role-greeting">Hey,</div>
+      <div class="panel-title">What do you do?</div>
+      <p class="panel-desc" style="margin-bottom:0;">Pick the role closest to your job. We'll tailor every question to your workflow.</p>
+    </div>
+    <div class="stat-card" style="margin-top:32px;">
+      <div class="stat-num" style="font-size:20px;">3x</div>
+      <div class="stat-label">AI-fluent professionals grow 3x faster in their careers</div>
+    </div>
+  </div>
+
+  <div class="role-right">
+    <div class="role-grid" id="role-grid"></div>
+    <div class="role-right-footer">
+      <button class="btn-primary" id="btn-begin" style="margin-top:0;" disabled onclick="handleBeginAssessment()">BEGIN ASSESSMENT &rarr;</button>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 3 — QUESTIONS
+══════════════════════════════════════════════════════ -->
+<div id="screen-questions" class="screen">
+
+  <nav class="q-nav">
+    <img src="scaler-logo.svg" alt="Scaler" height="22" />
+    <div class="q-nav-right">
+      <span class="q-label" id="q-progress-label">SKILL 1 OF 10</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="q-progress-bar" style="width:10%;"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="q-content">
+    <div class="q-area-title" id="q-area-title"></div>
+    <div class="q-area-subtitle">Select the level that best describes where you are today.</div>
+    <div class="level-cards" id="level-cards"></div>
+    <div class="q-footer">
+      <button class="btn-ghost" id="btn-back" onclick="handleBack()">&#8592; Back</button>
+      <button class="btn-next" id="btn-next" onclick="handleNext()" disabled>
+        <span id="btn-next-label">Next</span>
+        <span>&#8594;</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 4 — RESULTS
+══════════════════════════════════════════════════════ -->
+<div id="screen-results" class="screen">
+
+  <div class="results-hero">
+    <div class="results-hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">YOUR AI FLUENCY SCORE</div>
+        <div class="hero-title" id="results-hero-title">Here's where you stand</div>
+        <div id="band-badge-wrap"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:20px;">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 160 160" fill="none">
+            <circle cx="80" cy="80" r="66" stroke="#E5E7EB" stroke-width="12"/>
+            <circle id="ring-circle" cx="80" cy="80" r="66"
+              stroke="#2563EB"
+              stroke-width="12"
+              stroke-linecap="round"
+              stroke-dasharray="414.69"
+              stroke-dashoffset="414.69"
+              transform="rotate(-90 80 80)"
+              style="transition: stroke-dashoffset 1s ease;"
+            />
+          </svg>
+          <div class="ring-center">
+            <div class="ring-score" id="ring-score">0</div>
+            <div class="ring-max">/50</div>
+          </div>
+        </div>
+        <div class="stage-thermometer" id="stage-thermometer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-body">
+
+    <div class="meaning-card">
+      <div class="meaning-label">WHAT THIS MEANS</div>
+      <p id="meaning-text"></p>
+    </div>
+
+    <div class="skill-bars">
+      <div class="section-title">Your skill breakdown</div>
+      <div id="skill-bars-container"></div>
+    </div>
+
+    <div class="transition-card">
+      <div class="transition-eyebrow">WHERE YOU ARE &rarr; WHERE YOU COULD BE</div>
+      <div class="transition-roles">
+        <div class="transition-role-pill" id="trans-from"></div>
+        <div class="transition-arrow">&rarr;</div>
+        <div class="transition-role-pill target" id="trans-to"></div>
+      </div>
+      <div class="transition-heading">To make this transition, you need these skills:</div>
+      <div class="skill-tags" id="skill-tags"></div>
+      <div class="coverage-block">
+        <div class="coverage-text">
+          <strong>95% of these skills</strong> are covered in the <strong>Scaler Online PGP in Business &amp; AI</strong> curriculum — through live sessions, hands-on projects, and real-world case studies across 12 months.
+        </div>
+        <div class="coverage-bar-outer">
+          <div class="coverage-bar-inner" id="coverage-bar-inner"></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <button class="btn-primary" style="margin-top:0;width:auto;padding:0 28px;font-size:13px;" onclick="handleCallbackClick()">
+          Want to know more? Request a Callback &rarr;
+        </button>
+        <a href="https://www.scaler.com/online-pgp-in-business-and-ai" target="_blank" rel="noopener" onclick="handleCurriculumClick()" style="font-size:13px;color:var(--blue);text-decoration:underline;cursor:pointer;">
+          Explore the full curriculum &rarr;
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sticky-cta">
+    <button class="btn-cta-primary" onclick="handleCallbackClick()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8a16 16 0 006.29 6.29l1.15-1.15a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      Request a Callback
+    </button>
+    <button class="btn-cta-ghost" onclick="handleShare()">Share your score</button>
+    <button class="btn-cta-ghost" onclick="handleRetake()">Retake assessment</button>
+  </div>
+
+</div>
+
+
+<!-- data.js must load before the inline script -->
+<script src="data.js"></script>
+
+<script>
+/* ─────────────────────────────────────────────────────
+   TRACKING
+───────────────────────────────────────────────────── */
+const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwWoIPtW0JbpmKFVv-QM7nafQtC_-zddafcNwoazpynvf9zCXWeNOdU0bLU9VxPFX7qUQ/exec';
+
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function trackEvent(eventType, data = {}) {
+  const payload = {
+    user_id: state.userId,
+    event: eventType,
+    timestamp: new Date().toISOString(),
+    name: state.name || '',
+    email: state.email || '',
+    phone: state.phone || '',
+    ...data
+  };
+  fetch(SHEET_WEBHOOK, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+}
+
+/* ─────────────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────────────── */
+const state = {
+  userId: generateUUID(),
+  name: '',
+  email: '',
+  phone: '',
+  role: null,
+  currentQ: 0,
+  answers: new Array(10).fill(null),
+};
+
+/* ─────────────────────────────────────────────────────
+   SCREEN SWITCHING
+───────────────────────────────────────────────────── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─────────────────────────────────────────────────────
+   SCREEN 1 — LOGIN
+───────────────────────────────────────────────────── */
+function handleLogin(e) {
+  e.preventDefault();
+  state.name  = document.getElementById('inp-name').value.trim();
+  state.email = document.getElementById('inp-email').value.trim();
+  state.phone = document.getElementById('inp-phone').value.trim();
+  trackEvent('started');
+  buildRoleScreen();
+  showScreen('screen-role');
+}
+
+/* ─────────────────────────────────────────────────────
+   SCREEN 2 — ROLE SELECTION
+───────────────────────────────────────────────────── */
+function buildRoleScreen() {
+  const firstName = state.name.split(' ')[0];
+  document.getElementById('role-greeting').textContent = `Hey ${firstName},`;
+
+  const grid = document.getElementById('role-grid');
+  grid.innerHTML = '';
+
+  ROLES.forEach(role => {
+    const card = document.createElement('div');
+    card.className = 'role-card';
+    card.dataset.role = role;
+    card.innerHTML = `
+      <div class="role-radio"></div>
+      <div>
+        <div class="role-name">${escHtml(role)}</div>
+        <div class="role-desc-text">${escHtml(ROLE_DESCS[role])}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => selectRole(role));
+    grid.appendChild(card);
+  });
+}
+
+function selectRole(role) {
+  state.role = role;
+  document.querySelectorAll('.role-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.role === role);
+  });
+  document.getElementById('btn-begin').disabled = false;
+}
+
+function handleBeginAssessment() {
+  if (!state.role) return;
+  trackEvent('role_selected', { role: state.role });
+  state.currentQ = 0;
+  state.answers  = new Array(10).fill(null);
+  buildQuestionScreen(0);
+  showScreen('screen-questions');
+}
+
+/* ─────────────────────────────────────────────────────
+   SCREEN 3 — QUESTIONS
+───────────────────────────────────────────────────── */
+function buildQuestionScreen(qIndex) {
+  const skills = ROLE_SKILLS[state.role];
+  const skill  = skills[qIndex];
+  const total  = skills.length;
+
+  document.getElementById('q-progress-label').textContent = `SKILL ${qIndex + 1} OF ${total}`;
+  document.getElementById('q-progress-bar').style.width   = `${((qIndex + 1) / total) * 100}%`;
+  document.getElementById('btn-back').style.visibility    = qIndex === 0 ? 'hidden' : 'visible';
+  document.getElementById('q-area-title').textContent     = skill.area;
+
+  const container = document.getElementById('level-cards');
+  container.innerHTML = '';
+
+  skill.levels.forEach((lvlText, i) => {
+    const card = document.createElement('div');
+    card.className = 'level-card' + (state.answers[qIndex] === i ? ' selected' : '');
+    card.dataset.level = i;
+    card.innerHTML = `
+      <div class="level-badge">${i + 1}</div>
+      <div class="level-text"><strong>Level ${i + 1} &mdash; </strong>${escHtml(lvlText)}</div>
+    `;
+    card.addEventListener('click', () => selectLevel(qIndex, i));
+    container.appendChild(card);
+  });
+
+  const isLast = qIndex === total - 1;
+  document.getElementById('btn-next-label').textContent = isLast ? 'See Results' : 'Next';
+  document.getElementById('btn-next').disabled = state.answers[qIndex] === null;
+}
+
+function selectLevel(qIndex, level) {
+  state.answers[qIndex] = level;
+  document.querySelectorAll('.level-card').forEach(c => {
+    c.classList.toggle('selected', parseInt(c.dataset.level, 10) === level);
+  });
+  document.getElementById('btn-next').disabled = false;
+
+  const skill = ROLE_SKILLS[state.role][qIndex];
+  trackEvent('question_answered', {
+    question_number: qIndex + 1,
+    question_name:   skill.area,
+    answer_level:    level + 1,
+  });
+}
+
+function handleBack() {
+  if (state.currentQ > 0) {
+    state.currentQ--;
+    buildQuestionScreen(state.currentQ);
+  }
+}
+
+function handleNext() {
+  if (state.answers[state.currentQ] === null) return;
+  const total = ROLE_SKILLS[state.role].length;
+  if (state.currentQ < total - 1) {
+    state.currentQ++;
+    buildQuestionScreen(state.currentQ);
+  } else {
+    buildResultsScreen();
+    showScreen('screen-results');
+    animateResults();
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   SCREEN 4 — RESULTS
+───────────────────────────────────────────────────── */
+function buildResultsScreen() {
+  const skills = ROLE_SKILLS[state.role];
+  // Each answer is 0-indexed; score = answer + 1 (range 1–5)
+  const scores = state.answers.map(a => (a === null ? 1 : a + 1));
+  const total  = scores.reduce((s, v) => s + v, 0);
+
+  const band = BANDS.find(b => total >= b.min && total <= b.max)
+             || (total < BANDS[0].min ? BANDS[0] : BANDS[BANDS.length - 1]);
+
+  state._score = total;
+  state._band  = band.label;
+
+  // Fire completed event
+  const payload = { score: total, band: band.label };
+  skills.forEach((s, i) => {
+    payload[`skill_${i+1}_name`]  = s.area;
+    payload[`skill_${i+1}_level`] = scores[i];
+  });
+  trackEvent('completed', payload);
+
+  // Hero
+  const firstName = state.name.split(' ')[0];
+  document.getElementById('results-hero-title').textContent =
+    `Here's where you stand, ${firstName}`;
+
+  // Stage thermometer
+  const stages = [
+    {label:'AI Curious', min:10, max:18, color:'#D97706'},
+    {label:'AI Aware', min:19, max:28, color:'#2563EB'},
+    {label:'AI Capable', min:29, max:38, color:'#059669'},
+    {label:'AI Leader', min:39, max:50, color:'#7C3AED'},
+  ];
+  const thermoEl = document.getElementById('stage-thermometer');
+  thermoEl.innerHTML = '';
+  // Build as a table-like structure: left column has dots+lines, right column has labels
+  stages.forEach((s,i) => {
+    const isActive = total >= s.min && total <= s.max;
+    const isPast = total > s.max;
+    const prevActive = i > 0 && (total > stages[i-1].max || (total >= stages[i-1].min && total <= stages[i-1].max));
+
+    // Line connecting to previous dot (except first)
+    if (i > 0) {
+      const lineWrap = document.createElement('div');
+      lineWrap.style.cssText = 'display:flex;align-items:stretch;padding-left:6px;';
+      const line = document.createElement('div');
+      line.style.cssText = `width:2px;height:14px;background:${isPast||isActive?s.color:'#E5E7EB'};border-radius:1px;`;
+      lineWrap.appendChild(line);
+      thermoEl.appendChild(lineWrap);
+    }
+
+    // Dot + label row
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+    const dotSize = isActive ? 14 : 8;
+    const dotMargin = isActive ? 0 : 3; // center smaller dots with the 14px active dot
+    const dot = document.createElement('div');
+    dot.style.cssText = `width:${dotSize}px;height:${dotSize}px;margin-left:${dotMargin}px;border-radius:50%;background:${isPast||isActive?s.color:'#E5E7EB'};flex-shrink:0;${isActive?'box-shadow:0 0 0 4px '+s.color+'33;':''}`;
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = `font-size:${isActive?12:11}px;font-weight:${isActive?700:500};color:${isActive?'#111827':'#9CA3AF'};white-space:nowrap;`;
+    lbl.textContent = s.label;
+
+    row.appendChild(dot);
+    row.appendChild(lbl);
+    thermoEl.appendChild(row);
+  });
+
+  // Ring — reset to 0 so transition fires after screen swap
+  const ringEl = document.getElementById('ring-circle');
+  // Set stroke color directly based on band
+  const ringColors = {'ring-fill-curious':'#D97706','ring-fill-aware':'#2563EB','ring-fill-capable':'#059669','ring-fill-leader':'#7C3AED'};
+  ringEl.setAttribute('stroke', ringColors[band.ringCls] || '#2563EB');
+  ringEl.style.transition = 'none';
+  ringEl.style.strokeDashoffset = '414.69';
+
+  document.getElementById('ring-score').textContent = total;
+
+  // Band badge
+  document.getElementById('band-badge-wrap').innerHTML = `
+    <div class="band-badge ${band.cls}">
+      <div class="band-dot"></div>
+      ${band.label}
+    </div>
+  `;
+
+  // Meaning
+  document.getElementById('meaning-text').textContent = band.meaning;
+
+  // Skill bars — sort descending
+  const sorted = skills
+    .map((s, i) => ({ name: s.area, score: scores[i] }))
+    .sort((a, b) => b.score - a.score);
+
+  const strong = sorted.filter(s => s.score >= 4);
+  const mid    = sorted.filter(s => s.score === 3);
+  const weak   = sorted.filter(s => s.score <= 2);
+
+  const barsContainer = document.getElementById('skill-bars-container');
+  barsContainer.innerHTML = '';
+
+  function renderGroup(label, items, cls, labelCls) {
+    if (!items.length) return;
+    const lbl = document.createElement('div');
+    lbl.className = 'skill-group-label ' + (labelCls || '');
+    lbl.textContent = label;
+    barsContainer.appendChild(lbl);
+    items.forEach(item => {
+      const pct = (item.score / 5) * 100;
+      const row = document.createElement('div');
+      row.className = 'skill-row';
+      row.innerHTML = `
+        <div class="skill-name">${escHtml(item.name)}</div>
+        <div class="skill-bar-outer">
+          <div class="skill-bar-inner ${cls}" style="width:0%" data-target="${pct}%"></div>
+        </div>
+        <div class="skill-level-tag">${item.score}/5</div>
+      `;
+      barsContainer.appendChild(row);
+    });
+  }
+
+  renderGroup("Where you're strong", strong, 'bar-strong', 'label-strong');
+  renderGroup('Other skills', mid, 'bar-mid', 'label-mid');
+  renderGroup('Where you need work', weak, 'bar-weak', 'label-weak');
+
+  // Transition card
+  const transRole   = ROLE_TRANSITIONS[state.role] || `AI-Fluent ${state.role}`;
+  const transSkills = ROLE_TRANSITION_SKILLS[state.role] || [];
+
+  document.getElementById('trans-from').textContent = state.role;
+  document.getElementById('trans-to').textContent = transRole;
+
+  const tagsEl = document.getElementById('skill-tags');
+  tagsEl.innerHTML = '';
+  transSkills.forEach(s => {
+    const tag = document.createElement('div');
+    tag.className = 'skill-tag';
+    tag.innerHTML = `<div class="skill-tag-label">${escHtml(s.label)}</div><div class="skill-tag-detail">${escHtml(s.detail)}</div>`;
+    tagsEl.appendChild(tag);
+  });
+
+  // Animate coverage bar
+  setTimeout(() => {
+    const coverageBar = document.getElementById('coverage-bar-inner');
+    if (coverageBar) coverageBar.style.width = '95%';
+  }, 500);
+}
+
+function animateResults() {
+  const ringEl = document.getElementById('ring-circle');
+  const circumference = 2 * Math.PI * 66; // ~414.69
+  // score range is 10–50 (40 points total); map to 0–100% fill
+  const fraction = Math.min(1, Math.max(0, (state._score - 10) / 40));
+  const targetOffset = circumference * (1 - fraction);
+
+  // Double rAF: first forces the reset (dashoffset=414.69) to paint,
+  // then re-enables transition and sets the target
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      ringEl.style.transition = 'stroke-dashoffset 1s ease';
+      ringEl.style.strokeDashoffset = targetOffset;
+    });
+  });
+
+  // Animate skill bars after a short delay
+  setTimeout(() => {
+    document.querySelectorAll('.skill-bar-inner[data-target]').forEach(bar => {
+      bar.style.width = bar.dataset.target;
+    });
+  }, 250);
+}
+
+/* ─────────────────────────────────────────────────────
+   CTA ACTIONS
+───────────────────────────────────────────────────── */
+function handleCallbackClick() {
+  trackEvent('requested_callback');
+  // Show popup overlay
+  const existing = document.getElementById('callback-popup');
+  if (existing) existing.remove();
+  const popup = document.createElement('div');
+  popup.id = 'callback-popup';
+  popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeUp .2s ease;';
+  popup.innerHTML = `
+    <div style="background:white;border-radius:16px;padding:36px 40px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="width:56px;height:56px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div style="font-size:20px;font-weight:700;color:#111827;margin-bottom:8px;">We'll reach out shortly!</div>
+      <div style="font-size:15px;color:#6B7280;line-height:1.6;margin-bottom:24px;">A Scaler program advisor will call you at <strong style="color:#111827;">+91 ${escHtml(state.phone)}</strong> within 24 hours to help you plan your AI learning path.</div>
+      <button onclick="document.getElementById('callback-popup').remove()" style="background:#3940F0;color:white;border:none;border-radius:8px;padding:12px 32px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Got it</button>
+    </div>
+  `;
+  popup.addEventListener('click', (e) => { if (e.target === popup) popup.remove(); });
+  document.body.appendChild(popup);
+}
+
+function handleCurriculumClick() {
+  trackEvent('clicked_curriculum');
+  window.open('https://www.scaler.com/online-pgp-in-business-and-ai', '_blank');
+}
+
+function handleShare() {
+  const text = `I scored ${state._score}/50 on the Scaler AI Fluency Assessment — ${state._band}. Take yours at scaler.com`;
+  if (navigator.share) {
+    navigator.share({ title: 'My AI Fluency Score', text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text)
+      .then(() => alert('Score copied to clipboard!'))
+      .catch(() => alert(text));
+  }
+}
+
+function handleRetake() {
+  trackEvent('retook_test');
+  state.currentQ = 0;
+  state.answers  = new Array(10).fill(null);
+  state.role     = null;
+  state._score   = undefined;
+  state._band    = undefined;
+  document.getElementById('btn-begin').disabled = true;
+  buildRoleScreen();
+  showScreen('screen-role');
+}
+
+/* ─────────────────────────────────────────────────────
+   UTILITY
+───────────────────────────────────────────────────── */
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+
+<!--
+GOOGLE APPS SCRIPT — paste this into script.google.com:
+
+function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Raw Events sheet
+  var raw = ss.getSheetByName('Raw Events') || ss.insertSheet('Raw Events');
+  if (raw.getLastRow() === 0) {
+    raw.appendRow(['timestamp','user_id','event','name','email','phone','role',
+      'question_number','question_name','answer_level','score','band',
+      'skill_1','level_1','skill_2','level_2','skill_3','level_3',
+      'skill_4','level_4','skill_5','level_5','skill_6','level_6',
+      'skill_7','level_7','skill_8','level_8','skill_9','level_9',
+      'skill_10','level_10']);
+  }
+
+  var d = JSON.parse(e.postData.contents);
+  var row = [d.timestamp, d.user_id, d.event, d.name, d.email, d.phone, d.role||'',
+    d.question_number||'', d.question_name||'', d.answer_level||'', d.score||'', d.band||''];
+  for (var i = 1; i <= 10; i++) {
+    row.push(d['skill_'+i+'_name']||'', d['skill_'+i+'_level']||'');
+  }
+  raw.appendRow(row);
+
+  // Users summary sheet
+  var users = ss.getSheetByName('Users') || ss.insertSheet('Users');
+  if (users.getLastRow() === 0) {
+    users.appendRow(['user_id','name','email','phone','role','status','score','band',
+      'last_question','completed','requested_callback','clicked_curriculum','retook_test',
+      'first_seen','last_seen']);
+  }
+
+  var data = users.getDataRange().getValues();
+  var userRow = -1;
+  for (var r = 1; r < data.length; r++) {
+    if (data[r][0] === d.user_id) { userRow = r + 1; break; }
+  }
+
+  if (userRow === -1) {
+    users.appendRow([d.user_id, d.name, d.email, d.phone, '', 'started', '', '',
+      0, false, false, false, false, d.timestamp, d.timestamp]);
+    userRow = users.getLastRow();
+  }
+
+  users.getRange(userRow, 15).setValue(d.timestamp);
+  if (d.event === 'role_selected') {
+    users.getRange(userRow, 5).setValue(d.role);
+    users.getRange(userRow, 6).setValue('in_assessment');
+  }
+  if (d.event === 'question_answered') {
+    users.getRange(userRow, 9).setValue(d.question_number);
+    if (d.question_number < 10) users.getRange(userRow, 6).setValue('in_assessment (Q' + d.question_number + ')');
+  }
+  if (d.event === 'completed') {
+    users.getRange(userRow, 6).setValue('completed');
+    users.getRange(userRow, 7).setValue(d.score);
+    users.getRange(userRow, 8).setValue(d.band);
+    users.getRange(userRow, 9).setValue(10);
+    users.getRange(userRow, 10).setValue(true);
+  }
+  if (d.event === 'requested_callback') users.getRange(userRow, 11).setValue(true);
+  if (d.event === 'clicked_curriculum') users.getRange(userRow, 12).setValue(true);
+  if (d.event === 'retook_test') users.getRange(userRow, 13).setValue(true);
+
+  return ContentService.createTextOutput('ok');
+}
+
+// Dashboard formulas (add to a "Dashboard" sheet):
+// A1: "Total Started"         B1: =COUNTA(Users!A2:A)
+// A2: "Completed"             B2: =COUNTIF(Users!J2:J,TRUE)
+// A3: "% Completed"           B3: =B2/B1
+// A4: "% Requested Callback"  B4: =COUNTIF(Users!K2:K,TRUE)/B1
+// A5: "% Clicked Curriculum"  B5: =COUNTIF(Users!L2:L,TRUE)/B1
+// A6: "% Retook Test"         B6: =COUNTIF(Users!M2:M,TRUE)/B1
+// A7: "Avg Score (completed)" B7: =AVERAGEIF(Users!J2:J,TRUE,Users!G2:G)
+// A8: "AI Curious"            B8: =COUNTIF(Users!H2:H,"AI Curious")
+// A9: "AI Aware"              B9: =COUNTIF(Users!H2:H,"AI Aware")
+// A10: "AI Capable"           B10: =COUNTIF(Users!H2:H,"AI Capable")
+// A11: "AI Leader"            B11: =COUNTIF(Users!H2:H,"AI Leader")
+-->
+
+</body>
+</html>
