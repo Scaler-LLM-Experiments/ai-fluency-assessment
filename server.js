@@ -245,7 +245,7 @@ app.get('*', (req, res) => {
   } catch (e) {
     console.error('[db] schema init failed:', e.message);
   }
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server listening on 0.0.0.0:${PORT}  db=${pool ? 'on' : 'off'}  auth=${API_TOKEN ? 'on' : 'off'}`);
+  app.listen(PORT, () => {
+    console.log(`Server listening on :${PORT}  db=${pool ? 'on' : 'off'}  auth=${API_TOKEN ? 'on' : 'off'}`);
   });
 })();
