@@ -1,2 +1,9 @@
 # Local Netlify folder
 .netlify
+node_modules
+.env
+.env.local
+backend/node_modules
+frontend-tests/node_modules
+frontend-tests/test-results
+frontend-tests/playwright-report

@@ -1,0 +1,14 @@
+{
+  "name": "ai-fluency-backend",
+  "version": "1.0.0",
+  "description": "Backend API for AI Fluency Assessment — lead tracking + CRM integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/run.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}
