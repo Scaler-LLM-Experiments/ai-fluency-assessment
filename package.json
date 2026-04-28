@@ -1,7 +1,11 @@
 {
   "name": "ai-fluency-assessment",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
-    "start": "npx serve -s . -l $PORT"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
   }
 }
