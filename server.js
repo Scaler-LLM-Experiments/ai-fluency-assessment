@@ -1,0 +1,251 @@
+const express = require('express');
+const path = require('path');
+const { Pool } = require('pg');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const API_TOKEN = process.env.API_TOKEN || '';
+const DATABASE_URL = process.env.DATABASE_URL || '';
+
+const pool = DATABASE_URL
+  ? new Pool({
+      connectionString: DATABASE_URL,
+      ssl: DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
+    })
+  : null;
+
+app.use(express.json({ limit: '1mb' }));
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
+async function ensureSchema() {
+  if (!pool) return;
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS leads (
+      user_id        TEXT PRIMARY KEY,
+      name           TEXT,
+      email          TEXT,
+      phone          TEXT,
+      role           TEXT,
+      status         TEXT DEFAULT 'started',
+      score          INTEGER,
+      band           TEXT,
+      last_question  INTEGER DEFAULT 0,
+      completed      BOOLEAN DEFAULT FALSE,
+      requested_callback BOOLEAN DEFAULT FALSE,
+      clicked_curriculum BOOLEAN DEFAULT FALSE,
+      retook_test    BOOLEAN DEFAULT FALSE,
+      traffic_source TEXT,
+      utm_source     TEXT,
+      utm_medium     TEXT,
+      utm_campaign   TEXT,
+      utm_term       TEXT,
+      utm_content    TEXT,
+      referrer       TEXT,
+      first_seen_ist TEXT,
+      last_seen_ist  TEXT,
+      created_at     TIMESTAMPTZ DEFAULT NOW(),
+      updated_at     TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_leads_email   ON leads(email);
+    CREATE INDEX IF NOT EXISTS idx_leads_phone   ON leads(phone);
+    CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at DESC);
+
+    CREATE TABLE IF NOT EXISTS events (
+      id             BIGSERIAL PRIMARY KEY,
+      user_id        TEXT NOT NULL,
+      event          TEXT NOT NULL,
+      timestamp_ist  TEXT,
+      date_ist       TEXT,
+      time_ist       TEXT,
+      question_number INTEGER,
+      question_name  TEXT,
+      answer_level   TEXT,
+      score          INTEGER,
+      band           TEXT,
+      payload        JSONB,
+      created_at     TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_events_user    ON events(user_id);
+    CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_events_event   ON events(event);
+  `);
+}
+
+function requireAuth(req, res, next) {
+  if (!API_TOKEN) return res.status(503).json({ error: 'API_TOKEN not configured' });
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+  if (token !== API_TOKEN) return res.status(401).json({ error: 'unauthorized' });
+  next();
+}
+
+app.get('/health', async (req, res) => {
+  let db = 'disabled';
+  if (pool) {
+    try {
+      await pool.query('SELECT 1');
+      db = 'ok';
+    } catch (e) {
+      db = 'error: ' + e.message;
+    }
+  }
+  res.json({ status: 'ok', db, time: new Date().toISOString() });
+});
+
+app.post('/api/track', async (req, res) => {
+  res.json({ ok: true });
+  if (!pool) return;
+
+  const d = req.body || {};
+  if (!d.user_id || !d.event) return;
+
+  try {
+    await pool.query(
+      `INSERT INTO events (user_id, event, timestamp_ist, date_ist, time_ist,
+        question_number, question_name, answer_level, score, band, payload)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+      [
+        d.user_id, d.event,
+        d.timestamp_ist || null, d.date_ist || null, d.time_ist || null,
+        d.question_number || null, d.question_name || null, d.answer_level || null,
+        d.score != null ? Number(d.score) : null,
+        d.band || null,
+        d,
+      ]
+    );
+
+    const ts = d.timestamp_ist || null;
+    await pool.query(
+      `INSERT INTO leads (user_id, name, email, phone, traffic_source,
+         utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer,
+         first_seen_ist, last_seen_ist)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$12)
+       ON CONFLICT (user_id) DO UPDATE SET
+         name           = COALESCE(NULLIF(EXCLUDED.name,''),  leads.name),
+         email          = COALESCE(NULLIF(EXCLUDED.email,''), leads.email),
+         phone          = COALESCE(NULLIF(EXCLUDED.phone,''), leads.phone),
+         traffic_source = COALESCE(leads.traffic_source, EXCLUDED.traffic_source),
+         utm_source     = COALESCE(leads.utm_source,     EXCLUDED.utm_source),
+         utm_medium     = COALESCE(leads.utm_medium,     EXCLUDED.utm_medium),
+         utm_campaign   = COALESCE(leads.utm_campaign,   EXCLUDED.utm_campaign),
+         utm_term       = COALESCE(leads.utm_term,       EXCLUDED.utm_term),
+         utm_content    = COALESCE(leads.utm_content,    EXCLUDED.utm_content),
+         referrer       = COALESCE(leads.referrer,       EXCLUDED.referrer),
+         last_seen_ist  = EXCLUDED.last_seen_ist,
+         updated_at     = NOW()`,
+      [
+        d.user_id, d.name || '', d.email || '', d.phone || '',
+        d.traffic_source || '', d.utm_source || '', d.utm_medium || '',
+        d.utm_campaign || '', d.utm_term || '', d.utm_content || '',
+        d.referrer || '', ts,
+      ]
+    );
+
+    switch (d.event) {
+      case 'role_selected':
+        await pool.query(
+          `UPDATE leads SET role=$2, status='in_assessment', updated_at=NOW() WHERE user_id=$1`,
+          [d.user_id, d.role || '']
+        );
+        break;
+      case 'question_answered':
+        await pool.query(
+          `UPDATE leads SET last_question=$2, status=$3, updated_at=NOW() WHERE user_id=$1`,
+          [d.user_id, d.question_number || 0, `in_assessment (Q${d.question_number || 0}/10)`]
+        );
+        break;
+      case 'completed':
+        await pool.query(
+          `UPDATE leads SET status='completed', score=$2, band=$3, last_question=10,
+             completed=TRUE, updated_at=NOW() WHERE user_id=$1`,
+          [d.user_id, d.score != null ? Number(d.score) : null, d.band || null]
+        );
+        break;
+      case 'requested_callback':
+        await pool.query(`UPDATE leads SET requested_callback=TRUE, updated_at=NOW() WHERE user_id=$1`, [d.user_id]);
+        break;
+      case 'clicked_curriculum':
+        await pool.query(`UPDATE leads SET clicked_curriculum=TRUE, updated_at=NOW() WHERE user_id=$1`, [d.user_id]);
+        break;
+      case 'retook_test':
+        await pool.query(`UPDATE leads SET retook_test=TRUE, updated_at=NOW() WHERE user_id=$1`, [d.user_id]);
+        break;
+    }
+  } catch (err) {
+    console.error('[track] error:', err.message);
+  }
+});
+
+app.get('/api/leads', requireAuth, async (req, res) => {
+  if (!pool) return res.status(503).json({ error: 'db disabled' });
+  const limit  = Math.min(Number(req.query.limit) || 100, 1000);
+  const offset = Number(req.query.offset) || 0;
+  const since  = req.query.since;
+  const status = req.query.status;
+  const callback = req.query.callback;
+
+  const where = [];
+  const args = [];
+  if (since)    { args.push(since);    where.push(`updated_at >= $${args.length}`); }
+  if (status)   { args.push(status);   where.push(`status = $${args.length}`); }
+  if (callback === 'true') where.push(`requested_callback = TRUE`);
+
+  const sql = `SELECT * FROM leads ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
+               ORDER BY updated_at DESC LIMIT ${limit} OFFSET ${offset}`;
+  try {
+    const { rows } = await pool.query(sql, args);
+    res.json({ count: rows.length, leads: rows });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/leads/:user_id', requireAuth, async (req, res) => {
+  if (!pool) return res.status(503).json({ error: 'db disabled' });
+  try {
+    const lead   = await pool.query('SELECT * FROM leads WHERE user_id=$1', [req.params.user_id]);
+    if (!lead.rows[0]) return res.status(404).json({ error: 'not found' });
+    const events = await pool.query(
+      'SELECT * FROM events WHERE user_id=$1 ORDER BY created_at ASC',
+      [req.params.user_id]
+    );
+    res.json({ lead: lead.rows[0], events: events.rows });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.use((req, res, next) => {
+  const url = req.url;
+  if (url === '/' || url === '') return res.redirect(302, '/ai-business-fluency-assessment/');
+  next();
+});
+
+app.use('/ai-business-fluency-assessment', express.static(path.join(__dirname), {
+  index: 'index.html',
+  extensions: ['html'],
+}));
+
+app.use(express.static(path.join(__dirname), { index: false }));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+(async () => {
+  try {
+    await ensureSchema();
+    console.log('[db] schema ready (or db disabled:', !pool, ')');
+  } catch (e) {
+    console.error('[db] schema init failed:', e.message);
+  }
+  app.listen(PORT, () => {
+    console.log(`Server listening on :${PORT}  db=${pool ? 'on' : 'off'}  auth=${API_TOKEN ? 'on' : 'off'}`);
+  });
+})();
