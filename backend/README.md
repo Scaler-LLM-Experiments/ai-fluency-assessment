@@ -44,3 +44,11 @@ Auto-creates on boot (idempotent). Two tables:
 ## Deploy
 
 Railway service watching the `ai-fluency-backend` branch builds this folder via its Dockerfile. The static frontend tool is on the `main` branch in a separate Railway service and is unaffected.
+
+## Operating the dual-write phase
+
+The frontend (`main` branch, `index.html`) currently writes every event to **both** the Sheet webhook and `POST /api/track`. This is the parity-watch period before the Sheet is removed.
+
+- **Parity check**: `API_TOKEN=... SHEET_LIST_URL=... node scripts/parity-check.js --since 2026-04-30T00:00:00Z` — reports any `user_id` missing from either side. Exits 0 on parity, 1 on drift.
+- **CRM consumers**: see [CRM_INTEGRATION.md](CRM_INTEGRATION.md) for endpoint details, polling pattern, and field semantics.
+- **Frontend regression test**: `frontend-tests/tests/journey.spec.js` runs a full user flow against the live tool and asserts that **both** the Sheet and the backend received all 13 expected events.

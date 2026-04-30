@@ -26,28 +26,37 @@ test('full assessment journey fires expected tracking events', async ({ page }) 
   // role screen
   await page.waitForSelector('#screen-role.active', { timeout: 10_000 });
   await page.locator('.role-card').first().click();
+  // new UI requires explicit BEGIN ASSESSMENT click after role pick
+  const beginBtn = page.getByRole('button', { name: /begin assessment/i });
+  if (await beginBtn.count()) await beginBtn.first().click();
 
   // 10 questions
+  await page.waitForSelector('#screen-questions.active', { timeout: 10_000 });
   for (let i = 0; i < 10; i++) {
-    await page.waitForSelector('#screen-question.active', { timeout: 10_000 });
-    await page.locator('.option-row').first().click();
+    await page.locator('.level-card').first().click();
+    await page.locator('#btn-next:not([disabled])').click();
     await page.waitForTimeout(400);
   }
 
   // results
   await page.waitForSelector('#screen-results.active', { timeout: 15_000 });
 
-  // event assertions
-  const events = tracked.map(t => t.event).filter(Boolean);
-  expect(events).toContain('started');
-  expect(events).toContain('role_selected');
-  const qAnswered = events.filter(e => e === 'question_answered').length;
-  expect(qAnswered).toBe(10);
-  expect(events).toContain('completed');
+  // count events per destination — both sides should see every event
+  const sheetEvents   = tracked.filter(t => t.url.includes('script.google.com')).map(t => t.event);
+  const backendEvents = tracked.filter(t => t.url.includes('/api/track')).map(t => t.event);
+  const sheetQ   = sheetEvents.filter(e => e === 'question_answered').length;
+  const backendQ = backendEvents.filter(e => e === 'question_answered').length;
+  console.log(`SHEET   : started=${sheetEvents.includes('started')} role=${sheetEvents.includes('role_selected')} qAnswered=${sheetQ} completed=${sheetEvents.includes('completed')} total=${sheetEvents.length}`);
+  console.log(`BACKEND : started=${backendEvents.includes('started')} role=${backendEvents.includes('role_selected')} qAnswered=${backendQ} completed=${backendEvents.includes('completed')} total=${backendEvents.length}`);
 
-  // record where they went (sheet vs dual-write detection)
-  const sheetCount   = tracked.filter(t => t.url.includes('script.google.com')).length;
-  const backendCount = tracked.filter(t => t.url.includes('/api/track')).length;
-  console.log(`tracked: sheet=${sheetCount}  backend=${backendCount}`);
-  expect(sheetCount + backendCount).toBeGreaterThanOrEqual(13);
+  // sheet must keep working (parity guarantee)
+  expect(sheetEvents).toContain('started');
+  expect(sheetEvents).toContain('role_selected');
+  expect(sheetQ).toBe(10);
+  expect(sheetEvents).toContain('completed');
+  // backend must mirror it (dual-write guarantee)
+  expect(backendEvents).toContain('started');
+  expect(backendEvents).toContain('role_selected');
+  expect(backendQ).toBe(10);
+  expect(backendEvents).toContain('completed');
 });
