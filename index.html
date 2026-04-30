@@ -1380,6 +1380,7 @@
    TRACKING
 ───────────────────────────────────────────────────── */
 const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwWoIPtW0JbpmKFVv-QM7nafQtC_-zddafcNwoazpynvf9zCXWeNOdU0bLU9VxPFX7qUQ/exec';
+const BACKEND_URL = 'https://ai-fluency-backend-production.up.railway.app';
 
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -1442,6 +1443,12 @@ function trackEvent(eventType, data = {}) {
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
+  }).catch(() => {});
+  fetch(BACKEND_URL + '/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    keepalive: true
   }).catch(() => {});
 }
 
