@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pool } = require('pg');
+const crmSync = require('./lib/sync-worker');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -84,6 +85,13 @@ async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_events_user    ON events(user_id);
     CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_events_event   ON events(event);
+
+    ALTER TABLE leads  ADD COLUMN IF NOT EXISTS crm_prospect_id   TEXT;
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS crm_synced_at     TIMESTAMPTZ;
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS crm_sync_attempts INTEGER DEFAULT 0;
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS crm_sync_error    TEXT;
+    CREATE INDEX IF NOT EXISTS idx_events_crm_pending
+      ON events(created_at) WHERE crm_synced_at IS NULL;
   `);
 }
 
@@ -240,6 +248,38 @@ app.get('/api/leads/:user_id', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/sync-failures', requireAuth, async (req, res) => {
+  if (!pool) return res.status(503).json({ error: 'db disabled' });
+  const limit = Math.min(Number(req.query.limit) || 100, 500);
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, user_id, event, crm_sync_attempts, crm_sync_error, created_at
+       FROM events
+       WHERE crm_synced_at IS NULL AND crm_sync_error IS NOT NULL
+       ORDER BY created_at DESC
+       LIMIT $1`,
+      [limit]
+    );
+    res.json({ count: rows.length, failures: rows });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/sync-failures/:id/retry', requireAuth, async (req, res) => {
+  if (!pool) return res.status(503).json({ error: 'db disabled' });
+  try {
+    const { rowCount } = await pool.query(
+      `UPDATE events SET crm_sync_attempts = 0, crm_sync_error = NULL
+       WHERE id = $1 AND crm_synced_at IS NULL`,
+      [req.params.id]
+    );
+    res.json({ reset: rowCount });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/stats', requireAuth, async (req, res) => {
   if (!pool) return res.status(503).json({ error: 'db disabled' });
   try {
@@ -264,6 +304,7 @@ app.get('/api/stats', requireAuth, async (req, res) => {
   } catch (e) {
     console.error('[db] schema init failed:', e.message);
   }
+  if (pool) crmSync.start(pool);
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`ai-fluency-backend listening on 0.0.0.0:${PORT}  db=${pool ? 'on' : 'off'}  auth=${API_TOKEN ? 'on' : 'off'}`);
   });
