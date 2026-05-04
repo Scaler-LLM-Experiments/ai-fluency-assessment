@@ -334,3 +334,59 @@ function doPost(e) {
 
   return ContentService.createTextOutput('ok');
 }
+
+
+/**
+ * Read endpoint for parity checks against the Postgres backend.
+ *
+ * Usage:
+ *   GET <webapp_url>?action=list                    → all users from the Users sheet
+ *   GET <webapp_url>?action=list&since=2026-04-30   → users with last_seen_ist >= since
+ *
+ * Returns JSON: [{ user_id, name, email, phone, role, status, ..., last_seen_ist }, ...]
+ *
+ * IMPORTANT: After editing this function you MUST redeploy the Apps Script web app
+ * (Deploy → Manage deployments → Edit → New version → Deploy) for the change to go live.
+ */
+function doGet(e) {
+  var action = (e && e.parameter && e.parameter.action) || '';
+  if (action !== 'list') {
+    return ContentService
+      .createTextOutput(JSON.stringify({ error: 'unknown action', hint: 'use ?action=list' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var since = (e.parameter.since || '').trim();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var users = ss.getSheetByName('Users');
+  if (!users || users.getLastRow() < 2) {
+    return ContentService
+      .createTextOutput(JSON.stringify([]))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var values = users.getDataRange().getValues();
+  var headers = values[0];
+  var out = [];
+  for (var r = 1; r < values.length; r++) {
+    var row = values[r];
+    if (!row[0]) continue; // no user_id
+
+    if (since) {
+      var lastSeen = String(row[14] || ''); // column O = last_seen_ist
+      if (lastSeen && lastSeen < since) continue;
+    }
+
+    var obj = {};
+    for (var c = 0; c < headers.length; c++) {
+      var v = row[c];
+      if (v instanceof Date) v = v.toISOString();
+      obj[headers[c]] = v === '' ? null : v;
+    }
+    out.push(obj);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
