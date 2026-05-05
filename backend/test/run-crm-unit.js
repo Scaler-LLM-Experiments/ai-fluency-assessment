@@ -114,14 +114,18 @@ function setupCrmEnv(crm) {
   process.env.CRM_ACTIVITY_CODE_COMPLETED = '482';
   process.env.CRM_ACTIVITY_CODE_CALLBACK  = '485';
   process.env.CRM_PROGRAM_TAG = 'opgp_ai_fluency';
+  process.env.PUBLIC_BASE_URL = 'https://test.local';
+  process.env.API_TOKEN = 'test-token';
 }
 
 async function main() {
   // ─── A. Payload builder ─────────────────────────────────────────────
   console.log('\nA. crm-payloads');
-  const payloads = require('../lib/crm-payloads');
   process.env.CRM_ACTIVITY_CODE_COMPLETED = '482';
   process.env.CRM_ACTIVITY_CODE_CALLBACK  = '485';
+  process.env.PUBLIC_BASE_URL = 'https://test.local';
+  process.env.API_TOKEN = 'test-token';
+  const payloads = require('../lib/crm-payloads');
 
   assert(payloads.shouldPush('completed'),          'pushes completed');
   assert(payloads.shouldPush('requested_callback'), 'pushes requested_callback');

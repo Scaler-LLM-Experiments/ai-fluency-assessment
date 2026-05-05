@@ -83,6 +83,15 @@ function customFields(lead /*, event */) {
   return all.filter(f => f.Value != null && f.Value !== '');
 }
 
+// CRM expects ActivityTime in UTC as 'yyyy-MM-dd HH:mm:ss'. event.timestamp_ist
+// is a naive IST string; sending it as-is makes the server parse it as UTC,
+// which lands ~5h30m in the future and trips MXFutureDateTimeActivityNotAllowed.
+function toUtcStamp(ms) {
+  const d = new Date(ms);
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())}`;
+}
+
 function buildActivity(lead, event) {
   const a = {
     ActivityEvent: activityCodeFor(event.event),
@@ -92,10 +101,10 @@ function buildActivity(lead, event) {
   // Skip ActivityTime if event is older than 24h — CRM sorts the timeline by
   // ActivityTime, so back-dated stamps bury backlog drains. Live events still
   // get an accurate timestamp.
-  if (event.timestamp_ist) {
-    const eventMs = new Date(event.created_at || event.timestamp_ist).getTime();
+  const eventMs = event.created_at ? new Date(event.created_at).getTime() : null;
+  if (eventMs) {
     const stale = Date.now() - eventMs > 24 * 60 * 60 * 1000;
-    if (!stale) a.ActivityTime = event.timestamp_ist;
+    if (!stale) a.ActivityTime = toUtcStamp(eventMs);
   }
   return a;
 }
