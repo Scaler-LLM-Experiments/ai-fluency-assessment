@@ -1,14 +1,20 @@
 // Builds CRM-shaped payloads from our (lead, event) rows.
 //
-// All numeric ActivityEvent codes and the mx_Custom_* slot meanings are
-// PLACEHOLDERS until the CRM admin returns the program's lookup table.
-// Override at runtime via env vars without redeploying:
-//   CRM_ACTIVITY_CODE_COMPLETED=482
-//   CRM_ACTIVITY_CODE_CALLBACK=485
+// Activity codes and tenant-specific config come from env so we can rotate
+// without redeploying. Staging values:
+//   CRM_ACTIVITY_CODE_COMPLETED=651   # AI Fluency Test Completed
+//   CRM_ACTIVITY_CODE_CALLBACK=652    # AI Fluency Callback Requested
 //   CRM_PROGRAM_TAG=opgp_ai_fluency
 //   CRM_SEARCH_BY=Phone
 
+const { reportUrl } = require('./report');
+
 const PUSHED_EVENTS = new Set(['completed', 'requested_callback']);
+
+function publicBaseUrl() {
+  return process.env.PUBLIC_BASE_URL
+      || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+}
 
 function shouldPush(eventName) {
   return PUSHED_EVENTS.has(eventName);
@@ -42,38 +48,39 @@ function safeStr(v, max = 200) {
 }
 
 function activityNote(eventName, lead, event) {
+  // Role + report link live in their own subactivity fields (mx_Custom_2/3).
+  // Note carries only band, traffic context, and timestamp.
   if (eventName === 'completed') {
     return [
-      `AI Fluency Assessment completed`,
-      `Score: ${lead.score ?? '—'}  Band: ${lead.band ?? '—'}`,
-      `Role: ${lead.role ?? '—'}`,
+      `AI Fluency Assessment completed · Band: ${lead.band ?? '—'}`,
       `Source: ${lead.traffic_source ?? 'direct'}  Campaign: ${lead.utm_campaign ?? '—'}`,
       `Completed at: ${event.timestamp_ist ?? lead.last_seen_ist ?? ''}`,
     ].join('\n');
   }
   if (eventName === 'requested_callback') {
     return [
-      `Callback requested from AI Fluency Assessment`,
-      `Score: ${lead.score ?? '—'}  Band: ${lead.band ?? '—'}`,
-      `Role: ${lead.role ?? '—'}`,
+      `Callback requested · Band: ${lead.band ?? '—'}`,
       `Requested at: ${event.timestamp_ist ?? lead.last_seen_ist ?? ''}`,
     ].join('\n');
   }
   return `Event: ${eventName}`;
 }
 
-// mx_Custom_1..8 mapping. Lock with CRM admin before going live.
-function customFields(lead, event) {
-  return [
-    { SchemaName: 'mx_Custom_1', Value: safeStr(programTag()) },
-    { SchemaName: 'mx_Custom_2', Value: lead.score != null ? Number(lead.score) : null },
-    { SchemaName: 'mx_Custom_3', Value: safeStr(lead.band) },
-    { SchemaName: 'mx_Custom_4', Value: safeStr(lead.role) },
-    { SchemaName: 'mx_Custom_5', Value: safeStr(lead.utm_source) },
-    { SchemaName: 'mx_Custom_6', Value: safeStr(lead.utm_campaign) },
-    { SchemaName: 'mx_Custom_7', Value: safeStr(event.timestamp_ist || lead.last_seen_ist) },
-    { SchemaName: 'mx_Custom_8', Value: safeStr(lead.user_id) },
+// Activity-level custom fields. Schema names are tenant-defined.
+// Confirmed on staging activity 651 (and assumed identical on prod 2818):
+//   mx_Custom_1 → AI Fluency Score (number)
+//   mx_Custom_2 → Role (string)
+//   mx_Custom_3 → AI Fluency user inputs / BDA report URL (string)
+function customFields(lead /*, event */) {
+  const base = publicBaseUrl();
+  const link = base ? reportUrl(base, lead.user_id) : null;
+  const all = [
+    { SchemaName: 'mx_Custom_1', Value: lead.score != null ? Number(lead.score) : null },
+    { SchemaName: 'mx_Custom_2', Value: safeStr(lead.role) },
+    { SchemaName: 'mx_Custom_3', Value: safeStr(link) },
   ];
+  // Drop empty/null; tenant rejects "".
+  return all.filter(f => f.Value != null && f.Value !== '');
 }
 
 function buildActivity(lead, event) {
@@ -82,14 +89,23 @@ function buildActivity(lead, event) {
     ActivityNote: activityNote(event.event, lead, event),
     Fields: customFields(lead, event),
   };
-  if (event.timestamp_ist) a.ActivityTime = event.timestamp_ist;
+  // Skip ActivityTime if event is older than 24h — CRM sorts the timeline by
+  // ActivityTime, so back-dated stamps bury backlog drains. Live events still
+  // get an accurate timestamp.
+  if (event.timestamp_ist) {
+    const eventMs = new Date(event.created_at || event.timestamp_ist).getTime();
+    const stale = Date.now() - eventMs > 24 * 60 * 60 * 1000;
+    if (!stale) a.ActivityTime = event.timestamp_ist;
+  }
   return a;
 }
 
 function buildLeadDetails(lead) {
   const [first, last] = splitName(lead.name);
   const phone = lead.phone ? (String(lead.phone).startsWith('+') ? lead.phone : `+91-${lead.phone}`) : null;
-  return [
+  // Tenant rejects empty strings on mandatory attributes (e.g. SourceCampaign).
+  // Drop any attribute whose value is null / undefined / empty so we never send "".
+  const all = [
     { Attribute: 'EmailAddress',       Value: lead.email || null },
     { Attribute: 'FirstName',          Value: first || null },
     { Attribute: 'LastName',           Value: last  || null },
@@ -99,6 +115,7 @@ function buildLeadDetails(lead) {
     { Attribute: 'SourceCampaign',     Value: safeStr(lead.utm_campaign) },
     { Attribute: 'SearchBy',           Value: searchBy() },
   ];
+  return all.filter(a => a.Value != null && a.Value !== '');
 }
 
 function buildCreateLeadAndActivity(lead, event) {

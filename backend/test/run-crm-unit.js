@@ -142,22 +142,20 @@ async function main() {
 
   const fields = create.Activity.Fields;
   const get = (slot) => fields.find(f => f.SchemaName === slot)?.Value;
-  assertEq(get('mx_Custom_1'), 'opgp_ai_fluency', 'mx_Custom_1 = program tag');
-  assertEq(get('mx_Custom_2'), 32,                'mx_Custom_2 = score');
-  assertEq(get('mx_Custom_3'), 'AI Capable',      'mx_Custom_3 = band');
-  assertEq(get('mx_Custom_4'), 'Product Manager', 'mx_Custom_4 = role');
-  assertEq(get('mx_Custom_8'), 'u1',              'mx_Custom_8 = user_id');
+  assertEq(get('mx_Custom_1'), 32,                'mx_Custom_1 = score');
+  assertEq(get('mx_Custom_2'), 'Product Manager', 'mx_Custom_2 = role');
+  assert(/\/api\/leads\/u1\/report\?t=/.test(get('mx_Custom_3') || ''), 'mx_Custom_3 = signed report URL');
 
   const ca = payloads.buildCreateActivity('crm-uuid-123', lead, ev);
   assertEq(ca.RelatedProspectId, 'crm-uuid-123', 'CreateActivity carries RelatedProspectId');
   assertEq(ca.ActivityEvent, 482,                 'CreateActivity carries ActivityEvent');
-  assert(Array.isArray(ca.Fields) && ca.Fields.length === 8, 'CreateActivity has 8 mx_Custom_* fields');
+  assert(Array.isArray(ca.Fields) && ca.Fields.length === 3, 'CreateActivity has 3 mx_Custom_* fields (score, role, link)');
 
-  // mx_Custom_3 truncates >200 chars
-  const longBand = 'X'.repeat(500);
-  const long = payloads.buildCreateLeadAndActivity({ ...lead, band: longBand }, ev);
-  const truncBand = long.Activity.Fields.find(f => f.SchemaName === 'mx_Custom_3')?.Value;
-  assert(truncBand && truncBand.length === 200, 'long string fields truncated to 200 chars');
+  // role truncates >200 chars (mx_Custom_2)
+  const longRole = 'X'.repeat(500);
+  const long = payloads.buildCreateLeadAndActivity({ ...lead, role: longRole }, ev);
+  const truncRole = long.Activity.Fields.find(f => f.SchemaName === 'mx_Custom_2')?.Value;
+  assert(truncRole && truncRole.length === 200, 'long string fields truncated to 200 chars');
 
   // requested_callback uses CALLBACK code
   const callback = payloads.buildCreateLeadAndActivity(lead, { ...ev, event: 'requested_callback' });

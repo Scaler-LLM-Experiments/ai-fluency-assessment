@@ -101,7 +101,12 @@ function extractProspectId(data) {
   if (typeof data === 'string' && /^[0-9a-f-]{36}$/i.test(data)) return data;
   if (Array.isArray(data) && data.length) return extractProspectId(data[0]);
   if (typeof data === 'object') {
-    const keys = ['ProspectID', 'ProspectId', 'LeadId', 'LeadID', 'Id', 'RelatedProspectId'];
+    // CreateLeadAndActivity response: { Message: { Id: <activityId>, RelatedId: <prospectId> } }
+    if (data.Message && typeof data.Message === 'object') {
+      const fromMsg = extractProspectId(data.Message);
+      if (fromMsg) return fromMsg;
+    }
+    const keys = ['RelatedId', 'RelatedProspectId', 'ProspectID', 'ProspectId', 'LeadId', 'LeadID'];
     for (const k of keys) if (data[k]) return data[k];
   }
   return null;

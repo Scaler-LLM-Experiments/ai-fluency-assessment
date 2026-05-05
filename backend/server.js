@@ -1,6 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
 const crmSync = require('./lib/sync-worker');
+const { verifyToken, renderReport } = require('./lib/report');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -245,6 +246,27 @@ app.get('/api/leads/:user_id', requireAuth, async (req, res) => {
     res.json({ lead: lead.rows[0], events: events.rows });
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+});
+
+// BDA-facing one-click report. Signed token in URL — no login.
+app.get('/api/leads/:user_id/report', async (req, res) => {
+  if (!pool) return res.status(503).send('db disabled');
+  const userId = req.params.user_id;
+  if (!verifyToken(userId, req.query.t)) {
+    return res.status(403).type('text/plain').send('invalid or missing token');
+  }
+  try {
+    const lead = await pool.query('SELECT * FROM leads WHERE user_id=$1', [userId]);
+    if (!lead.rows[0]) return res.status(404).type('text/plain').send('lead not found');
+    const events = await pool.query(
+      'SELECT * FROM events WHERE user_id=$1 ORDER BY created_at ASC',
+      [userId]
+    );
+    res.setHeader('Cache-Control', 'private, max-age=60');
+    res.type('html').send(renderReport({ lead: lead.rows[0], events: events.rows }));
+  } catch (e) {
+    res.status(500).type('text/plain').send('error: ' + e.message);
   }
 });
 
