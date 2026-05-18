@@ -427,18 +427,94 @@ function OtpStep({ lead, turnstileToken, onVerified, onBack }) {
   );
 }
 
+/* ---------- Scaler sign-out ---------- */
+const SCALER_SIGN_OUT_URL = "/users/sign_out";
+async function scalerSignOut() {
+  const csrf = readCsrfToken();
+  try {
+    await fetch(SCALER_SIGN_OUT_URL, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Accept": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+      },
+    });
+  } catch (_) {}
+}
+
+/* ---------- User menu (logged-in pill + dropdown) ---------- */
+function UserMenu({ user, onSignOut }) {
+  const [open, setOpen] = React.useState(false);
+  const rootRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const label = user.email || user.phone || user.name || "Account";
+  const initial = (user.name || user.email || "U").trim().charAt(0).toUpperCase();
+
+  return (
+    <div className="usermenu" ref={rootRef}>
+      <button
+        type="button"
+        className="usermenu__trigger"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className="usermenu__avatar" aria-hidden="true">{initial}</span>
+        <span className="usermenu__label">
+          <span className="usermenu__label-eyebrow">Signed in as</span>
+          <span className="usermenu__label-value">{label}</span>
+        </span>
+        <svg className={"usermenu__chev" + (open ? " usermenu__chev--open" : "")} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      {open && (
+        <div className="usermenu__panel" role="menu">
+          <div className="usermenu__panel-head">
+            {user.name && <div className="usermenu__panel-name">{user.name}</div>}
+            {user.email && <div className="usermenu__panel-sub">{user.email}</div>}
+            {user.phone && <div className="usermenu__panel-sub">+91 {user.phone}</div>}
+          </div>
+          <button type="button" className="usermenu__item usermenu__item--danger" role="menuitem" onClick={onSignOut}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            Sign out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Top bar ---------- */
-function Bar() {
+function Bar({ user, onSignOut }) {
   return (
     <header className="bar">
       <div className="bar__logo">
         <img src="./assets/logo-colour.svg" alt="Scaler" />
       </div>
       <div className="bar__right">
-        <span className="bar__pill">
-          <span className="dot"></span>
-          Free · 3 min
-        </span>
+        {user ? (
+          <UserMenu user={user} onSignOut={onSignOut} />
+        ) : (
+          <span className="bar__pill">
+            <span className="dot"></span>
+            Free · 3 min
+          </span>
+        )}
       </div>
     </header>
   );
@@ -1298,10 +1374,17 @@ function Result({ role, lead, answers, questions, onRestart }) {
 function App() {
   const [stage, setStage] = useState("bootstrap"); // bootstrap | landing | otp | role | quiz | result
   const [lead, setLead] = useState(null);
+  const [sessionUser, setSessionUser] = useState(null); // populated only when scaler.com session is active
   const [turnstileToken, setTurnstileTokenState] = useState("");
   const [role, setRole] = useState(null);
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]);
+
+  const handleSignOut = async () => {
+    trackEvent("signed_out");
+    await scalerSignOut();
+    window.location.reload();
+  };
 
   React.useEffect(() => {
     trackEvent("page_loaded");
@@ -1319,6 +1402,7 @@ function App() {
       if (jwt) {
         const user = await fetchLoggedInUser(jwt);
         if (cancelled) return;
+        if (user) setSessionUser(user);
         if (user && user.phoneVerified && user.phone) {
           // Skip landing + OTP entirely. Hydrate identity and jump to role.
           const hydrated = { name: user.name, email: user.email, phone: user.phone };
@@ -1346,7 +1430,7 @@ function App() {
   return (
     <div className="page">
       <div className={(stage === "landing" || stage === "otp" || stage === "bootstrap") ? "bar-wrap bar-wrap--landing" : "bar-wrap"}>
-        <Bar />
+        <Bar user={sessionUser} onSignOut={handleSignOut} />
       </div>
 
       {stage === "bootstrap" && (
