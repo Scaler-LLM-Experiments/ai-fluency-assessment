@@ -167,6 +167,63 @@ function readCsrfToken() {
   return (m && m.content) || "";
 }
 
+// Returns a JWT string if the user has an active scaler.com session, or "" if
+// not. Same probe career-profile-tool uses on its standalone landing page.
+async function generateJwtIfLoggedIn() {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+    const csrf = readCsrfToken();
+    const res = await fetch("/generate-jwt", {
+      method: "POST",
+      credentials: "include",
+      redirect: "manual",
+      headers: {
+        "Content-Type": "text/plain",
+        "X-Requested-With": "XMLHttpRequest",
+        ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+      },
+      body: JSON.stringify({}),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    if (!res.ok || res.status !== 200) return "";
+    const token = await res.text();
+    return token && token.length > 0 ? token : "";
+  } catch (_) {
+    return "";
+  }
+}
+
+// Fetches the logged-in user's profile via /api/v3/users. Returns null on any
+// failure. Only call if generateJwtIfLoggedIn() returned a non-empty token.
+async function fetchLoggedInUser(jwt) {
+  try {
+    const res = await fetch("/api/v3/users", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-User-Token": jwt,
+      },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const attrs = json && json.data && json.data.attributes;
+    if (!attrs) return null;
+    return {
+      name: attrs.name || "",
+      email: attrs.email || "",
+      phone: (attrs.phone_number || attrs.phone || "").replace(/^\+?91[-\s]?/, "").replace(/\D/g, "").slice(-10),
+      phoneVerified: Boolean(attrs.phone_verified),
+      raw: attrs,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
 async function scalerAuthCall(url, payload) {
   let csrf = readCsrfToken();
   if (!csrf) csrf = await fetchAndStoreCsrfToken();
@@ -1239,7 +1296,7 @@ function Result({ role, lead, answers, questions, onRestart }) {
    APP
    ============================================================ */
 function App() {
-  const [stage, setStage] = useState("landing"); // landing | otp | role | quiz | result
+  const [stage, setStage] = useState("bootstrap"); // bootstrap | landing | otp | role | quiz | result
   const [lead, setLead] = useState(null);
   const [turnstileToken, setTurnstileTokenState] = useState("");
   const [role, setRole] = useState(null);
@@ -1248,16 +1305,56 @@ function App() {
 
   React.useEffect(() => {
     trackEvent("page_loaded");
-    // Warm the CSRF token so the OTP signup POST has it ready by the time the
-    // user submits the landing form. Same pattern career-profile-tool uses.
-    fetchAndStoreCsrfToken();
+    let cancelled = false;
+    (async () => {
+      // CSRF first — required by /generate-jwt and by the OTP signup POST.
+      await fetchAndStoreCsrfToken();
+      if (cancelled) return;
+
+      // Probe for an existing scaler.com session. Fail-safe: any error here
+      // falls through to the landing form, preserving the original flow.
+      const jwt = await generateJwtIfLoggedIn();
+      if (cancelled) return;
+
+      if (jwt) {
+        const user = await fetchLoggedInUser(jwt);
+        if (cancelled) return;
+        if (user && user.phoneVerified && user.phone) {
+          // Skip landing + OTP entirely. Hydrate identity and jump to role.
+          const hydrated = { name: user.name, email: user.email, phone: user.phone };
+          setLead(hydrated);
+          setTrackingLead(hydrated);
+          trackEvent("session_resumed", { phone_verified: true });
+          trackEvent("started");
+          setStage("role");
+          return;
+        }
+        // Logged in but no verified phone — still treat as anonymous so the
+        // OTP step runs. Pre-fill what we know.
+        if (user) {
+          const partial = { name: user.name, email: user.email, phone: user.phone };
+          setLead(partial);
+          setTrackingLead(partial);
+          trackEvent("session_resumed", { phone_verified: false });
+        }
+      }
+      setStage("landing");
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   return (
     <div className="page">
-      <div className={(stage === "landing" || stage === "otp") ? "bar-wrap bar-wrap--landing" : "bar-wrap"}>
+      <div className={(stage === "landing" || stage === "otp" || stage === "bootstrap") ? "bar-wrap bar-wrap--landing" : "bar-wrap"}>
         <Bar />
       </div>
+
+      {stage === "bootstrap" && (
+        <div className="bootstrap-screen">
+          <div className="bootstrap-spinner" aria-label="Loading" />
+          <div className="bootstrap-text">Setting up your assessment…</div>
+        </div>
+      )}
 
       {stage === "landing" && (
         <Landing
