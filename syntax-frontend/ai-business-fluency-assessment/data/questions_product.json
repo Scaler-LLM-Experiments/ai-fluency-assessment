@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI-assisted PRD & spec writing",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write PRDs manually in Google Docs. AI hasn't entered your spec workflow.",
+      "Level 2 - You've used ChatGPT to brainstorm feature ideas or clean up PRD language. You copy-paste and edit.",
+      "Level 3 - You have a go-to prompt that generates PRD sections - problem statement, user stories, success metrics, edge cases. You iterate with the model until the spec is tight. Your PRDs come out 2x faster.",
+      "Level 4 - You've built a PRD template as a system prompt. You feed it customer research, ticket data, and competitive context - and it generates a first draft that your engineering team actually reviews seriously. You use AI to stress-test your own specs by asking \"what will break?\"",
+      "Level 5 - Your team's spec process runs through AI. New PMs on your team use your prompt templates. You've integrated spec generation into your workflow tools (Notion AI, Linear, etc.) and the output quality is indistinguishable from a senior PM's manual work."
+    ]
+  },
+  {
+    "title": "Using AI agents for product research & discovery",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You Google for competitor info and manually read through reviews, forums, and reports.",
+      "Level 2 - You've asked ChatGPT or Perplexity to summarize a competitor's product page or a market report.",
+      "Level 3 - You run structured research sessions - you prompt AI with specific research briefs (\"Analyze the onboarding flows of these 5 competitors and identify the 3 biggest UX gaps\"). You use Perplexity for real-time data and Claude for synthesis.",
+      "Level 4 - You've built a research workflow: competitive monitoring prompts you run weekly, customer feedback synthesis pipelines (app reviews → themes → opportunities), and you combine multiple AI tools to triangulate insights.",
+      "Level 5 - You've built or spec'd an AI-powered research system for your product team. Agents auto-monitor competitor changelogs, synthesize NPS verbatims, and surface opportunity areas. You've moved from \"I use AI to research\" to \"AI runs our research layer.\""
+    ]
+  },
+  {
+    "title": "Prompt engineering for product workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You type natural language into ChatGPT and take whatever comes out.",
+      "Level 2 - You've learned to add context - \"You are a senior PM at a B2B SaaS company\" - and you get noticeably better outputs.",
+      "Level 3 - You write structured prompts with role, context, constraints, and output format. You test variations. You've written 10+ prompts you reuse regularly - for user story generation, bug triage summaries, release notes, and stakeholder updates.",
+      "Level 4 - You design prompt chains - discovery prompt → PRD prompt → edge case finder → test case generator. You anticipate hallucination risks and add guardrails (\"Only cite data from the attached document\"). Your team uses your prompts.",
+      "Level 5 - You've built a prompt playbook for your PM org. You understand when to use system prompts vs. few-shot examples vs. chain-of-thought. You've debugged enough prompts to predict which design choices matter for product work. You shape how your org interacts with LLMs."
+    ]
+  },
+  {
+    "title": "AI for user data analysis & product metrics",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You look at dashboards someone else built. You maybe pull basic numbers from Amplitude or Mixpanel.",
+      "Level 2 - You've asked AI to explain a metric trend or write a SQL query for you.",
+      "Level 3 - You regularly use AI to write SQL, analyze funnel data, build cohort analyses, and identify patterns in user behavior. You paste data into Claude and get actionable insights in minutes instead of waiting for the analytics team.",
+      "Level 4 - You've built an analytics workflow where AI handles the heavy lifting - you feed it raw event data, retention tables, or survey responses, and it produces structured analyses with recommendations. You validate AI outputs against your product intuition and business logic.",
+      "Level 5 - You've built or spec'd AI-powered analytics features into your product. Your team uses AI to run automated cohort analyses, churn prediction models, or feature adoption scoring. You've moved analytics from \"pull request to data team\" to \"self-serve with AI guardrails.\""
+    ]
+  },
+  {
+    "title": "Building & speccing AI-powered features",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You haven't been involved in defining or shipping AI features.",
+      "Level 2 - You've seen AI features in other products and have opinions, but haven't written specs for one.",
+      "Level 3 - You've written a PRD for an AI-powered feature - defined the user problem, the AI's role, success metrics, and edge cases. You understand that AI features need evaluation criteria, not just acceptance criteria.",
+      "Level 4 - You actively collaborate with ML/AI engineers on feature design. You define fallback behavior, confidence thresholds, human-in-the-loop flows, and feedback loops. You've shipped at least one AI feature and learned from its failure modes.",
+      "Level 5 - You lead AI product strategy at your company. You evaluate build vs. buy vs. fine-tune decisions. You've designed evaluation frameworks for AI features (accuracy, latency, cost, user trust). Your AI features have measurable business impact and you can articulate exactly why each design choice was made."
+    ]
+  },
+  {
+    "title": "AI agents: from basic automation to orchestrated systems",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You've heard of AI agents but haven't used or built one.",
+      "Level 2 - You've tried a basic agent - maybe a GPT with custom instructions, or a simple Zapier AI workflow.",
+      "Level 3 - You've built or spec'd an agent that handles a real task end-to-end: a customer support triage agent, a bug classification bot, or a research assistant that pulls data from multiple sources. It works, but it's brittle.",
+      "Level 4 - Your agents are robust - they handle errors, have fallback paths, and you've tested them against edge cases. You chain agents together (Agent A's output feeds Agent B). You understand tool-use, function calling, and context window management.",
+      "Level 5 - You've built an integrated agent system - a multi-agent workflow where specialized agents collaborate. You've designed the orchestration layer, defined agent boundaries, and measured system-level performance. You're the person your org comes to for \"how should we use agents for X?\""
+    ]
+  },
+  {
+    "title": "AI for stakeholder communication & alignment",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write all your stakeholder emails, updates, and presentations manually.",
+      "Level 2 - You've used AI to draft a status update or clean up a presentation.",
+      "Level 3 - You use AI to generate weekly product updates, executive summaries, and board-ready narratives from raw data. You edit for voice and accuracy, but AI does the first 80%.",
+      "Level 4 - You've built communication templates - AI generates your sprint reviews from Jira data, your monthly business reviews from metrics dashboards, and your strategy narratives from research docs. Your stakeholders don't know (or care) that AI helped.",
+      "Level 5 - You've systematized product communication with AI. New PMs on your team use your templates. You've built workflows where AI translates technical updates into business language, customizes messaging for different audiences (eng vs. exec vs. customer), and maintains a consistent product narrative."
+    ]
+  },
+  {
+    "title": "AI-powered user feedback synthesis",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You read user feedback manually - support tickets, NPS comments, app reviews - one by one.",
+      "Level 2 - You've pasted a batch of feedback into ChatGPT and asked for themes.",
+      "Level 3 - You run structured feedback analysis - you prompt AI with your product context and taxonomy, feed it hundreds of reviews or tickets, and get a prioritized list of themes with supporting quotes. You do this monthly.",
+      "Level 4 - You've built a feedback pipeline: raw data (Intercom, Zendesk, app reviews, Gong calls) → AI-powered theme extraction → opportunity scoring → prioritization input for your roadmap. It runs with minimal manual effort.",
+      "Level 5 - You've productized feedback synthesis for your org. PMs, designers, and CS teams use the system you built. It auto-surfaces emerging issues, tracks sentiment trends over time, and connects user pain to revenue impact. Your roadmap decisions are visibly data-backed because of this system."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You open ChatGPT occasionally when you're stuck on something.",
+      "Level 2 - You use 1–2 AI tools regularly - maybe ChatGPT for writing and Perplexity for research.",
+      "Level 3 - You have a personal AI stack - specific tools for specific tasks. Claude for deep analysis, Perplexity for research, Notion AI for docs, Granola or Otter for meetings. You save 5+ hours/week.",
+      "Level 4 - You've built a personal productivity OS. AI handles your meeting prep (auto-generates briefs from past notes + agenda), your writing (first drafts of everything from emails to strategy docs), and your research (competitive monitoring, market analysis). You've measured the time savings.",
+      "Level 5 - You've built an integrated system - your personal AI workflow feeds your product work seamlessly. Meeting notes auto-generate action items that create Jira tickets. Research auto-populates your competitive dashboard. Your productivity system is something other PMs ask you about and try to replicate."
+    ]
+  },
+  {
+    "title": "Leading AI adoption in your product org",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually. Your team doesn't have shared AI practices.",
+      "Level 2 - You've shared an AI tip or tool recommendation in a team Slack channel.",
+      "Level 3 - You've piloted an AI tool for your team - maybe an AI-powered user research tool, a Copilot setup, or an AI writing assistant. You got at least 3 teammates to adopt it.",
+      "Level 4 - You've led AI adoption for your product team - defined which tools to use for what, created prompt templates, run training sessions, and measured adoption metrics. Your team is measurably more productive.",
+      "Level 5 - You drive AI strategy for your product org. You've defined the AI toolkit policy, created an internal AI playbook, and built a culture where AI-assisted work is the default. You present AI productivity gains to leadership and influence org-wide AI adoption."
+    ]
+  }
+]

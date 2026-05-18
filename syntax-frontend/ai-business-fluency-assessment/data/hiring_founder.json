@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Harvey",
+    "domain": "harvey.ai",
+    "logo": "./assets/logos/harvey.png",
+    "role": "Founding Product Growth Lead",
+    "location": "San Francisco · Hybrid",
+    "asks": [
+      "Define and own Harvey's product-led growth strategy, identifying the highest-impact opportunities across the user lifecycle.",
+      "Build and run a rigorous experimentation program: develop hypotheses, design A/B tests, and iterate quickly based on data.",
+      "Champion a culture of experimentation and data-informed decision-making across teams."
+    ],
+    "covered": ["Product dev", "GTM", "Customer dev"],
+    "url": "https://www.harvey.ai/company/careers/9ce0c68b-80f2-4467-88d0-02473f98e2d4"
+  },
+  {
+    "company": "Glean",
+    "domain": "glean.com",
+    "logo": "./assets/logos/glean.png",
+    "role": "Forward Deployed Product Manager",
+    "location": "New York · Hybrid",
+    "asks": [
+      "Your primary job is 0-to-1 product creation. You'll identify where Glean's platform can be extended to solve problems no product currently solves, design the solution, and ship it.",
+      "Conduct thorough business analysis to identify structural problems and unmet needs at strategic customers before designing solutions.",
+      "Build executive relationships and establish product vision within customer organizations."
+    ],
+    "covered": ["Product dev", "Customer dev", "Founder culture"],
+    "url": "https://job-boards.greenhouse.io/gleanwork/jobs/4659409005"
+  },
+  {
+    "company": "CodeAnt AI",
+    "domain": "codeant.ai",
+    "logo": "./assets/logos/codeant.png",
+    "role": "Founding Account Executive (Full-Cycle GTM)",
+    "location": "San Francisco · Onsite",
+    "asks": [
+      "Full sales cycle - prospect → discovery → demo → POC → close (typical ACV $10–50K).",
+      "Outbound engine - phone, email, LinkedIn; ≥ 10 demos/month.",
+      "Playbook creation - turn every win into repeatable processes."
+    ],
+    "covered": ["GTM", "Customer dev", "Founder culture"],
+    "url": "https://www.ycombinator.com/companies/codeant-ai/jobs/ZdQvjSA-founding-account-executive-full-cycle-gtm"
+  },
+  {
+    "company": "Sarvam AI",
+    "domain": "sarvam.ai",
+    "logo": "./assets/logos/sarvam.png",
+    "role": "Reasoning AI - GTM",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Develop and execute comprehensive GTM strategies for our reasoning products.",
+      "Collaborate with product teams to ensure product roadmaps align with market needs.",
+      "Analyze market trends and competitive landscape to identify growth opportunities."
+    ],
+    "covered": ["GTM", "Product dev", "Founder culture"],
+    "url": "https://careers.sarvam.ai/careers/jobs/0fe3d2d1-5d44-4039-b3f5-38a8348f1ebd"
+  }
+]

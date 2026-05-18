@@ -1,0 +1,53 @@
+{
+  "currentRole": "Marketing / Growth Manager",
+  "targetRole": "AI-Powered Growth Strategist",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI Copy Generation at Scale",
+      "desc": "50+ ad variations per campaign across Google, Meta & LinkedIn in minutes"
+    },
+    {
+      "name": "AI Campaign Intelligence",
+      "desc": "Feed ROAS data → get budget reallocation, channel strategy & anomaly alerts"
+    },
+    {
+      "name": "AI-Powered CRO",
+      "desc": "Auto-audit landing pages, generate test hypotheses from heatmap data"
+    },
+    {
+      "name": "AI Content Engines",
+      "desc": "SEO brief → first draft → social snippets → email teasers in one workflow"
+    },
+    {
+      "name": "AI Creative Benchmarking",
+      "desc": "Extract winning patterns from top ads - hooks, CTAs, imagery, copy length"
+    },
+    {
+      "name": "AI Lifecycle Automation",
+      "desc": "Dynamic email sequences that adapt to behavior signals in real-time"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Campaign-type prompt chains your whole team uses daily"
+    },
+    {
+      "name": "AI Marketing Analytics",
+      "desc": "Multi-channel attribution, ROAS breakdowns & reallocation recs in 30 min"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Campaign briefs from meeting notes, auto-generated weekly reports"
+    },
+    {
+      "name": "AI Adoption Leadership",
+      "desc": "Build the AI-first marketing org - playbooks, tools, culture"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

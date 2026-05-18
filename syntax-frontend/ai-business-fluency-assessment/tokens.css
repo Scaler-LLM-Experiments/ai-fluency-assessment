@@ -1,0 +1,319 @@
+/* =========================================================
+   Syntax by Scaler - Colors & Type tokens
+   ========================================================= */
+
+@font-face {
+  font-family: 'Clash Grotesk';
+  src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype-variations');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Plus Jakarta Sans + Archivo via Google Fonts fallback */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,500&family=Archivo:wght@400;600;700;800&display=swap');
+
+:root {
+  /* -------- Brand Colors -------- */
+  --brand-primary: #0055FF;           /* PRIMARY - bright, canonical brand blue */
+  --brand-primary-alt: #004CE5;       /* supporting fill (slightly deeper) */
+  --brand-primary-strong: #083CA0;    /* heavy buttons / strong blue blocks / hover */
+  --brand-navy: #011845;              /* darkest brand color */
+  --brand-navy-2: #011A53;           /* Navy step */
+  --brand-navy-3: #0B1529;           /* Near-black navy */
+
+  /* Blue tints - used for soft hero panels, chip backgrounds */
+  --brand-blue-50:  #EBF8FF;
+  --brand-blue-100: #E6F0FF;
+  --brand-blue-200: #E9F1FF;
+  --brand-blue-300: #E3F1FF;
+
+  /* Accents observed in visual direction */
+  --accent-gold:    #E8B017;         /* Mustard-gold accent */
+  --accent-lime:    #C4FF00;         /* Lime - used inside radial gradient stars */
+  --accent-teal:    rgba(0, 225, 173, 0.5);
+  --accent-violet:  #8000FF;
+  --accent-violet-2: rgba(119, 81, 255, 0.5);
+  --accent-orange:  #ED7700;
+
+  /* -------- Neutrals -------- */
+  --n-0:   #FFFFFF;
+  --n-50:  #FAFAFA;
+  --n-100: #F5F5F5;
+  --n-150: #F6F6F6;
+  --n-200: #E4E4E4;
+  --n-300: #D1D1D1;
+  --n-400: #AAAAAA;
+  --n-500: #696969;
+  --n-600: #616161;
+  --n-700: #404040;
+  --n-800: #262626;
+  --n-850: #212121;
+  --n-900: #171717;
+  --n-950: #121212;
+  --n-ink: #000B1F;
+
+  /* Borders */
+  --border-subtle: #E4E4E4;
+  --border-muted:  #E5E7EB;
+  --border-strong: #D1D1D1;
+
+  /* -------- Semantic foreground -------- */
+  --fg-1: #121212;   /* primary ink */
+  --fg-2: #212121;   /* body */
+  --fg-3: #616161;   /* meta / helper */
+  --fg-4: #AAAAAA;   /* placeholder / captions on dark */
+  --fg-inverse: #FFFFFF;
+  --fg-on-brand: #FFFFFF;
+  --fg-link: var(--brand-primary);
+  --fg-link-hover: var(--brand-primary-strong);
+
+  /* -------- Semantic surface -------- */
+  --surface-0: #FFFFFF;
+  --surface-1: #FAFAFA;
+  --surface-2: #F5F5F5;
+  --surface-soft-blue: #E9F1FF;
+  --surface-brand: var(--brand-primary);
+  --surface-deep: var(--brand-navy);
+
+  /* -------- Shadows (flat, subtle) -------- */
+  --shadow-xs: 0 1px 2px 0 rgba(26,26,26,0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0,11,31,0.06), 0 1px 1px 0 rgba(0,11,31,0.04);
+  --shadow-md: 0 8px 24px -8px rgba(1,24,69,0.10), 0 2px 6px -2px rgba(1,24,69,0.06);
+  --shadow-lg: 0 24px 48px -12px rgba(1,24,69,0.18);
+
+  /* -------- Radii --------
+     BRAND RULE: no rounded corners anywhere. Ever. The only value is 0.
+     Kept as a token so components can reference it consistently.          */
+  --radius-0: 0px;
+
+  /* -------- Spacing (4pt base) -------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 48px;
+  --sp-10: 64px;
+  --sp-11: 80px;
+  --sp-12: 120px;
+
+  /* -------- Type families --------
+     RULE: Clash Grotesk handles ALL headline + poster type (H1–H3, hero display,
+     wordmark-weight statements at 80–120px). Use weight 500–600 for standard
+     headlines; weight 700 for poster moments.
+     Everything else - body, UI, labels, eyebrows, stats, captions, buttons -
+     is Plus Jakarta Sans.                                                    */
+  --font-headline: "Clash Grotesk", "Plus Jakarta Sans", sans-serif;
+  --font-poster: "Clash Grotesk", "Plus Jakarta Sans", sans-serif;
+  --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* legacy aliases - do not use in new code */
+  --font-display: var(--font-headline);
+  --font-display-heavy: var(--font-poster);
+
+  /* -------- Type scale (px / line-height / weight) -------- */
+  --t-hero-size:    120px;
+  --t-hero-lh:      1.0;
+  --t-hero-weight:  700;
+  --t-hero-family:  var(--font-display-heavy);
+
+  --t-display-size: 80px;
+  --t-display-lh:   1.0;
+  --t-display-weight: 700;
+  --t-display-family: var(--font-display-heavy);
+
+  /* H1–H3 are HEADLINES → Clash Grotesk.
+     H4+ are section labels / subheads → Plus Jakarta Sans. */
+  --t-h1-size: 56px;   --t-h1-lh: 1.0;  --t-h1-weight: 500;  --t-h1-family: var(--font-headline);
+  --t-h2-size: 40px;   --t-h2-lh: 1.05; --t-h2-weight: 500;  --t-h2-family: var(--font-headline);
+  --t-h3-size: 32px;   --t-h3-lh: 1.1;  --t-h3-weight: 500;  --t-h3-family: var(--font-headline);
+  --t-h4-size: 24px;   --t-h4-lh: 1.2;  --t-h4-weight: 600;  --t-h4-family: var(--font-body);
+  --t-h5-size: 20px;   --t-h5-lh: 1.2;  --t-h5-weight: 700;  --t-h5-family: var(--font-body);
+  --t-h6-size: 18px;   --t-h6-lh: 1.35; --t-h6-weight: 600;  --t-h6-family: var(--font-body);
+
+  --t-body-lg-size: 18px; --t-body-lg-lh: 1.55;
+  --t-body-size:    16px; --t-body-lh:    1.55;
+  --t-body-sm-size: 14px; --t-body-sm-lh: 1.45;
+  --t-caption-size: 12px; --t-caption-lh: 1.5;
+
+  --t-eyebrow-size: 14px; --t-eyebrow-lh: 20px;
+  --t-eyebrow-tracking: 0.12em;  /* wide, uppercase or title case */
+
+  --t-kbd-size: 12px;
+}
+
+/* ---------- Element defaults ---------- */
+html, body {
+  font-family: var(--font-body);
+  color: var(--fg-1);
+  background: var(--surface-0);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, .t-h1 {
+  font-family: var(--t-h1-family);
+  font-size: var(--t-h1-size);
+  line-height: var(--t-h1-lh);
+  font-weight: var(--t-h1-weight);
+  color: var(--fg-1);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h2, .t-h2 {
+  font-family: var(--t-h2-family);
+  font-size: var(--t-h2-size);
+  line-height: var(--t-h2-lh);
+  font-weight: var(--t-h2-weight);
+  color: var(--fg-1);
+  margin: 0;
+}
+
+h3, .t-h3 {
+  font-family: var(--t-h3-family);
+  font-size: var(--t-h3-size);
+  line-height: var(--t-h3-lh);
+  font-weight: var(--t-h3-weight);
+  color: var(--fg-1);
+  margin: 0;
+}
+
+h4, .t-h4 {
+  font-family: var(--t-h4-family);
+  font-size: var(--t-h4-size);
+  line-height: var(--t-h4-lh);
+  font-weight: var(--t-h4-weight);
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+  margin: 0;
+}
+
+h5, .t-h5 {
+  font-family: var(--font-body);
+  font-size: var(--t-h5-size);
+  line-height: var(--t-h5-lh);
+  font-weight: var(--t-h5-weight);
+  letter-spacing: -0.03em;
+  color: var(--brand-navy);
+  margin: 0;
+}
+
+.t-hero {
+  font-family: var(--t-hero-family);
+  font-size: var(--t-hero-size);
+  line-height: var(--t-hero-lh);
+  font-weight: var(--t-hero-weight);
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+
+.t-display {
+  font-family: var(--t-display-family);
+  font-size: var(--t-display-size);
+  line-height: var(--t-display-lh);
+  font-weight: var(--t-display-weight);
+  color: var(--fg-1);
+}
+
+p, .t-body {
+  font-family: var(--font-body);
+  font-size: var(--t-body-size);
+  line-height: var(--t-body-lh);
+  color: var(--fg-2);
+  margin: 0;
+}
+
+.t-body-lg { font-size: var(--t-body-lg-size); line-height: var(--t-body-lg-lh); }
+.t-body-sm { font-size: var(--t-body-sm-size); line-height: var(--t-body-sm-lh); color: var(--fg-2); }
+.t-caption { font-size: var(--t-caption-size); line-height: var(--t-caption-lh); color: var(--fg-3); }
+
+.t-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--t-eyebrow-size);
+  line-height: var(--t-eyebrow-lh);
+  letter-spacing: var(--t-eyebrow-tracking);
+  color: var(--brand-primary);
+  font-weight: 500;
+}
+
+code, kbd, .t-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+a {
+  color: var(--fg-link);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+a:hover { color: var(--fg-link-hover); }
+
+/* ---------- Buttons (no rounded corners) ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 80ms ease;
+  border-radius: 0;
+  /* one shared outline-on-hover token: 2px ring offset by 2px of the surface color */
+  --btn-ring: 0 0 0 2px var(--brand-primary);
+}
+.btn:active { transform: translateY(0.5px); }
+.btn:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+
+/* ---- Primary ---- 
+   Resting: brand blue. Hover: brighter fill + 2px outline ring. */
+.btn--primary {
+  background: var(--brand-primary);
+  color: var(--fg-on-brand);
+  box-shadow: var(--shadow-xs);
+}
+.btn--primary:hover {
+  background: #1F6BFF;                  /* brighter step up from #0055FF */
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--brand-primary);
+}
+
+/* ---- Outline ----
+   Resting: white with blue border. Hover: light blue fill + thicker outline. */
+.btn--outline {
+  background: var(--n-0);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-xs);
+}
+.btn--outline:hover {
+  background: var(--brand-blue-50);
+  color: #0040C2;
+  box-shadow: 0 0 0 2px var(--brand-primary);
+}
+
+/* ---- Ghost ----
+   Resting: transparent. Hover: soft blue tint + subtle blue outline. */
+.btn--ghost {
+  background: transparent;
+  color: var(--fg-1);
+}
+.btn--ghost:hover {
+  background: var(--brand-blue-50);
+  color: var(--brand-primary);
+  box-shadow: inset 0 0 0 1px var(--brand-primary);
+}
+
+.btn--lg  { height: 56px; padding: 16px 28px; font-size: 16px; }
+.btn--xl  { height: 80px; padding: 30px 49px; font-size: 20px; }

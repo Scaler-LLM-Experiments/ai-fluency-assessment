@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Google",
+    "domain": "google.com",
+    "logo": "./assets/logos/google.png",
+    "role": "Senior Marketing Analyst, Gemini Marketing",
+    "location": "Gurugram / Hyderabad · Hybrid",
+    "asks": [
+      "Partner with product data science to architect advanced funnels and forecast user behavior to establish engagement metrics",
+      "Lead the measurement of acquisition and re-engagement campaigns with incrementality frameworks validating ROI",
+      "Lead sophisticated segmentation and cohort analysis to drive personalized lifecycle marketing"
+    ],
+    "covered": ["Analytics", "Lifecycle marketing", "Campaign strategy"],
+    "url": "https://www.google.com/about/careers/applications/jobs/results/138854453313708742-senior-marketing-analyst-gemini-marketing"
+  },
+  {
+    "company": "Spotify",
+    "domain": "spotify.com",
+    "logo": "./assets/logos/spotify.png",
+    "role": "Growth Marketing Manager",
+    "location": "New York · Hybrid",
+    "asks": [
+      "Manage and evolve owned channel programs optimizing listening engagement, and long term listening retention",
+      "Support bespoke global campaigns, and revenue generating campaigns, testing how to scale their effectiveness and impact through automation",
+      "Partner with Analytics and Insights teams to assess campaign performance and identify key opportunities for lifecycle marketing programs"
+    ],
+    "covered": ["Lifecycle marketing", "Prompting", "Productivity"],
+    "url": "https://jobs.lever.co/spotify/817fb282-0d84-4a9f-bf11-1c5cdb0fbd2b"
+  },
+  {
+    "company": "Spotify",
+    "domain": "spotify.com",
+    "logo": "./assets/logos/spotify.png",
+    "role": "Data Scientist - Growth Analytics (Performance Marketing)",
+    "location": "New York · Hybrid",
+    "asks": [
+      "Develop data-driven strategies to drive the growth of Spotify users and subscribers, with a focus on performance marketing",
+      "Refine attribution practices and define robust, data-backed methods to measure the incremental impact of marketing spend",
+      "Build scalable data pipelines and dashboards to track marketing efficiency and Global business performance"
+    ],
+    "covered": ["Analytics", "CRO", "Ad creative"],
+    "url": "https://www.lifeatspotify.com/jobs/data-scientist-growth-analytics-performance-marketing"
+  },
+  {
+    "company": "Groww",
+    "domain": "groww.in",
+    "logo": "./assets/logos/groww.png",
+    "role": "Manager - Growth (Performance Marketing)",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Drive innovation and implement testing strategies to continually uncover optimization levers",
+      "Deeply analyze traffic and performance across channels to understand user behavior, drop-offs, and conversion paths",
+      "Collaborate with design/creative teams on platform-specific visuals and ad copy"
+    ],
+    "covered": ["Analytics", "Ad creative", "CRO"],
+    "url": "https://job-boards.eu.greenhouse.io/groww/jobs/4796666101"
+  }
+]

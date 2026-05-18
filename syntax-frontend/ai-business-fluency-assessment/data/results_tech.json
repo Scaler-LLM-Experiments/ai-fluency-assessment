@@ -1,0 +1,53 @@
+{
+  "currentRole": "Tech Professional transitioning to Business",
+  "targetRole": "Technical Business Leader",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI-Powered Business Storytelling",
+      "desc": "Feed tech specs → get exec narratives, board decks & business cases"
+    },
+    {
+      "name": "AI Financial Analysis",
+      "desc": "P&L deep-dives, unit economics modeling & CAC/LTV analysis using Claude"
+    },
+    {
+      "name": "AI Product Strategy",
+      "desc": "Generate competitive analyses, mini-PRDs & market sizing with AI frameworks"
+    },
+    {
+      "name": "AI Business Case Engineering",
+      "desc": "ROI models, payback calculations & risk quantification that get funded"
+    },
+    {
+      "name": "AI Cross-Functional Fluency",
+      "desc": "Analyze marketing funnels, sales pipelines & ops metrics with AI assistance"
+    },
+    {
+      "name": "AI Stakeholder Intelligence",
+      "desc": "Influence mapping, meeting prep & audience-tailored communication at scale"
+    },
+    {
+      "name": "AI-Powered GTM Design",
+      "desc": "Go-to-market frameworks, positioning & channel strategy using AI synthesis"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Tech→business translation prompts that leverage your engineering depth"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Dual-purpose stack - Cursor for code, Claude for business, Perplexity for research"
+    },
+    {
+      "name": "AI Adoption Leadership",
+      "desc": "Bridge tech & business - enable AI across every function in your org"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

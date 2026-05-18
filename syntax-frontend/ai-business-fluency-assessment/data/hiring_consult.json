@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Deloitte",
+    "domain": "deloitte.com",
+    "logo": "./assets/logos/deloitte.png",
+    "role": "Senior Consultant | GEN AI | Bengaluru | Artificial Intelligence & Data",
+    "location": "Bengaluru · Hybrid",
+    "asks": [
+      "Design and implement end-to-end Generative AI systems using LLMs",
+      "Build and optimize Retrieval-Augmented Generation (RAG) pipelines (chunking, embeddings, indexing, retrieval tuning)",
+      "Deploy AI solutions using cloud platforms (AWS, Azure, GCP) with CI/CD and MLOps practices"
+    ],
+    "covered": ["Prompting", "Deliverables", "Adoption"],
+    "url": "https://southasiacareers.deloitte.com/job/Bengaluru-Senior-Consultant-GEN-AI-Bengaluru-Artificial-Intelligence-&-Data/55483644/"
+  },
+  {
+    "company": "Deloitte",
+    "domain": "deloitte.com",
+    "logo": "./assets/logos/deloitte.png",
+    "role": "Consultant-Gen AI",
+    "location": "Bengaluru · Hybrid",
+    "asks": [
+      "Deliver large-scale AI/Gen AI projects across multiple industries and domains",
+      "Brainstorm, build & improve AI/Gen AI models developed by the team & identify scope for model improvements & best practices",
+      "Work with a team of Data Engineers, ML/AI Engineers, Prompt engineers, and other Data & AI professionals to deliver projects"
+    ],
+    "covered": ["Prompting", "Deliverables", "Productivity"],
+    "url": "https://usijobs.deloitte.com/en_US/careersUSI/JobDetail/USI-EH26-Consulting-AI-Data-Consultant-Gen-AI/303628"
+  },
+  {
+    "company": "Accenture",
+    "domain": "accenture.com",
+    "logo": "./assets/logos/accenture.png",
+    "role": "Ind & Func AI Decision Science Team Lead/Consultant",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Collaborate with clients to understand their business objectives and identify AI opportunities",
+      "Develop AI strategies and roadmaps that align with client goals and Accenture's capabilities",
+      "Identify appropriate AI algorithms and techniques to solve specific business problems"
+    ],
+    "covered": ["Strategy frameworks", "Adoption", "Competitive intel"],
+    "url": "https://www.accenture.com/in-en/careers/jobdetails?id=R00229014_en"
+  },
+  {
+    "company": "McKinsey & Company",
+    "domain": "mckinsey.com",
+    "logo": "./assets/logos/mckinsey.png",
+    "role": "Data Science Consultant - QuantumBlack, AI by McKinsey",
+    "location": "Global (Multiple Cities) · Hybrid",
+    "asks": [
+      "Design and modernize large-scale data and analytics platforms including data management, governance",
+      "Leverage automation, cognitive and AI based solutions to manage data, predict scenarios and prescribe actions",
+      "Lead discussions with business and functional analysts to understand requirements and assess integration impacts on business architecture"
+    ],
+    "covered": ["Strategy frameworks", "Market sizing", "Deliverables"],
+    "url": "https://www.mckinsey.com/careers/search-jobs/jobs/datascienceconsultant-quantumblackaibymckinsey-100822"
+  }
+]

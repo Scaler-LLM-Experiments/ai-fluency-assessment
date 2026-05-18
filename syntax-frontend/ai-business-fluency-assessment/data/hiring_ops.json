@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Amazon",
+    "domain": "amazon.com",
+    "logo": "./assets/logos/amazon.png",
+    "role": "Sr. Program Manager, Supply Chain Programs",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Use large datasets, analytics, and operations research techniques to solve complex supply chain and network optimization problems",
+      "Design and implement innovative logistics and capacity planning models tailored to the Indian e-commerce ecosystem",
+      "Influence senior stakeholders through clear, data-driven insights while staying ahead of emerging trends in e-commerce and quick commerce"
+    ],
+    "covered": ["Demand forecasting", "Process optimization", "Reporting"],
+    "url": "https://amazon.jobs/en/jobs/10390838/sr-program-manager-supply-chain-programs"
+  },
+  {
+    "company": "Walmart",
+    "domain": "walmart.com",
+    "logo": "./assets/logos/walmart.png",
+    "role": "Manager, Supply Chain Management - Analytics and Data Science – Global Logistics",
+    "location": "Bentonville, AR · Hybrid",
+    "asks": [
+      "Analyze data from planning, logistics, replenishment, and execution systems that support the end-to-end movement of goods",
+      "Apply analytics to initiatives spanning planning, execution, and continuous improvement",
+      "Monitor and analyze key metrics including On-Time Delivery (OTD), inventory flow, cost, and forecast/model accuracy"
+    ],
+    "covered": ["Inventory", "Demand forecasting", "Reporting"],
+    "url": "https://careers.walmart.com/us/en/jobs/R-2469902"
+  },
+  {
+    "company": "Walmart",
+    "domain": "walmart.com",
+    "logo": "./assets/logos/walmart.png",
+    "role": "Senior Manager - AI & Self-Healing Engine (Last Mile Delivery)",
+    "location": "Bentonville, AR · Hybrid",
+    "asks": [
+      "Build orchestration frameworks to coordinate between AI agents and operations teams",
+      "Collaborate with engineering to implement agent-driven detection, root cause analysis, and resolution workflows",
+      "Provide thought-leadership to Walmart LMD leadership and business partners in delivering Agentic AI and self-healing solutions"
+    ],
+    "covered": ["Process optimization", "Logistics", "Adoption"],
+    "url": "https://careers.walmart.com/us/en/jobs/R-2407111"
+  },
+  {
+    "company": "Swiggy",
+    "domain": "swiggy.com",
+    "logo": "./assets/logos/swiggy.png",
+    "role": "Manager - Planning & Performance",
+    "location": "Bengaluru · Hybrid",
+    "asks": [
+      "Build campaign calendars aligned with key events, leveraging past campaign data and insights to continuously improve planning effectiveness",
+      "Monitor widget and campaign performance, analyze data for insights, support RCA discussions, and prepare reports and dashboards",
+      "Streamline processes, create SOPs, and identify automation opportunities across campaign execution"
+    ],
+    "covered": ["Process optimization", "Demand forecasting", "Reporting"],
+    "url": "https://www.iimjobs.com/j/swiggy-manager-planning-and-performance-1685990"
+  }
+]

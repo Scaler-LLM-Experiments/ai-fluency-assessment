@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Sarvam AI",
+    "domain": "sarvam.ai",
+    "logo": "./assets/logos/sarvam.png",
+    "role": "GTM & Strategy, Model API",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Own customer relationships end-to-end: run demos, onboarding sessions, and integration walkthroughs.",
+      "Write scripts and build demo applications to unblock customer integrations.",
+      "Surface market insights: track what customers and prospects are building, map the competitive landscape."
+    ],
+    "covered": ["Business storytelling", "Product thinking", "Ops & GTM"],
+    "url": "https://careers.kula.ai/sarvam-ai/31776/"
+  },
+  {
+    "company": "Datadog",
+    "domain": "datadoghq.com",
+    "logo": "./assets/logos/datadog.png",
+    "role": "Senior Technical Program Manager, Knowledge Systems",
+    "location": "New York · Hybrid",
+    "asks": [
+      "Own and maintain the roadmap for Knowledge Systems across the TS Organization.",
+      "Leverage AI to automate processes wherever possible, ideally curating our extensive knowledge base.",
+      "Drive adoption of tooling and processes across TS, effectively influencing without direct authority."
+    ],
+    "covered": ["Product thinking", "Prompting", "Adoption"],
+    "url": "https://careers.datadoghq.com/detail/7446392/"
+  },
+  {
+    "company": "Stripe",
+    "domain": "stripe.com",
+    "logo": "./assets/logos/stripe.png",
+    "role": "Technical Program Manager",
+    "location": "Singapore · Hybrid",
+    "asks": [
+      "Drive functional and technical delivery of key team and org-wide programs/initiatives.",
+      "Help drive product decisions to align with program and sometimes higher company initiatives.",
+      "Guide and manage the usage of agile methodologies to simplify project delivery."
+    ],
+    "covered": ["Product thinking", "Stakeholder mgmt", "Business metrics"],
+    "url": "https://stripe.com/jobs/listing/technical-program-manager/7653021"
+  },
+  {
+    "company": "Notion",
+    "domain": "notion.com",
+    "logo": "./assets/logos/notion.png",
+    "role": "GTM AI + Innovation Manager",
+    "location": "San Francisco · Hybrid",
+    "asks": [
+      "Design, test, and scale AI-driven solutions that help our sales team work more efficiently.",
+      "Execute builds or collaborate with engineers to launch and iterate on solutions, while helping shape our thinking on AI workflows, agents, and modern tools.",
+      "Track and optimize the pipeline and revenue impact of AI and automation implementations across GTM."
+    ],
+    "covered": ["Prompting", "Ops & GTM", "Adoption"],
+    "url": "https://jobs.ashbyhq.com/notion/3336e944-0970-48ef-9a97-4ebd6656d0c2"
+  }
+]

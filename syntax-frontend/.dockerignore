@@ -1,0 +1,8 @@
+.git
+.DS_Store
+node_modules
+*.log
+.playwright-mcp
+screens/*.png
+*.png
+!assets/**/*.png

@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for financial analysis & modeling",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build financial models in Excel from scratch. Every formula, scenario, and assumption is manual work.",
+      "Level 2 - You've used AI to check a formula, explain a financial concept, or brainstorm model assumptions.",
+      "Level 3 - You use AI to accelerate financial modeling - it generates model structures from your description, writes Excel formulas, builds scenario frameworks, and creates sensitivity analysis templates. Your models get built in half the time.",
+      "Level 4 - You've built financial analysis workflows - you feed AI your raw data (P&L, balance sheet, cash flow) and it generates variance analysis, trend identification, and executive narratives. You focus on judgment and recommendations, AI handles the analytical grunt work.",
+      "Level 5 - You've systematized financial analysis with AI for your team. Standard analyses (monthly close commentary, budget vs. actuals, forecasts) are AI-assisted with human validation. Your finance team produces faster, more insightful work because AI handles the routine analytical layer."
+    ]
+  },
+  {
+    "title": "AI for budgeting & forecasting",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build annual budgets in spreadsheets using last year's numbers plus adjustments.",
+      "Level 2 - You've used AI to analyze budget variances or build a basic forecast model.",
+      "Level 3 - You use AI to build dynamic forecasts - feeding it historical data, growth assumptions, and market context. AI generates scenario-based budgets (bull/base/bear), identifies where your assumptions are weakest, and creates presentation-ready output.",
+      "Level 4 - You've built a forecasting system - AI monitors actuals vs. budget in real-time, adjusts rolling forecasts based on trend data, flags material variances before month-end, and generates management commentaries. Your forecasting is continuous, not quarterly.",
+      "Level 5 - You've deployed AI-powered financial planning for your organization. FP&A that required a team of 5 runs with 2 people and AI. Forecasts are more accurate, faster, and more granular. Leadership trusts your numbers because the analytical rigor is visible."
+    ]
+  },
+  {
+    "title": "AI for commercial deal analysis & pricing",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You evaluate deals using standard spreadsheet models and gut feel for pricing.",
+      "Level 2 - You've used AI to analyze a deal structure or brainstorm pricing strategies.",
+      "Level 3 - You use AI to analyze commercial deals - you feed it deal terms, comparable transactions, and market benchmarks, and it generates deal assessments, risk flags, and negotiation recommendations. You evaluate deals faster and catch risks earlier.",
+      "Level 4 - You've built a deal analysis workflow - AI models deal economics under different scenarios, benchmarks pricing against market data, generates term sheet analyses, and creates internal approval documents. Your deal velocity has increased without sacrificing diligence.",
+      "Level 5 - You've built an AI-powered commercial intelligence system. Pricing optimization uses AI-driven market analysis. Deal evaluation is systematic and data-rich. Your commercial team makes better pricing and deal decisions because the analytical foundation is stronger."
+    ]
+  },
+  {
+    "title": "AI for audit, compliance & risk management",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You handle compliance manually - checklist-driven reviews, manual documentation, and spreadsheet tracking.",
+      "Level 2 - You've used AI to draft compliance documentation or understand a new regulation.",
+      "Level 3 - You use AI to accelerate compliance work - analyzing regulatory changes for impact, generating audit checklists, reviewing contracts for compliance gaps, and creating documentation frameworks. Compliance prep that took weeks now takes days.",
+      "Level 4 - You've built a compliance workflow - AI monitors regulatory changes, assesses their impact on your business, generates compliance action plans, and drafts policy updates. Your audit preparation is largely AI-assisted with human validation at key checkpoints.",
+      "Level 5 - You've deployed AI-powered compliance for your organization. Regulatory monitoring is automated, audit trails are AI-generated, and risk assessments are continuous rather than periodic. Your compliance function is more thorough and faster than before AI."
+    ]
+  },
+  {
+    "title": "AI for management reporting & business intelligence",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You compile management reports manually - pulling data from multiple systems and building slides.",
+      "Level 2 - You've used AI to format a report or draft an executive summary from data.",
+      "Level 3 - You use AI to generate management reports - you feed it raw financial data and it produces narrative commentaries, trend analyses, and variance explanations. Your monthly reporting cycle is 40% faster.",
+      "Level 4 - You've built a reporting workflow - AI auto-generates standard reports from your data, creates different versions for different audiences (board, exec team, ops), and flags the issues that need human attention. You spend time on insights, not formatting.",
+      "Level 5 - You've systematized business intelligence with AI. Every recurring report is AI-generated with human QA. Your leadership gets more timely, more insightful financial narratives. The data-to-decision cycle has compressed from days to hours."
+    ]
+  },
+  {
+    "title": "Prompt engineering for finance workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You ask ChatGPT basic finance questions.",
+      "Level 2 - You've learned to provide specific financial context - \"Analyze this P&L for a SaaS company with 80% gross margins.\"",
+      "Level 3 - You write structured prompts for finance tasks - variance analysis, ratio calculations, forecast generation, and audit preparation. You have 10+ reusable prompts that produce consistent, professional outputs.",
+      "Level 4 - You build prompt chains for complex financial work - data ingestion prompt → analysis prompt → recommendation prompt → presentation prompt. You know where AI hallucinates in finance (making up benchmark data, incorrect formulas) and you add verification steps.",
+      "Level 5 - You've built a finance prompt playbook for your team. Every recurring financial analysis has a prompt workflow. Junior analysts produce senior-quality outputs using your templates. You've fundamentally changed how your finance team approaches analytical work."
+    ]
+  },
+  {
+    "title": "AI for treasury & cash flow management",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manage cash flow in spreadsheets with basic projections.",
+      "Level 2 - You've used AI to build a cash flow forecast or analyze working capital trends.",
+      "Level 3 - You use AI to build dynamic cash flow models - it factors in receivable aging, payable schedules, seasonal patterns, and growth assumptions. Your cash forecasting is more granular and accurate.",
+      "Level 4 - You've built a cash management workflow - AI monitors daily cash positions, projects short-term and long-term liquidity, flags potential shortfalls weeks in advance, and generates financing recommendations.",
+      "Level 5 - You've deployed AI-powered treasury management. Cash flow forecasting is continuous, scenario-aware, and integrated with your operational data. Your CFO makes capital allocation decisions based on AI-generated projections that have proven more accurate than manual forecasts."
+    ]
+  },
+  {
+    "title": "AI for vendor & cost management",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You track vendor costs in spreadsheets and negotiate contracts based on experience and market knowledge.",
+      "Level 2 - You've used AI to analyze vendor spend data or draft a contract review.",
+      "Level 3 - You use AI to analyze vendor performance and costs - benchmarking against market rates, identifying consolidation opportunities, and generating negotiation strategies based on contract terms and spend patterns.",
+      "Level 4 - You've built a procurement analytics workflow - AI monitors spend categories, identifies cost reduction opportunities, benchmarks vendor pricing, and generates executive summaries of procurement performance. Your cost savings pipeline is data-driven.",
+      "Level 5 - You've deployed AI-powered cost management. Spend analytics are automated, vendor risk is continuously monitored, and procurement decisions are supported by AI-generated market intelligence. Your cost-to-revenue ratio has improved measurably because of systematic AI-powered analysis."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for finance professionals",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use ChatGPT occasionally for ad-hoc questions.",
+      "Level 2 - You use AI regularly - for writing, basic calculations, and report formatting.",
+      "Level 3 - You have a finance professional's AI stack - Claude for analysis and narrative writing, AI for Excel/Sheets automation, Perplexity for market research and benchmarks. You save 6+ hours/week on reporting and analysis.",
+      "Level 4 - You've built a finance productivity OS - AI handles your recurring reports, generates your meeting briefs, drafts your emails, and helps you analyze any dataset in minutes. Your throughput has doubled.",
+      "Level 5 - You've built an integrated system that makes you the most productive finance person in your org. AI handles 80% of your analytical work, and you focus on judgment, relationships, and strategy. Other finance professionals want to learn your setup."
+    ]
+  },
+  {
+    "title": "Leading AI adoption in your finance team",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually. Your finance team runs on Excel and manual processes.",
+      "Level 2 - You've shown a teammate an AI trick - generating formulas, drafting reports.",
+      "Level 3 - You've piloted AI tools for your finance team - maybe AI-assisted reporting, automated reconciliation, or intelligent forecasting. You've demonstrated measurable time savings.",
+      "Level 4 - You've driven AI adoption across your finance function - defined AI use cases per finance process, created prompt templates, and trained your team. At least 3 finance workflows run faster because of AI.",
+      "Level 5 - You've transformed your finance function with AI. From close processes to forecasting to reporting - AI is embedded. You've measured and presented the efficiency gains. You're the person leadership consults on \"how should finance use AI?\""
+    ]
+  }
+]

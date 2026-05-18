@@ -1,0 +1,18 @@
+{
+  "currentRole": "Product Manager",
+  "targetRole": "AI-First Product Leader",
+  "bands": ["AI Curious", "AI Aware", "AI Capable", "AI Leader"],
+  "transitionSkills": [
+    { "name": "AI-First Spec Writing", "desc": "Generate PRDs, user stories & edge cases with prompt chains in Claude" },
+    { "name": "AI Agent Design for Products", "desc": "Build multi-agent systems with tool-use, orchestration & fallback paths" },
+    { "name": "AI-Powered User Research", "desc": "Auto-synthesize NPS, reviews & Gong calls into roadmap-ready insights" },
+    { "name": "Prompt Playbook Engineering", "desc": "Build reusable prompt libraries your entire PM team runs on" },
+    { "name": "AI Feature Evaluation", "desc": "Define confidence thresholds, hallucination guardrails & human-in-the-loop flows" },
+    { "name": "AI Analytics Pipelines", "desc": "SQL generation → cohort analysis → churn prediction without the data team" },
+    { "name": "AI Competitive Intelligence", "desc": "Weekly auto-monitoring of competitor changelogs, pricing & feature launches" },
+    { "name": "AI Stakeholder Automation", "desc": "Sprint reviews, exec summaries & board narratives auto-generated from data" },
+    { "name": "AI Productivity OS", "desc": "Meeting prep → action items → Jira tickets - fully AI-orchestrated" },
+    { "name": "AI Adoption Leadership", "desc": "Team training, tool policy, prompt playbooks & measurable productivity gains" }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}
