@@ -137,10 +137,16 @@ async function fetchAndStoreCsrfToken() {
         "X-Requested-With": "XMLHttpRequest",
       },
     });
-    if (!res.ok) return "";
+    if (!res.ok) {
+      try { trackEvent("csrf_failed", { status: res.status, reason: "non_ok" }); } catch (_) {}
+      return "";
+    }
     const json = await res.json();
     const token = json && json.csrf_token;
-    if (!token) return "";
+    if (!token) {
+      try { trackEvent("csrf_failed", { status: res.status, reason: "no_token" }); } catch (_) {}
+      return "";
+    }
     let meta = document.querySelector('meta[name="csrf-token"]');
     if (!meta) {
       meta = document.createElement("meta");
@@ -148,8 +154,10 @@ async function fetchAndStoreCsrfToken() {
       document.head.appendChild(meta);
     }
     meta.content = token;
+    try { trackEvent("csrf_fetched"); } catch (_) {}
     return token;
   } catch (e) {
+    try { trackEvent("csrf_failed", { status: 0, reason: "network" }); } catch (_) {}
     return "";
   }
 }
