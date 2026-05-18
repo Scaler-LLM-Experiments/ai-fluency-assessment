@@ -1,0 +1,53 @@
+{
+  "currentRole": "Finance / Commercial Manager",
+  "targetRole": "AI-Augmented Finance Leader",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI Financial Modeling",
+      "desc": "Model structures, Excel formulas & sensitivity analysis at 2x speed"
+    },
+    {
+      "name": "AI Dynamic Forecasting",
+      "desc": "Rolling forecasts that auto-adjust, flag variances & generate commentary"
+    },
+    {
+      "name": "AI Deal Intelligence",
+      "desc": "Scenario modeling, pricing benchmarks & term sheet analysis in minutes"
+    },
+    {
+      "name": "AI Compliance Automation",
+      "desc": "Regulatory monitoring → impact assessment → action plans → policy drafts"
+    },
+    {
+      "name": "AI Executive Reporting",
+      "desc": "Auto-generated narratives - board version, exec version, ops version"
+    },
+    {
+      "name": "AI Treasury Management",
+      "desc": "Cash flow modeling with receivable aging, seasonal patterns & liquidity alerts"
+    },
+    {
+      "name": "AI Cost Intelligence",
+      "desc": "Spend analytics, vendor risk scoring & procurement negotiation strategies"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Finance-specific prompt chains with hallucination guardrails built in"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Recurring reports, dataset analysis & meeting briefs fully automated"
+    },
+    {
+      "name": "AI Adoption Leadership",
+      "desc": "Map AI to every finance process, train team, measure & present ROI"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

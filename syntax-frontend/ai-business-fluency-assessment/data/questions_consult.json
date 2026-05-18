@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for client research & industry analysis",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You Google client companies, read annual reports, and manually build research decks.",
+      "Level 2 - You've used ChatGPT to summarize an earnings call or a market report.",
+      "Level 3 - You run structured research briefs through AI - \"Analyze this company's last 3 annual reports, identify strategic themes, map them against industry trends.\" You synthesize across multiple sources in hours, not days. Your research quality has visibly improved.",
+      "Level 4 - You've built a client research workflow - AI ingests public filings, competitor data, news, and market reports, then generates structured analysis decks with themes, risks, and strategic options. You focus on insight, not information gathering.",
+      "Level 5 - You've built an AI-powered research capability for your practice. Analysts use your prompt templates and workflows. Client research that took a team 2 weeks now takes 3 days. Partners notice the speed and depth improvement."
+    ]
+  },
+  {
+    "title": "AI for strategy framework application & synthesis",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manually apply frameworks - Porter's Five Forces, SWOT, value chain analysis - building slides from scratch.",
+      "Level 2 - You've used AI to populate a strategy framework with data or generate a first draft of a SWOT analysis.",
+      "Level 3 - You prompt AI with structured inputs (industry data, competitive landscape, client specifics) and it generates framework-ready analysis that you refine. Your first-draft strategy decks are ready in half the time.",
+      "Level 4 - You've built prompt chains for strategy work - data ingestion → framework application → insight extraction → recommendation generation. AI handles the analytical heavy-lifting, you focus on the \"so what\" and client-specific judgment.",
+      "Level 5 - You've codified your firm's strategy methodology into AI workflows. Junior consultants use your system to generate first-draft analyses that would normally require a senior associate. You've changed how your team approaches strategy work."
+    ]
+  },
+  {
+    "title": "AI for financial modeling & business case development",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build financial models in Excel from scratch. Every assumption, formula, and scenario is manual.",
+      "Level 2 - You've used AI to explain a financial concept, check a formula, or brainstorm model assumptions.",
+      "Level 3 - You use AI to build model structures - you describe the business case, and AI generates the assumption framework, revenue build-up logic, and sensitivity variables. You still build the model, but AI saves you 40% of the design work.",
+      "Level 4 - You feed AI your data tables and it generates scenario analyses, waterfall charts, and executive summaries. You use AI to stress-test your assumptions - \"What breaks this business case? What are the hidden risks in these projections?\"",
+      "Level 5 - You've built AI-assisted financial analysis workflows for your team. Analysts use your templates to generate model structures, validate assumptions against industry benchmarks, and produce board-ready financial narratives. The quality floor has risen across your practice."
+    ]
+  },
+  {
+    "title": "AI for presentation & deliverable production",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build every client deck manually - writing, structuring, formatting, iterating.",
+      "Level 2 - You've used AI to draft slide copy or reorganize a presentation narrative.",
+      "Level 3 - You use AI to generate presentation narratives from raw analysis - you feed it your findings and it produces a storyline with slide-by-slide content, key messages, and supporting data points. You format and refine, but the thinking structure comes fast.",
+      "Level 4 - You've built a deliverable production system - AI generates storyboards from project briefs, drafts executive summaries from detailed analyses, and creates appendix content from raw data. Your team delivers faster with higher narrative quality.",
+      "Level 5 - You've systematized deliverable production for your practice. Templates, prompt workflows, and quality standards are codified. A 50-page strategy report that took 2 weeks of production work now takes 4 days. Clients consistently praise the insight density."
+    ]
+  },
+  {
+    "title": "AI for market sizing & opportunity assessment",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You research market sizes through Google, Statista, and industry reports - manually triangulating numbers.",
+      "Level 2 - You've used AI to find market data or calculate a basic TAM/SAM/SOM.",
+      "Level 3 - You use AI to build bottom-up and top-down market sizing models - you provide the logic framework and data sources, AI generates the calculations, sensitivity ranges, and comparable benchmarks. Your market sizing is faster and more rigorous.",
+      "Level 4 - You've built a market sizing workflow - AI pulls comparable data, generates multiple estimation approaches, flags where your assumptions are weakest, and produces presentation-ready outputs with confidence intervals.",
+      "Level 5 - You've codified market sizing into an AI-powered capability. Your team uses prompt templates that enforce rigor - multiple approaches, explicit assumptions, sensitivity analysis, and source tracking. Junior consultants produce partner-quality market sizing on their first try."
+    ]
+  },
+  {
+    "title": "Prompt engineering for consulting workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You ask ChatGPT basic questions and accept whatever it gives you.",
+      "Level 2 - You've learned to give detailed context - client industry, project scope, desired output format.",
+      "Level 3 - You write structured prompts for each phase of consulting work - research, analysis, synthesis, recommendation. You have reusable prompts for client briefs, competitive analysis, and stakeholder interviews. You iterate until outputs are client-ready.",
+      "Level 4 - You build prompt chains for complete workstreams - intake prompt → research prompt → analysis prompt → recommendation prompt → executive summary prompt. You anticipate where AI will hallucinate (made-up market data, fake company info) and add verification steps.",
+      "Level 5 - You've built a consulting prompt playbook. Your firm uses your workflows. You train new consultants on prompt-first approaches. You understand which consulting tasks benefit from AI (research, synthesis, first-draft analysis) and which don't (client judgment, relationship nuance, political navigation)."
+    ]
+  },
+  {
+    "title": "AI for interview synthesis & qualitative research",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You take manual notes in stakeholder interviews and write up findings by hand.",
+      "Level 2 - You've used AI to transcribe an interview or summarize meeting notes.",
+      "Level 3 - You run all client interviews through AI - transcription → theme extraction → quote identification → cross-interview pattern analysis. What took 2 hours of synthesis per interview now takes 20 minutes.",
+      "Level 4 - You've built an interview analysis system - AI processes multiple interviews, identifies patterns across stakeholders, flags contradictions, and generates a structured findings report with supporting quotes. Your qualitative research is more rigorous because AI catches patterns humans miss.",
+      "Level 5 - You've productized qualitative research for your practice. The interview-to-insight pipeline is systematized. Stakeholder research that took weeks now produces richer, better-structured findings in days. Partners use your system for every engagement."
+    ]
+  },
+  {
+    "title": "AI for competitive & due diligence analysis",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manually research competitors - reading websites, analyst reports, and news articles one by one.",
+      "Level 2 - You've used AI to summarize a competitor's strategy or compare two companies.",
+      "Level 3 - You use AI to run structured competitive analyses - you feed it a framework (capabilities matrix, feature comparison, market positioning) and it generates a comprehensive competitive landscape from public data. You verify and add judgment.",
+      "Level 4 - You've built competitive intelligence workflows - AI monitors competitor moves (product launches, hiring patterns, partnership announcements, pricing changes), generates weekly intelligence briefs, and flags strategic implications for your client.",
+      "Level 5 - You've built a competitive intelligence capability for your firm. Due diligence analyses that required 3 analysts for 2 weeks now take 1 analyst for 4 days. Your AI-powered approach has become a differentiator in how your firm wins engagements."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for consultants",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use ChatGPT occasionally when you're stuck.",
+      "Level 2 - You use AI regularly for writing - email drafts, meeting summaries, brainstorming.",
+      "Level 3 - You have a consultant's AI stack - Claude for deep analysis and writing, Perplexity for real-time research, Granola for meeting notes, Gamma or Beautiful.ai for deck drafts. You save 8+ hours/week.",
+      "Level 4 - You've built a consulting productivity OS - AI auto-generates meeting briefs before client calls, synthesizes your notes after, drafts follow-up emails, and maintains your project knowledge base. Your utilization rate is higher because non-billable work takes half the time.",
+      "Level 5 - You've built an integrated system that makes you measurably faster than peers. Research → analysis → synthesis → deliverable → client communication - AI assists at every stage. Other consultants ask you to teach them your setup. You're the go-to \"AI-powered consultant\" in your firm."
+    ]
+  },
+  {
+    "title": "Leading AI adoption in your consulting practice",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually. Your team does consulting the traditional way.",
+      "Level 2 - You've shared an AI tool recommendation or prompt trick with your project team.",
+      "Level 3 - You've piloted AI tools on a client engagement - used AI for research, analysis, or deliverable production and demonstrated time/quality improvements to your team lead.",
+      "Level 4 - You've driven AI adoption for your practice - created AI usage guidelines, prompt templates for common deliverables, and trained analysts on AI-first workflows. Engagement margins have improved because your team produces faster.",
+      "Level 5 - You've shaped your firm's AI strategy. You've defined how AI should be used across engagement types, created the playbooks, and built a culture where AI-assisted work is the standard. You present AI efficiency gains to partners and influence firm-wide adoption."
+    ]
+  }
+]

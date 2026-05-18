@@ -1,0 +1,53 @@
+{
+  "currentRole": "Business / Strategy Consultant",
+  "targetRole": "AI Strategy Advisor",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI-Powered Client Research",
+      "desc": "Annual reports → structured strategy analysis in hours, not weeks"
+    },
+    {
+      "name": "AI Strategy Synthesis",
+      "desc": "Porter's, SWOT & value chain via prompt chains that produce deck-ready output"
+    },
+    {
+      "name": "AI Financial Case Building",
+      "desc": "Assumption frameworks, scenario analysis & board-ready narratives from raw data"
+    },
+    {
+      "name": "AI Deliverable Acceleration",
+      "desc": "50-page strategy reports in 4 days using AI storyboarding & synthesis"
+    },
+    {
+      "name": "AI Market Sizing",
+      "desc": "Bottom-up + top-down models with confidence intervals & source tracking"
+    },
+    {
+      "name": "AI Interview Analysis",
+      "desc": "Transcription → theme extraction → cross-stakeholder pattern synthesis"
+    },
+    {
+      "name": "AI Competitive Monitoring",
+      "desc": "Auto-track competitor moves, hiring, pricing - weekly intel briefs"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Client-ready prompt chains for every workstream in your practice"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Meeting briefs, follow-up drafts & project knowledge bases on autopilot"
+    },
+    {
+      "name": "AI Adoption Leadership",
+      "desc": "Practice-wide AI playbooks, analyst training & margin improvement"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for business communication & storytelling",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You communicate in technical terms. Business stakeholders often ask you to \"translate\" what you mean.",
+      "Level 2 - You've used AI to rewrite technical content in business language - emails, updates, presentations.",
+      "Level 3 - You use AI to bridge the tech-business gap - you feed it technical details and get business-ready narratives. You prompt with audience context (\"Write this for a VP of Sales who cares about revenue impact, not architecture\") and the output lands.",
+      "Level 4 - You've built communication templates - AI translates your technical work into business cases, executive summaries, and stakeholder updates. You customize for different audiences automatically. Non-technical leaders now understand your impact clearly.",
+      "Level 5 - You've mastered AI-assisted business communication. You produce executive-quality strategy narratives, board decks, and business cases that no one would guess came from an engineer. AI handles the translation, you bring the technical depth that gives your business arguments an unfair advantage."
+    ]
+  },
+  {
+    "title": "AI for understanding business metrics & P&L",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You know revenue and costs exist but haven't analyzed a P&L or business metrics dashboard yourself.",
+      "Level 2 - You've used AI to explain financial concepts - unit economics, gross margin, CAC/LTV, burn rate.",
+      "Level 3 - You regularly use AI to analyze business data - you paste revenue reports, funnel data, or financial summaries into Claude and get structured analyses. You ask \"What would a CFO flag in this data?\" and get useful answers.",
+      "Level 4 - You've built a business analysis workflow - AI helps you build financial models, analyze cohort economics, and prepare business reviews. You participate in P&L discussions with confidence because AI helps you prep.",
+      "Level 5 - You've become fluent in business metrics with AI as your accelerator. You build business cases, analyze ROI, and present financial arguments that earn credibility from business leaders. Your technical background + business fluency makes you a rare, valuable profile."
+    ]
+  },
+  {
+    "title": "AI for product thinking & strategy",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You think about features and code, not user problems or business strategy.",
+      "Level 2 - You've used AI to brainstorm product ideas or understand a product strategy framework.",
+      "Level 3 - You use AI to develop product thinking - you prompt it with user problems and get structured analyses of market opportunity, competitive landscape, and solution approaches. You write product notes that PMs take seriously.",
+      "Level 4 - You've built product strategy skills with AI - you generate competitive analyses, write mini-PRDs, and create product proposals that include market sizing, user segmentation, and success metrics. AI bridges the gap between your technical intuition and formal product thinking.",
+      "Level 5 - You lead product strategy discussions. You combine your technical depth with AI-powered business analysis to propose products others can't - you see technical feasibility AND business viability simultaneously. You're the \"technical PM\" everyone wants on their team."
+    ]
+  },
+  {
+    "title": "AI for market research & competitive intelligence",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You don't actively track market trends or competitors in your domain.",
+      "Level 2 - You've used AI to summarize a competitor's product or a market trend article.",
+      "Level 3 - You use AI to run structured competitive analyses - you prompt with specific comparison frameworks and get analyses of how your product compares on features, pricing, positioning, and technical architecture. You bring insights to product discussions.",
+      "Level 4 - You've built a research workflow - AI monitors competitors, synthesizes industry reports, and generates strategic summaries. You show up to business meetings with market context that surprises non-technical leaders.",
+      "Level 5 - You've become the person who bridges technical and market intelligence. Your AI-powered research connects technology trends to business opportunities. You write the analysis that shapes your company's product strategy."
+    ]
+  },
+  {
+    "title": "AI for stakeholder management & influence",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You work with stakeholders but struggle to align business and technical priorities.",
+      "Level 2 - You've used AI to prepare for a stakeholder meeting - generating talking points or anticipating questions.",
+      "Level 3 - You use AI to prepare for every important meeting - it generates stakeholder briefs, anticipates objections, and helps you frame technical decisions in business terms. Your meetings are more productive because you come prepared.",
+      "Level 4 - You've built a stakeholder management system - AI helps you map influence, track priorities across stakeholders, and generate tailored communication for each. You manage cross-functional alignment more effectively than most pure business people.",
+      "Level 5 - You've become an exceptional cross-functional leader. AI handles the prep, you bring the judgment. You navigate business politics, build executive relationships, and drive decisions that balance technical excellence with business outcomes."
+    ]
+  },
+  {
+    "title": "Prompt engineering for business-technical bridge roles",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI for coding tasks but haven't applied it to business problems.",
+      "Level 2 - You've started prompting AI for business tasks - drafting emails to non-technical stakeholders, summarizing business meetings.",
+      "Level 3 - You write structured prompts for both technical and business tasks. You leverage your technical understanding to write better prompts than most business people - you understand context windows, model limitations, and prompt structure at a deeper level.",
+      "Level 4 - You build sophisticated prompt workflows that bridge tech and business - translating architecture decisions into business impact assessments, converting sprint outputs into stakeholder updates, and generating business cases from technical specs.",
+      "Level 5 - You've built prompt systems that make you a force multiplier. Your technical understanding of LLMs combined with your growing business acumen means your AI outputs are more accurate and nuanced than what pure business or pure tech people produce."
+    ]
+  },
+  {
+    "title": "AI for building business cases & ROI analysis",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build features but can't articulate their business value in financial terms.",
+      "Level 2 - You've used AI to understand what a business case should include or to estimate the impact of a project.",
+      "Level 3 - You use AI to build business cases for technical projects - you describe the project and AI helps you frame the ROI, model the cost savings, and articulate the business value. Your proposals get approved more often because they speak the language of business.",
+      "Level 4 - You've built a business case workflow - AI helps you model different scenarios, calculate payback periods, and generate executive summaries. You present technical investments as business investments, complete with financial projections and risk analysis.",
+      "Level 5 - You're the engineer who can sell technical projects to the board. Your AI-assisted business cases are rigorous, credible, and compelling. Leadership funds your proposals because you quantify impact in terms they care about - revenue, cost, risk, time-to-market."
+    ]
+  },
+  {
+    "title": "AI for understanding operations, marketing & sales",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You know these functions exist but don't understand their workflows or metrics.",
+      "Level 2 - You've used AI to learn about go-to-market strategies, sales funnels, or operational metrics.",
+      "Level 3 - You use AI to actively build cross-functional knowledge - you analyze marketing campaigns, understand sales pipeline metrics, and learn operational workflows. When you sit in cross-functional meetings, you contribute meaningfully.",
+      "Level 4 - You've built a learning system - AI helps you prepare for cross-functional interactions, understand the metrics each team cares about, and contribute technical solutions to business problems. You're no longer \"just the tech person\" in the room.",
+      "Level 5 - You're a true generalist-specialist. You understand how every business function works, can analyze their data, and propose AI-powered solutions for their problems. Your technical background + business breadth makes you a future COO/CPO candidate."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for career transitioners",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI for coding assistance but not for business skill-building.",
+      "Level 2 - You use AI for both technical and business tasks - coding help AND email drafting.",
+      "Level 3 - You have a dual-purpose AI stack - Copilot/Cursor for code, Claude for business analysis, Perplexity for market research, AI transcription for meetings. You save 6+ hours/week AND you're building business skills simultaneously.",
+      "Level 4 - You've built a career transition OS - AI accelerates your learning (explains business concepts on demand, simulates stakeholder conversations), handles your communication gap (translates tech to business), and makes you productive in business tasks faster than a typical MBA grad.",
+      "Level 5 - You've built an integrated system that makes your transition seamless. AI is your real-time business mentor, communication coach, and analytical assistant. You're equally effective in technical deep-dives and business strategy sessions because AI covers your gaps while you build the real skills."
+    ]
+  },
+  {
+    "title": "Leading AI adoption as a tech-business bridge",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually for your own work.",
+      "Level 2 - You've helped a non-technical colleague use AI for the first time.",
+      "Level 3 - You've identified and piloted AI tools for a business team - helping marketing use AI for copy, or helping ops use AI for reporting. Your technical understanding lets you evaluate and deploy AI tools faster than non-technical teams can.",
+      "Level 4 - You've become the AI champion across functions - you lead AI adoption not just for your engineering team but for business teams who need someone technical to guide them. You evaluate tools, create workflows, and train people.",
+      "Level 5 - You drive AI strategy across the organization. Your unique position - understanding both the technology and the business applications - makes you the most valuable person in the AI adoption conversation. You shape the company's AI roadmap."
+    ]
+  }
+]

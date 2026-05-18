@@ -1,0 +1,58 @@
+[
+  {
+    "company": "BlackRock",
+    "domain": "blackrock.com",
+    "logo": "./assets/logos/blackrock.png",
+    "role": "Financial Planning & Analysis, Associate",
+    "location": "Gurgaon · Hybrid",
+    "asks": [
+      "Drive initiatives to build analytics for a better presentation of the financials.",
+      "Understanding complex data sets and being the storyteller to help business make decisions.",
+      "Demonstrated ability to use generative AI tools (e.g., Copilot/ChatGPT) to accelerate summarizing, quality checks, insight generation and building prompts/agents for different use cases."
+    ],
+    "covered": ["Financial analysis", "Forecasting", "Prompting"],
+    "url": "https://careers.blackrock.com/job/gurgaon/financial-planning-and-analysis-associate/45831/94060760400"
+  },
+  {
+    "company": "Stripe",
+    "domain": "stripe.com",
+    "logo": "./assets/logos/stripe.png",
+    "role": "Finance & Strategy - Finance Analytics Analyst",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Own P&L reporting and analysis for assigned product lines, business units, or functional cost centers.",
+      "Write SQL queries to extract, validate, and analyze data from financial systems.",
+      "Use AI tools (Claude, Cursor, Claude Code, and similar platforms) as part of workflow - apply an AI-first approach to new tasks, evaluate where AI can accelerate delivery."
+    ],
+    "covered": ["Financial analysis", "Prompting", "Mgmt reporting"],
+    "url": "https://stripe.com/jobs/listing/finance-strategy-finance-analytics-analyst/7597622"
+  },
+  {
+    "company": "Amazon",
+    "domain": "amazon.com",
+    "logo": "./assets/logos/amazon.png",
+    "role": "Finance Business Partner, AWS",
+    "location": "Sydney · Hybrid",
+    "asks": [
+      "Serve as the key finance business partner to AWS leadership teams and internal stakeholders, delivering clear financial recommendations that drive action.",
+      "Drive cost savings by identifying opportunities and benchmarking across vendors and locations.",
+      "Develop ad hoc business analysis and present recommendations directly to AWS senior leadership."
+    ],
+    "covered": ["Financial analysis", "Forecasting", "Commercial deals"],
+    "url": "https://amazon.jobs/en/jobs/10397528/finance-business-partner-aws"
+  },
+  {
+    "company": "Razorpay",
+    "domain": "razorpay.com",
+    "logo": "./assets/logos/razorpay.png",
+    "role": "Senior Manager I, Analytics",
+    "location": "Bengaluru · Onsite",
+    "asks": [
+      "Design and analyze A/B tests to measure the impact of marketing campaigns, product features, and engagement strategies.",
+      "Build self-serve analytics solutions using Tableau, SQL, and Python.",
+      "Develop a deep understanding of ad network performance, customer engagement, and marketing analytics - define and refine key business metrics, ensuring accurate tracking, instrumentation, and data quality."
+    ],
+    "covered": ["Financial analysis", "Forecasting", "Mgmt reporting"],
+    "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4686425005"
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for demand forecasting & planning",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You forecast demand using historical averages and Excel models. Adjustments are based on gut feel and sales input.",
+      "Level 2 - You've used AI to analyze past demand patterns or generate a simple forecast from historical data.",
+      "Level 3 - You use AI to build multi-variable demand models - you feed it historical sales, seasonality data, promotional calendars, and external factors. AI generates forecasts with confidence intervals and flags anomalies. Your forecast accuracy has improved 10–15%.",
+      "Level 4 - You've built a demand planning workflow where AI ingests POS data, inventory levels, lead times, and market signals to generate SKU-level forecasts with automated reorder recommendations. You review exceptions, not every SKU.",
+      "Level 5 - You've built an AI-powered demand planning system for your organization. It auto-adjusts forecasts based on real-time signals, generates scenario plans for disruptions, and has reduced stockouts and excess inventory measurably. Your planning team operates on AI recommendations, not spreadsheets."
+    ]
+  },
+  {
+    "title": "AI for process optimization & efficiency",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You identify process bottlenecks through observation and manual time studies.",
+      "Level 2 - You've used AI to analyze process data or brainstorm efficiency improvements.",
+      "Level 3 - You regularly feed process data (cycle times, throughput, defect rates, downtime logs) into AI and get structured analyses - bottleneck identification, root cause hypotheses, and improvement recommendations. You implement the top suggestions.",
+      "Level 4 - You've built an AI-assisted continuous improvement workflow - AI monitors process KPIs, detects anomalies, generates root cause analyses, and recommends corrective actions. Your improvement cycle time has halved.",
+      "Level 5 - You've deployed AI-powered process optimization across your operations. AI models simulate process changes before implementation, predict failure points, and optimize schedules dynamically. Your operation runs on data-driven decisions, not experience-based guesses."
+    ]
+  },
+  {
+    "title": "AI for supplier management & procurement",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manage suppliers through spreadsheets, emails, and manual performance tracking.",
+      "Level 2 - You've used AI to draft RFQs, analyze supplier quotes, or summarize vendor performance data.",
+      "Level 3 - You use AI to evaluate suppliers - you feed it performance data (quality, delivery, pricing history) and it generates scorecards, risk assessments, and negotiation briefs. Your supplier reviews are faster and more data-driven.",
+      "Level 4 - You've built a procurement intelligence workflow - AI analyzes market pricing trends, flags cost-saving opportunities, generates negotiation strategies based on supplier dependency and market conditions, and auto-drafts contract terms.",
+      "Level 5 - You've built an AI-powered procurement system. It monitors commodity prices, predicts cost movements, auto-generates RFQs, evaluates bids against multi-dimensional criteria, and surfaces strategic sourcing opportunities. Your procurement team makes better decisions faster."
+    ]
+  },
+  {
+    "title": "AI for inventory & warehouse optimization",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manage inventory with basic min/max levels and manual cycle counts.",
+      "Level 2 - You've used AI to analyze inventory data or calculate optimal reorder points.",
+      "Level 3 - You use AI to optimize inventory levels - dynamic safety stock calculations, ABC-XYZ analysis, and dead stock identification. AI processes your SKU-level data and recommends actions you'd never get to manually across thousands of items.",
+      "Level 4 - You've built an AI-assisted inventory system - it monitors stock levels in real-time, predicts stockouts before they happen, optimizes warehouse slotting based on pick patterns, and generates exception reports. Your carrying costs have dropped measurably.",
+      "Level 5 - You've deployed AI-driven inventory optimization across your network. Multiple warehouses, dynamic allocation, predictive replenishment - AI manages the complexity that humans can't handle at scale. You've reduced working capital while improving service levels."
+    ]
+  },
+  {
+    "title": "AI for logistics & transportation optimization",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You plan routes and shipments manually or using basic tools. Carrier selection is based on rate sheets.",
+      "Level 2 - You've used AI to analyze shipping data or optimize a route plan.",
+      "Level 3 - You use AI to optimize transportation - you feed it shipment data, carrier rates, constraints, and delivery windows, and it generates optimized load plans and route recommendations. You save 10–15% on freight costs on routes you've optimized.",
+      "Level 4 - You've built a logistics optimization workflow - AI consolidates orders, selects optimal carriers, plans routes considering real-time constraints (traffic, weather, capacity), and generates cost-benefit analyses for logistics decisions.",
+      "Level 5 - You've deployed an AI-powered logistics system. It dynamically optimizes your transportation network - real-time route adjustments, predictive capacity booking, automated carrier negotiations, and continuous cost optimization. Your logistics cost per unit has improved quarter over quarter."
+    ]
+  },
+  {
+    "title": "Prompt engineering for operations workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You ask ChatGPT basic questions about operational challenges.",
+      "Level 2 - You've learned to provide specific data and context - \"Given these lead times and demand patterns, how should I adjust safety stock?\"",
+      "Level 3 - You write structured prompts for operational analysis - demand analysis, supplier evaluation, process mapping, root cause analysis. You have go-to prompts for recurring operational tasks that produce consistent, useful outputs.",
+      "Level 4 - You build prompt chains for complex operational decisions - data analysis prompt → scenario modeling prompt → recommendation prompt → implementation plan prompt. You know where AI hallucinates in operations (fake benchmarks, unrealistic efficiency numbers) and add verification steps.",
+      "Level 5 - You've built an operations prompt playbook. Your team uses these workflows for standard analyses. New ops managers can produce senior-quality analyses using your prompt templates. You've fundamentally changed how your team approaches operational problem-solving."
+    ]
+  },
+  {
+    "title": "AI for quality management & compliance",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You track quality through manual inspections and spreadsheet-based reports.",
+      "Level 2 - You've used AI to analyze quality data or generate a non-conformance report.",
+      "Level 3 - You use AI to analyze quality trends - defect patterns, Pareto analysis, process capability calculations. AI identifies correlations you'd miss in manual analysis and generates structured improvement recommendations.",
+      "Level 4 - You've built an AI-assisted quality system - it monitors quality KPIs in real-time, predicts quality risks based on process parameters, generates corrective action plans, and auto-drafts compliance documentation.",
+      "Level 5 - You've deployed AI-powered quality management. Predictive quality models flag issues before they reach customers. Compliance documentation is auto-generated and audit-ready. Your quality costs have dropped while customer satisfaction has improved."
+    ]
+  },
+  {
+    "title": "AI for operational reporting & communication",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You compile operational reports manually - pulling data from multiple systems into Excel and PowerPoint.",
+      "Level 2 - You've used AI to draft an operational summary or format a report.",
+      "Level 3 - You use AI to generate operational reports - you feed it raw KPI data and it produces narrative summaries with trend analysis, exception highlights, and recommendations. Your weekly ops review prep takes 30 minutes instead of half a day.",
+      "Level 4 - You've built a reporting workflow - AI auto-ingests operational data, generates daily/weekly/monthly reports with context-aware narratives, and highlights only what needs human attention. Your leadership gets better information faster.",
+      "Level 5 - You've systematized operational reporting with AI. Every operational review - from daily standups to quarterly business reviews - runs on AI-generated analyses and narratives. The data-to-decision cycle has compressed from days to hours."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for ops managers",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use ChatGPT occasionally for ad-hoc questions.",
+      "Level 2 - You use AI regularly for writing and basic analysis.",
+      "Level 3 - You have an ops manager's AI stack - Claude for analysis and reporting, Perplexity for benchmarking and research, AI transcription for supplier calls and team meetings. You save 5+ hours/week on administrative and analytical tasks.",
+      "Level 4 - You've built a productivity OS for operations - AI handles your daily reporting, meeting summaries, supplier communication drafts, and exception analysis. You focus on decisions and relationships, not data wrangling.",
+      "Level 5 - You've built an integrated system where AI is your operational co-pilot. It surfaces what needs your attention each morning, generates the analyses you need before you ask, and handles the documentation you used to spend hours on. Other ops managers want your setup."
+    ]
+  },
+  {
+    "title": "Leading AI adoption in your operations team",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually. Your operations team runs on spreadsheets and legacy systems.",
+      "Level 2 - You've shown your team an AI tool - maybe for report generation or data analysis.",
+      "Level 3 - You've piloted AI tools in your operations - demand planning, quality analysis, or reporting - and demonstrated measurable improvements to your leadership.",
+      "Level 4 - You've driven AI adoption across your operations function - defined use cases, deployed tools, created SOPs, and trained your team. At least 3 operational processes now run faster or more accurately because of AI.",
+      "Level 5 - You've transformed your operations with AI. It's embedded in how your team forecasts, plans, monitors, and reports. You've measured and presented the ROI. You're the person leadership asks about \"how should we use AI in operations?\""
+    ]
+  }
+]

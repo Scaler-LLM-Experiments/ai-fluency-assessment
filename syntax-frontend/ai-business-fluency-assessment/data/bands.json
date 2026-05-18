@@ -1,0 +1,26 @@
+[
+  {
+    "min": 10,
+    "max": 18,
+    "name": "AI Curious",
+    "desc": "Right now, AI is changing how every industry works - and you haven't started using it yet. That's not a criticism, it's a fact. The people in your role who figure this out in the next 12 months will pull ahead. The ones who don't will struggle to stay relevant. The good news? You don't need to become a coder. You need the right framework."
+  },
+  {
+    "min": 19,
+    "max": 28,
+    "name": "AI Aware",
+    "desc": "You've started using AI, which puts you ahead of many. But there's a big difference between using ChatGPT once a week and actually transforming how you work. Right now, you're scratching the surface. Professionals who go deeper - who learn to build workflows, automate decisions, and lead with AI - will be the ones who get promoted, hired, and trusted with bigger roles."
+  },
+  {
+    "min": 29,
+    "max": 38,
+    "name": "AI Capable",
+    "desc": "You're already better at AI than most people in your role. That's the good news. The not-so-good news? Everyone is catching up fast. The gap between 'good with AI' and 'irreplaceable because of AI' is exactly where career acceleration happens. You need peers at your level and structured challenges to push further."
+  },
+  {
+    "min": 39,
+    "max": 50,
+    "name": "AI Leader",
+    "desc": "You're in the top tier. Most people in your role aren't close to where you are. But here's what separates leaders from legends: scaling your impact beyond yourself. Building systems, training teams, driving org-wide change. That's the next level - and it's hard to do alone."
+  }
+]

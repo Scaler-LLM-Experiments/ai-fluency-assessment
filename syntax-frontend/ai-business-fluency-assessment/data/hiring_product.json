@@ -1,0 +1,58 @@
+[
+  {
+    "company": "Anthropic",
+    "domain": "anthropic.com",
+    "logo": "./assets/logos/anthropic.png",
+    "role": "Product Manager, Claude Code Growth",
+    "location": "San Francisco · Remote",
+    "asks": [
+      "Develop and execute a product strategy focused on acquisition, monetization, virality, and retention for Claude Code",
+      "Analyze product metrics and user feedback to identify opportunities and optimize performance",
+      "Balance rapid iteration with our commitment to AI safety and ethics"
+    ],
+    "covered": ["Analytics", "Feedback synth", "Stakeholder comms"],
+    "url": "https://www.anthropic.com/careers/jobs/5024981008"
+  },
+  {
+    "company": "Google",
+    "domain": "google.com",
+    "logo": "./assets/logos/google.png",
+    "role": "Product Manager, GenAI Developer Experiences",
+    "location": "Bengaluru, India",
+    "asks": [
+      "Lead the GenAI developer experience - turning vibe-coding concepts into functional reality",
+      "Build an AI-native engine that generates fully functional, data-ready prototypes",
+      "Run rapid testing with real creator tools to focus dev resources on high-value features"
+    ],
+    "covered": ["AI features", "Spec writing", "Prompting"],
+    "url": "https://www.google.com/about/careers/applications/jobs/results/119831351669990086-product-manager-genai-developer-experiences"
+  },
+  {
+    "company": "Swiggy",
+    "domain": "swiggy.com",
+    "logo": "./assets/logos/swiggy.png",
+    "role": "Product Manager I",
+    "location": "Bengaluru, India",
+    "asks": [
+      "Build and ship AI-led capabilities across driver journeys - interventions, automation, new interaction surfaces",
+      "Integrate AI / LLM intelligence into support flows to improve resolution speed and driver trust",
+      "Write crisp PRDs and define success - problem framing, metrics, instrumentation"
+    ],
+    "covered": ["AI features", "Spec writing", "Agents"],
+    "url": "https://careers.swiggy.com"
+  },
+  {
+    "company": "Atlassian",
+    "domain": "atlassian.com",
+    "logo": "./assets/logos/atlassian.png",
+    "role": "Principal PM, Rovo Search & AI Quality",
+    "location": "Remote · Worldwide",
+    "asks": [
+      "Define and drive the strategic vision and roadmap for AI quality on Search and Search Agents",
+      "Partner with engineering, data science, product, and design to lift AI quality measurably",
+      "Create compelling narratives and communicate progress to customers, stakeholders, and the broader community"
+    ],
+    "covered": ["Agents", "Adoption", "Stakeholder comms"],
+    "url": "https://www.atlassian.com/company/careers/details/24917"
+  }
+]

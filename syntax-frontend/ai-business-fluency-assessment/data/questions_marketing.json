@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for ad copy & creative production",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write all ad copy manually. Every headline, description, and CTA is crafted from scratch.",
+      "Level 2 - You've used ChatGPT to brainstorm headlines or generate copy variations for a campaign.",
+      "Level 3 - You generate first-draft copy for all channels (Google, Meta, LinkedIn, email) with AI. You prompt with your ICP, value props, tone guidelines, and character limits. You produce 20 variations in the time it took to write 3 manually.",
+      "Level 4 - You've built a copy generation system - you feed AI your best-performing ads, brand voice guidelines, and campaign brief, and it generates platform-specific copy that consistently beats your baseline CTR. You A/B test AI-generated vs. human-written copy.",
+      "Level 5 - You run creative production at scale with AI. Your entire ad copy pipeline is AI-assisted - from brief to first draft to variations to localization. You've built prompt templates your team uses daily. You track which AI-generated hooks outperform and feed that back into the prompts."
+    ]
+  },
+  {
+    "title": "AI-powered campaign strategy & audience targeting",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You define audiences based on demographics, past campaign data, and gut feel.",
+      "Level 2 - You've used AI to analyze past campaign performance or brainstorm new audience segments.",
+      "Level 3 - You use AI to analyze your CRM/campaign data, identify high-converting segments, and suggest targeting strategies. You prompt with your funnel data and AI maps out audience-channel-message combinations you hadn't considered.",
+      "Level 4 - You've built an AI-assisted campaign planning workflow - AI ingests your historical performance data, competitive landscape, and market signals, then generates a prioritized campaign plan with budget allocation recommendations.",
+      "Level 5 - You've built an AI-powered growth intelligence system. It monitors campaign performance in real-time, surfaces anomalies, recommends reallocation, and generates strategic recommendations. Your marketing team operates on AI-generated insights, not just dashboards."
+    ]
+  },
+  {
+    "title": "AI for content marketing at scale",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write all blog posts, newsletters, and content pieces manually.",
+      "Level 2 - You've used AI to outline a blog post or generate a first draft that you heavily edited.",
+      "Level 3 - You use AI to research topics, generate detailed outlines, write first drafts, and create social media repurposing - all from a single content brief. Your content output has 3x'd without adding headcount.",
+      "Level 4 - You've built a content engine - AI generates content briefs from SEO data, writes drafts in your brand voice, creates social media snippets, email teasers, and meta descriptions. You edit for quality and publish. Your cost per content piece has dropped 60%.",
+      "Level 5 - You run a full AI-powered content operation. Programmatic SEO pages, personalized email sequences, dynamic landing page copy - all AI-generated with human QA. You've built the prompts, templates, and workflows that your entire content team runs on."
+    ]
+  },
+  {
+    "title": "AI for creative benchmarking & design direction",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You brief designers manually and provide subjective feedback on creatives.",
+      "Level 2 - You've used AI to generate mood boards, analyze competitor creatives, or get design feedback.",
+      "Level 3 - You use AI to systematically benchmark competitor creatives - you feed it landing pages, ad creatives, and email designs and get structured analyses of visual patterns, copy frameworks, and UX choices. This directly informs your creative briefs.",
+      "Level 4 - You've built a creative intelligence workflow - AI analyzes your top-performing creatives, identifies winning patterns (color, copy length, CTA placement, imagery style), and generates data-backed creative briefs for your design team.",
+      "Level 5 - You've built an AI-assisted creative system where design briefs are auto-generated from performance data, AI generates creative variations (via Midjourney/DALL-E), and you test at a velocity that was previously impossible. Your creative hit rate has measurably improved."
+    ]
+  },
+  {
+    "title": "AI for conversion rate optimization",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You run A/B tests occasionally based on best practices or gut feel.",
+      "Level 2 - You've used AI to analyze A/B test results or brainstorm landing page improvements.",
+      "Level 3 - You use AI to audit landing pages - you feed it your page, funnel data, and competitor pages, and get specific recommendations for headline, CTA, social proof placement, and form optimization. You implement and test these systematically.",
+      "Level 4 - You've built a CRO workflow with AI - it analyzes heatmap data, session recording summaries, and funnel metrics to generate prioritized optimization hypotheses. You run 3x more experiments because AI handles the analysis and ideation.",
+      "Level 5 - You've built an AI-powered CRO system. AI generates landing page variations, writes test hypotheses from user behavior data, and prioritizes experiments by expected impact. Your conversion rates improve month-over-month because the system compounds learnings."
+    ]
+  },
+  {
+    "title": "Prompt engineering for marketing workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You type basic requests into ChatGPT - \"Write me an email about X.\"",
+      "Level 2 - You've learned to provide brand voice, audience context, and desired tone in your prompts.",
+      "Level 3 - You write structured prompts with persona, brand guidelines, channel constraints, and performance benchmarks. You have 10+ reusable prompts for different marketing tasks - launch emails, ad copy, social posts, PR pitches.",
+      "Level 4 - You build prompt chains for campaigns - audience research prompt → messaging framework prompt → copy generation prompt → variation prompt. You test across models (GPT-4 for strategy, Claude for long-form, etc.). Your team uses your prompts daily.",
+      "Level 5 - You've built a marketing prompt playbook that your entire team runs on. Every campaign type has a prompt workflow. You've measured which prompts produce copy that converts vs. copy that just sounds good. You train new marketers on prompt-first workflows."
+    ]
+  },
+  {
+    "title": "AI for marketing analytics & attribution",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You look at dashboards in Google Analytics or your ad platform. You pull reports manually.",
+      "Level 2 - You've used AI to explain a metric trend, build a UTM structure, or analyze campaign data.",
+      "Level 3 - You regularly use AI to analyze multi-channel campaign data - you paste performance data into Claude and get channel-by-channel breakdowns, ROAS analysis, and budget reallocation recommendations. Decisions that took a day now take 30 minutes.",
+      "Level 4 - You've built an analytics workflow where AI ingests your marketing data (ad spend, conversions, LTV, cohort data), generates weekly performance narratives, flags anomalies, and recommends actions. Your weekly reporting is 80% automated.",
+      "Level 5 - You've built an AI-powered marketing intelligence layer. It connects to your data sources, generates real-time insights, predicts campaign performance, and auto-generates stakeholder reports. Your CMO gets AI-generated briefs that are more insightful than what the BI team manually produced."
+    ]
+  },
+  {
+    "title": "AI for email & lifecycle marketing",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write every email manually and send to broad segments.",
+      "Level 2 - You've used AI to draft email sequences or generate subject line variations.",
+      "Level 3 - You use AI to generate complete lifecycle sequences - welcome series, nurture flows, re-engagement campaigns - with personalized copy for different segments. You test AI-generated subject lines against your manual ones.",
+      "Level 4 - You've built an AI-powered email system - AI generates personalized content blocks based on user behavior, optimizes send times, and creates dynamic sequences that adapt based on engagement. Your email revenue per send has measurably increased.",
+      "Level 5 - You run hyper-personalized lifecycle marketing with AI. Every email is dynamically generated based on user data, behavior signals, and predicted intent. You've built the content generation layer, the personalization logic, and the measurement framework. This is a competitive moat, not just an optimization."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for marketers",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You open ChatGPT when you need help writing something.",
+      "Level 2 - You use 1–2 AI tools regularly - ChatGPT for copy, maybe Canva AI for quick graphics.",
+      "Level 3 - You have a marketing AI stack - ChatGPT/Claude for copy and strategy, Perplexity for competitive research, Midjourney for creative concepts, AI transcription for customer call analysis. You save 6+ hours/week.",
+      "Level 4 - You've built a marketing productivity OS - AI drafts your campaign briefs from meeting notes, generates your weekly reports from platform data, handles first-draft copy for every channel, and monitors competitors. You've measured and can prove the time savings.",
+      "Level 5 - You've built an integrated system that other marketers want to copy. Your workflow is: AI monitors → AI analyzes → AI drafts → you decide → AI executes. You've become the \"AI marketing person\" in your org and others model their workflows on yours."
+    ]
+  },
+  {
+    "title": "Leading AI adoption in your marketing team",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI individually. Your team writes and plans manually.",
+      "Level 2 - You've shared an AI trick with your team - a prompt for ad copy, a tool for social scheduling.",
+      "Level 3 - You've piloted AI tools for your marketing team - got 3+ people using AI for copy generation, research, or analytics. You've shown it saves time on real campaigns.",
+      "Level 4 - You've restructured your team's workflow around AI - defined which tools to use for each stage of campaign production, created prompt libraries, and run training sessions. Campaign turnaround time has measurably decreased.",
+      "Level 5 - You've built an AI-first marketing org. Every campaign runs through AI-assisted workflows. You've defined the AI toolkit, created the playbooks, and built a culture where AI-assisted output is the baseline. You present AI-driven efficiency gains and performance improvements to leadership."
+    ]
+  }
+]

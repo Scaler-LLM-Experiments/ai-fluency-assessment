@@ -1,0 +1,53 @@
+{
+  "currentRole": "Operations / Supply Chain Manager",
+  "targetRole": "AI-Driven Operations Leader",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI Demand Forecasting",
+      "desc": "Multi-variable models with seasonality that improve accuracy 10-15%"
+    },
+    {
+      "name": "AI Process Optimization",
+      "desc": "Feed cycle times & defect rates → get bottleneck analysis & fix recommendations"
+    },
+    {
+      "name": "AI Supplier Intelligence",
+      "desc": "Auto-generated scorecards, risk assessments & negotiation strategies"
+    },
+    {
+      "name": "AI Inventory Management",
+      "desc": "Dynamic safety stock, predictive stockouts & dead stock alerts across 1000s of SKUs"
+    },
+    {
+      "name": "AI Logistics Optimization",
+      "desc": "Route planning, carrier selection & load optimization saving 10-15% on freight"
+    },
+    {
+      "name": "AI Quality & Compliance",
+      "desc": "Predictive quality models + auto-generated audit-ready documentation"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Ops-specific prompt chains with data verification guardrails"
+    },
+    {
+      "name": "AI Operational Reporting",
+      "desc": "Raw KPIs → narrative summaries with exceptions & recommendations in 30 min"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Daily exception surfacing, supplier comms & meeting prep on autopilot"
+    },
+    {
+      "name": "AI Adoption Leadership",
+      "desc": "Map AI use cases across ops, deploy tools, train team, measure ROI"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

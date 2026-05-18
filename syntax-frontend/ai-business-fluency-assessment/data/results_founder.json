@@ -1,0 +1,53 @@
+{
+  "currentRole": "Founder / Entrepreneur",
+  "targetRole": "AI-Native Founder",
+  "bands": [
+    "AI Curious",
+    "AI Aware",
+    "AI Capable",
+    "AI Leader"
+  ],
+  "transitionSkills": [
+    {
+      "name": "AI-Powered GTM Execution",
+      "desc": "Positioning, channel strategy & launch messaging across platforms from one brief"
+    },
+    {
+      "name": "AI Investor Relations",
+      "desc": "Auto-generated updates, board prep, pitch narratives & Q&A anticipation"
+    },
+    {
+      "name": "AI Hiring & People Ops",
+      "desc": "JDs, screening rubrics, interview scorecards & onboarding - 2x faster"
+    },
+    {
+      "name": "AI Financial Command",
+      "desc": "Revenue projections, scenario modeling & runway management like a funded Series B"
+    },
+    {
+      "name": "AI Product Velocity",
+      "desc": "User stories from interviews → prioritization → specs developers build from"
+    },
+    {
+      "name": "AI Customer Intelligence",
+      "desc": "Call synthesis → churn signals → upsell detection → personalized outreach"
+    },
+    {
+      "name": "AI Operations at Scale",
+      "desc": "SOPs, vendor frameworks & compliance from ad-hoc chaos to real systems"
+    },
+    {
+      "name": "Prompt Playbook Engineering",
+      "desc": "Founder prompt library - every repeating process has an AI workflow"
+    },
+    {
+      "name": "AI Productivity OS",
+      "desc": "Virtual co-founder - think, communicate, analyze & execute 12+ hrs/week faster"
+    },
+    {
+      "name": "AI-First Culture Building",
+      "desc": "Team playbooks, hiring for AI fluency, productivity measurement"
+    }
+  ],
+  "curriculumLine": "95% of these skills are covered in the Scaler Online PGP in Business & AI curriculum - through live sessions, hands-on projects, and real-world case studies across 12 months."
+}

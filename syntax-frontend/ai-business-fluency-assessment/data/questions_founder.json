@@ -1,0 +1,112 @@
+[
+  {
+    "title": "AI for GTM strategy & launch execution",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You plan go-to-market manually - brainstorming, competitor googling, and writing everything from scratch.",
+      "Level 2 - You've used AI to brainstorm positioning ideas, draft a launch plan, or research competitors.",
+      "Level 3 - You use AI to build complete GTM strategies - you prompt with your product, ICP, market context, and AI generates positioning options, channel strategies, launch timelines, and messaging frameworks. Your launches are more structured and faster.",
+      "Level 4 - You've built a GTM workflow - AI generates your competitive positioning, creates launch messaging per channel, drafts PR pitches, writes landing page copy, and creates investor-ready launch decks. You focus on strategy and relationships, AI handles production.",
+      "Level 5 - You run your entire GTM through AI-assisted workflows. From market research to positioning to launch execution to post-launch analysis. Your launches are faster, more data-driven, and better-messaged than startups with 3x your team size."
+    ]
+  },
+  {
+    "title": "AI for fundraising & investor communication",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write pitch decks and investor updates manually.",
+      "Level 2 - You've used AI to draft a section of a pitch deck or clean up an investor update.",
+      "Level 3 - You use AI to generate investor-quality narratives - you feed it your metrics, milestones, and market context, and it produces pitch deck copy, update emails, and Q&A prep that anticipates investor concerns. Your communication is sharper.",
+      "Level 4 - You've built an investor communication workflow - AI generates your monthly updates from raw metrics, prepares you for board meetings with briefing docs, and creates data rooms with narrative context. You spend time on relationships, not production.",
+      "Level 5 - You've systematized investor relations with AI. Updates auto-generate from your dashboards. Board prep is AI-assisted. Your narrative consistency across all touchpoints (deck, updates, one-on-ones) is airtight because AI maintains it. Investors comment on your communication quality."
+    ]
+  },
+  {
+    "title": "AI for hiring, team building & people management",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You write job descriptions from scratch and screen resumes manually.",
+      "Level 2 - You've used AI to draft JDs, screening criteria, or interview questions.",
+      "Level 3 - You use AI for your entire hiring workflow - AI generates JDs from role requirements, creates screening rubrics, drafts outreach messages for candidates, and generates structured interview scorecards. Your hiring moves 2x faster.",
+      "Level 4 - You've built a people management system with AI - AI helps you write performance reviews, generate 1-on-1 agendas based on team OKRs, draft difficult feedback conversations, and create onboarding materials for new hires. You manage a growing team more effectively.",
+      "Level 5 - You've built AI-powered people operations for your startup. From hiring pipeline to onboarding to performance management - AI handles the admin so you can focus on culture and strategy. Your team of 10 runs like a team of 20 operationally."
+    ]
+  },
+  {
+    "title": "AI for financial planning & runway management",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You manage finances in a basic spreadsheet. Burn rate calculations are rough.",
+      "Level 2 - You've used AI to build a basic financial model or analyze your burn rate.",
+      "Level 3 - You use AI to build financial models - revenue projections, scenario planning, cash flow forecasts. You feed it your actuals and assumptions, and it generates models with sensitivity analysis. You make better funding and spending decisions.",
+      "Level 4 - You've built a financial planning workflow - AI monitors your actuals vs. projections, flags variance, generates board-ready financial updates, and models the impact of hiring/pricing/expansion decisions on your runway.",
+      "Level 5 - You run financial operations with AI as your virtual CFO. Monthly close reports, budget vs. actuals, fundraising scenarios, pricing optimization - all AI-assisted. You make financial decisions with the rigor of a funded startup twice your size."
+    ]
+  },
+  {
+    "title": "AI for product development & iteration",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You build product based on intuition and direct customer conversations. No systematic process.",
+      "Level 2 - You've used AI to brainstorm features, write user stories, or prioritize a backlog.",
+      "Level 3 - You use AI throughout your product process - generating user stories from customer interviews, prioritizing features based on impact/effort analysis, writing specs that your developers can actually build from. Your product velocity has increased.",
+      "Level 4 - You've built a product development system - AI synthesizes customer feedback into opportunities, generates PRDs, creates test scenarios, and writes release notes. You make product decisions faster because the analytical prep work is automated.",
+      "Level 5 - You run product development like a senior PM org with AI as force multiplier. Customer insights → opportunity identification → spec → build → measure - AI accelerates every stage. Your startup iterates faster than competitors with dedicated product teams."
+    ]
+  },
+  {
+    "title": "Prompt engineering for founder workflows",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You type whatever comes to mind into ChatGPT.",
+      "Level 2 - You've learned to give context about your startup - stage, market, customers - and get better outputs.",
+      "Level 3 - You have a library of founder-specific prompts - for investor emails, customer research, team communication, strategy sessions. You've written 15+ prompts you use weekly. AI is a daily tool, not an occasional novelty.",
+      "Level 4 - You build prompt workflows for end-to-end tasks - pitch deck creation, GTM planning, financial modeling, hiring. You chain prompts together and test across models (Claude for long analysis, GPT for creative, Perplexity for research).",
+      "Level 5 - You've codified your entire startup's AI-first approach. Every repeating process has a prompt workflow. New team members get a startup AI playbook on day one. Your prompt engineering skill is a legitimate competitive advantage in speed and quality."
+    ]
+  },
+  {
+    "title": "AI for customer development & sales",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You talk to customers informally and track feedback in your head or scattered notes.",
+      "Level 2 - You've used AI to draft sales emails, prepare for customer calls, or summarize feedback.",
+      "Level 3 - You use AI for structured customer development - AI synthesizes call notes into patterns, generates discovery questions for different customer segments, drafts sales proposals, and creates follow-up sequences. Your sales cycle is more systematic.",
+      "Level 4 - You've built a customer intelligence system - AI analyzes all customer touchpoints (calls, emails, support tickets, usage data), identifies churn signals, surfaces upsell opportunities, and generates personalized outreach. You understand your customers better than you could manually.",
+      "Level 5 - You've built AI-powered customer operations. From first touch to retention - AI handles the analytical layer. You know which customer segments are growing, which are churning, and why. Your sales process is data-driven despite having no sales ops team."
+    ]
+  },
+  {
+    "title": "AI for operations & scaling",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You handle operations manually - everything from vendor management to compliance is ad hoc.",
+      "Level 2 - You've used AI to draft SOPs, vendor emails, or process documentation.",
+      "Level 3 - You use AI to systematize your startup's operations - generating SOPs from your ad-hoc processes, creating vendor evaluation frameworks, drafting contracts, and building operational dashboards. Your chaos starts to look like a real company.",
+      "Level 4 - You've built operational systems with AI - automated reporting, vendor management workflows, compliance checklists, and team playbooks. You spend less time firefighting and more time on strategy because processes actually exist.",
+      "Level 5 - You've built a scalable operating system for your startup with AI. Operations that would normally require an ops hire run on AI-assisted workflows. Investors notice your operational maturity. You're ready to scale because the operational foundation is solid."
+    ]
+  },
+  {
+    "title": "Personal AI productivity system for founders",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You're overwhelmed and barely have time to try AI tools.",
+      "Level 2 - You use ChatGPT for quick tasks - drafting emails, brainstorming, research.",
+      "Level 3 - You have a founder's AI stack - Claude for deep thinking and analysis, Perplexity for market research, AI for meeting notes, Notion AI for documentation. You save 8+ hours/week and those hours go back into building.",
+      "Level 4 - You've built a founder productivity OS - AI drafts your investor updates from metrics, prepares you for board meetings, generates your weekly team communication, handles first drafts of everything. You've measured: AI saves you 12+ hours/week.",
+      "Level 5 - You've built an integrated system that makes you operate like a founder with a full C-suite. AI is your virtual co-founder - it helps you think strategically, communicate clearly, analyze deeply, and move fast. Other founders ask how you get so much done with a small team. This is your answer."
+    ]
+  },
+  {
+    "title": "Leading AI-first culture in your startup",
+    "sub": "Select the level that best describes where you are today.",
+    "levels": [
+      "Level 1 - You use AI personally but your team doesn't.",
+      "Level 2 - You've encouraged your team to try AI tools.",
+      "Level 3 - You've defined which AI tools your startup uses and gotten the whole team on board. At least 3 workflows now run through AI - writing, research, customer analysis.",
+      "Level 4 - You've built an AI-first startup - every team member has AI in their workflow, you've created shared prompt libraries, and you measure the productivity impact. New hires are selected partly for AI fluency.",
+      "Level 5 - AI-first is your startup's competitive advantage. It's in your culture, your hiring criteria, your processes, and your product. You operate with the output of a team 3x your size because AI amplifies every person. This is a deliberate strategy, not just tool adoption."
+    ]
+  }
+]
