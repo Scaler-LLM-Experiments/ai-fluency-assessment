@@ -122,18 +122,58 @@ function trackEvent(event, data = {}) {
 const TURNSTILE_SITEKEY = "0x4AAAAAAATOoPzNrSMFG9jp";
 const SCALER_SIGNUP_URL = "/users/v2/";
 const SCALER_VERIFY_URL = "/users/v2/verify";
+const SCALER_CSRF_URL = "/csrf-token";
+
+// Scaler's Rails backend requires X-CSRF-Token on POST /users/v2/ — without it
+// the request is treated as a non-XHR form post and the backend responds with
+// a Turbolinks.visit redirect instead of dispatching an OTP. Fetch once on
+// boot, stash on a meta tag, and read back per request.
+async function fetchAndStoreCsrfToken() {
+  try {
+    const res = await fetch(SCALER_CSRF_URL, {
+      credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+    if (!res.ok) return "";
+    const json = await res.json();
+    const token = json && json.csrf_token;
+    if (!token) return "";
+    let meta = document.querySelector('meta[name="csrf-token"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "csrf-token";
+      document.head.appendChild(meta);
+    }
+    meta.content = token;
+    return token;
+  } catch (e) {
+    return "";
+  }
+}
+
+function readCsrfToken() {
+  const m = document.querySelector('meta[name="csrf-token"]');
+  return (m && m.content) || "";
+}
 
 async function scalerAuthCall(url, payload) {
+  let csrf = readCsrfToken();
+  if (!csrf) csrf = await fetchAndStoreCsrfToken();
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "X-Accept-Flash": "true",
+  };
+  if (csrf) headers["X-CSRF-Token"] = csrf;
   try {
     const res = await fetch(url, {
       method: "POST",
       credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "X-Accept-Flash": "true",
-      },
+      headers,
       body: JSON.stringify(payload),
     });
     let json = null;
@@ -1200,6 +1240,9 @@ function App() {
 
   React.useEffect(() => {
     trackEvent("page_loaded");
+    // Warm the CSRF token so the OTP signup POST has it ready by the time the
+    // user submits the landing form. Same pattern career-profile-tool uses.
+    fetchAndStoreCsrfToken();
   }, []);
 
   return (
