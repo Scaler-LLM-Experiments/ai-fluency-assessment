@@ -1722,3 +1722,48 @@ button {
   .usermenu__label-value { max-width: 120px; font-size: 12px; }
   .usermenu__panel { min-width: 220px; }
 }
+
+/* ---------- Inline OTP on Landing ---------- */
+.field__phone--with-action {
+  grid-template-columns: 80px 1fr auto;
+}
+.btn--otp {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--brand-primary);
+  background: var(--brand-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+.btn--otp:hover:not(:disabled) { filter: brightness(1.05); }
+.btn--otp:disabled,
+.btn--otp[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn--otp-sent {
+  background: #fff;
+  color: var(--brand-primary);
+}
+.field__hint {
+  color: #667085;
+  font-weight: 400;
+  font-size: 12px;
+  margin-left: 4px;
+}
+.field--otp { margin-top: 4px; }
+
+@media (max-width: 520px) {
+  .field__phone--with-action {
+    grid-template-columns: 70px 1fr;
+  }
+  .field__phone--with-action .btn--otp {
+    grid-column: 1 / -1;
+    height: 40px;
+  }
+}

@@ -282,151 +282,6 @@ function TurnstileWidget({ onToken }) {
   return <div ref={ref} className="turnstile-wrap" />;
 }
 
-function OtpStep({ lead, turnstileToken, onVerified, onBack }) {
-  const [digits, setDigits] = React.useState(["", "", "", "", "", ""]);
-  const [error, setError] = React.useState("");
-  const [submitting, setSubmitting] = React.useState(false);
-  const [resending, setResending] = React.useState(false);
-  const [resendMsg, setResendMsg] = React.useState("");
-  const inputsRef = React.useRef([]);
-
-  React.useEffect(() => {
-    if (inputsRef.current[0]) inputsRef.current[0].focus();
-  }, []);
-
-  const setDigit = (idx, v) => {
-    const clean = v.replace(/\D/g, "").slice(0, 1);
-    const next = digits.slice();
-    next[idx] = clean;
-    setDigits(next);
-    if (clean && idx < 5 && inputsRef.current[idx + 1]) inputsRef.current[idx + 1].focus();
-  };
-
-  const handleKeyDown = (idx, e) => {
-    if (e.key === "Backspace" && !digits[idx] && idx > 0) {
-      inputsRef.current[idx - 1].focus();
-    }
-  };
-
-  const handlePaste = (e) => {
-    const txt = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g, "");
-    if (!txt) return;
-    e.preventDefault();
-    const next = ["", "", "", "", "", ""];
-    for (let i = 0; i < 6 && i < txt.length; i++) next[i] = txt[i];
-    setDigits(next);
-    const focusIdx = Math.min(txt.length, 5);
-    if (inputsRef.current[focusIdx]) inputsRef.current[focusIdx].focus();
-  };
-
-  const submit = async () => {
-    setError("");
-    const otp = digits.join("");
-    if (!/^\d{6}$/.test(otp)) { setError("Enter the 6-digit code we sent to your phone."); return; }
-    setSubmitting(true);
-    const { ok, status, json } = await scalerAuthCall(SCALER_VERIFY_URL, {
-      user: {
-        phone_number: "+91-" + lead.phone,
-        otp,
-        email: lead.email,
-        type: "marketing",
-        skip_existing_user_check: true,
-      },
-    });
-    setSubmitting(false);
-    if (!ok) {
-      const msg = (json && (json.flashError || json.message)) ||
-        (status === 422 ? "Invalid OTP. Please try again." :
-         status === 406 ? "OTP expired. Please resend a new code." :
-         "Verification failed. Please try again.");
-      trackEvent("otp_failed", { status });
-      setError(msg);
-      return;
-    }
-    trackEvent("otp_verified");
-    onVerified();
-  };
-
-  const resend = async () => {
-    if (resending) return;
-    setResending(true);
-    setResendMsg("Sending...");
-    const { ok } = await scalerAuthCall(SCALER_SIGNUP_URL, {
-      user: {
-        name: lead.name,
-        email: lead.email,
-        phone_number: "+91-" + lead.phone,
-        skip_existing_user_check: true,
-      },
-      "cf-turnstile-response": turnstileToken,
-      type: "marketing",
-    });
-    setResendMsg(ok ? "OTP sent" : "Failed, try again");
-    setTimeout(() => { setResending(false); setResendMsg(""); }, 30000);
-  };
-
-  return (
-    <section className="land">
-      <div className="land-l">
-        <div className="land-l__brand">
-          <img src="./assets/logo-white.svg" alt="Scaler" />
-          <span className="land-l__brand-divider"></span>
-          <span className="land-l__brand-sub">AI Fluency</span>
-        </div>
-        <div className="land-l__main">
-          <div className="land-l__eyebrow">One quick step</div>
-          <h1 className="land-l__title">Verify your phone.</h1>
-          <p className="land-l__sub">We've sent a 6-digit code to your phone to keep your report personal to you.</p>
-        </div>
-        <div></div>
-      </div>
-
-      <div className="land-r">
-        <div className="land-r__card">
-          <div className="land-r__icon"><Icon name="lock" size={22} /></div>
-          <h2 className="land-r__title">Enter the OTP</h2>
-          <p className="land-r__sub">Sent to +91 {lead.phone}</p>
-
-          <div className="otp-row" onPaste={handlePaste}>
-            {digits.map((d, i) => (
-              <input
-                key={i}
-                ref={(el) => (inputsRef.current[i] = el)}
-                className="otp-cell"
-                inputMode="numeric"
-                maxLength={1}
-                value={d}
-                onChange={(e) => setDigit(i, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(i, e)}
-                aria-label={`OTP digit ${i + 1}`}
-              />
-            ))}
-          </div>
-          {error && <div className="field__err" style={{ marginTop: 6 }}>{error}</div>}
-
-          <button
-            className="btn btn--primary btn--lg btn--block land-r__cta"
-            onClick={submit}
-            disabled={submitting}
-          >
-            {submitting ? "Verifying..." : "Verify & Continue"}
-            <Icon name="arrow_right" size={16} />
-          </button>
-
-          <div className="otp-meta">
-            <span>Didn't get it? </span>
-            <a onClick={resend} className={resending ? "otp-link otp-link--disabled" : "otp-link"}>Resend OTP</a>
-            {resendMsg && <span className="otp-meta__status"> — {resendMsg}</span>}
-          </div>
-          <div className="otp-meta">
-            <a className="otp-link" onClick={onBack}>← Change phone number</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ---------- Scaler sign-out ---------- */
 const SCALER_SIGN_OUT_URL = "/users/sign_out";
 async function scalerSignOut() {
@@ -537,20 +392,31 @@ function Foot() {
 /* ============================================================
    STAGE 1 - LANDING (single-fold split)
    ============================================================ */
-function Landing({ onStart, initialValues, initialTurnstileToken }) {
+function Landing({ onVerified, initialValues, initialTurnstileToken }) {
   const [name, setName] = useState((initialValues && initialValues.name) || "");
   const [email, setEmail] = useState((initialValues && initialValues.email) || "");
   const [phone, setPhone] = useState((initialValues && initialValues.phone) || "");
   const [touched, setTouched] = useState({ name: false, email: false, phone: false });
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState(initialTurnstileToken || "");
-  const [submitting, setSubmitting] = useState(false);
   const [serverErr, setServerErr] = useState("");
+
+  // OTP phase: "idle" → "sending" → "sent" → "verifying"
+  const [otpPhase, setOtpPhase] = useState("idle");
+  const [otpSentTo, setOtpSentTo] = useState("");
+  const [digits, setDigits] = useState(["", "", "", "", "", ""]);
+  const [otpErr, setOtpErr] = useState("");
+  const [resending, setResending] = useState(false);
+  const [resendMsg, setResendMsg] = useState("");
+  const otpInputsRef = React.useRef([]);
 
   const nameValid = name.trim().length > 1;
   const emailValid = /\S+@\S+\.\S+/.test(email.trim());
   const phoneValid = phone.replace(/\D/g, "").length >= 10;
-  const canStart = nameValid && emailValid && phoneValid;
+  const canRequestOtp = nameValid && emailValid && phoneValid && !!turnstileToken;
+  const otpDigits = digits.join("");
+  const otpComplete = /^\d{6}$/.test(otpDigits);
+  const otpSent = otpPhase === "sent" || otpPhase === "verifying";
 
   const showNameErr = (touched.name || submitAttempted) && !nameValid;
   const showEmailErr = (touched.email || submitAttempted) && !emailValid;
@@ -560,29 +426,31 @@ function Landing({ onStart, initialValues, initialTurnstileToken }) {
   const emailErrMsg = email.trim().length === 0 ? "Please enter your work email" : "Enter a valid email address";
   const phoneErrMsg = phone.trim().length === 0 ? "Please enter your phone number" : "Enter a valid 10-digit phone number";
 
-  const handleSubmit = async () => {
+  const cleanPhone = () => phone.replace(/\D/g, "").slice(-10);
+
+  const sendOtp = async () => {
     setSubmitAttempted(true);
     setTouched({ name: true, email: true, phone: true });
     setServerErr("");
-    if (!canStart) return;
+    if (!nameValid || !emailValid || !phoneValid) return;
     if (!turnstileToken) {
       setServerErr("Please complete the verification check below, then try again.");
       return;
     }
-    const cleanPhone = phone.replace(/\D/g, "").slice(-10);
-    setSubmitting(true);
+    setOtpPhase("sending");
+    const cp = cleanPhone();
     const { ok, status, json } = await scalerAuthCall(SCALER_SIGNUP_URL, {
       user: {
         name: name.trim(),
         email: email.trim(),
-        phone_number: "+91-" + cleanPhone,
+        phone_number: "+91-" + cp,
         skip_existing_user_check: true,
       },
       "cf-turnstile-response": turnstileToken,
       type: "marketing",
     });
-    setSubmitting(false);
     if (!ok) {
+      setOtpPhase("idle");
       const msg = (json && (json.flashError || json.message)) ||
         (status === 422 ? "Please check your details and try again." :
          status === 429 ? "Too many attempts. Please wait a few minutes." :
@@ -591,7 +459,85 @@ function Landing({ onStart, initialValues, initialTurnstileToken }) {
       return;
     }
     trackEvent("otp_sent");
-    onStart({ name: name.trim(), email: email.trim(), phone: cleanPhone, turnstileToken });
+    trackEvent("started");
+    setOtpSentTo(cp);
+    setOtpPhase("sent");
+    setTimeout(() => { if (otpInputsRef.current[0]) otpInputsRef.current[0].focus(); }, 50);
+  };
+
+  const setDigit = (idx, v) => {
+    const clean = v.replace(/\D/g, "").slice(0, 1);
+    const next = digits.slice();
+    next[idx] = clean;
+    setDigits(next);
+    if (clean && idx < 5 && otpInputsRef.current[idx + 1]) otpInputsRef.current[idx + 1].focus();
+  };
+  const handleOtpKeyDown = (idx, e) => {
+    if (e.key === "Backspace" && !digits[idx] && idx > 0) otpInputsRef.current[idx - 1].focus();
+  };
+  const handleOtpPaste = (e) => {
+    const txt = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g, "");
+    if (!txt) return;
+    e.preventDefault();
+    const next = ["", "", "", "", "", ""];
+    for (let i = 0; i < 6 && i < txt.length; i++) next[i] = txt[i];
+    setDigits(next);
+    const focusIdx = Math.min(txt.length, 5);
+    if (otpInputsRef.current[focusIdx]) otpInputsRef.current[focusIdx].focus();
+  };
+
+  const verifyAndStart = async () => {
+    setOtpErr("");
+    if (!otpComplete) { setOtpErr("Enter the 6-digit code we sent to your phone."); return; }
+    setOtpPhase("verifying");
+    const { ok, status, json } = await scalerAuthCall(SCALER_VERIFY_URL, {
+      user: {
+        phone_number: "+91-" + otpSentTo,
+        otp: otpDigits,
+        email: email.trim(),
+        type: "marketing",
+        skip_existing_user_check: true,
+      },
+    });
+    if (!ok) {
+      setOtpPhase("sent");
+      const msg = (json && (json.flashError || json.message)) ||
+        (status === 422 ? "Invalid OTP. Please try again." :
+         status === 406 ? "OTP expired. Please resend a new code." :
+         "Verification failed. Please try again.");
+      trackEvent("otp_failed", { status });
+      setOtpErr(msg);
+      return;
+    }
+    trackEvent("otp_verified");
+    onVerified({ name: name.trim(), email: email.trim(), phone: otpSentTo, turnstileToken });
+  };
+
+  const resendOtp = async () => {
+    if (resending) return;
+    setResending(true);
+    setResendMsg("Sending...");
+    setOtpErr("");
+    const { ok } = await scalerAuthCall(SCALER_SIGNUP_URL, {
+      user: {
+        name: name.trim(),
+        email: email.trim(),
+        phone_number: "+91-" + otpSentTo,
+        skip_existing_user_check: true,
+      },
+      "cf-turnstile-response": turnstileToken,
+      type: "marketing",
+    });
+    setResendMsg(ok ? "OTP sent" : "Failed, try again");
+    setTimeout(() => { setResending(false); setResendMsg(""); }, 30000);
+  };
+
+  const changeNumber = () => {
+    setOtpPhase("idle");
+    setOtpSentTo("");
+    setDigits(["", "", "", "", "", ""]);
+    setOtpErr("");
+    setResendMsg("");
   };
 
   return (
@@ -697,7 +643,7 @@ function Landing({ onStart, initialValues, initialTurnstileToken }) {
           </div>
           <div className="field">
             <label className="field__label">Phone number <span className="field__req">*</span></label>
-            <div className="field__phone">
+            <div className="field__phone field__phone--with-action">
               <input className="field__input" value="+91" readOnly />
               <input
                 className={"field__input" + (showPhoneErr ? " field__input--err" : "")}
@@ -708,21 +654,64 @@ function Landing({ onStart, initialValues, initialTurnstileToken }) {
                 inputMode="numeric"
                 required
                 aria-invalid={showPhoneErr}
+                disabled={otpSent}
+                readOnly={otpSent}
               />
+              <button
+                type="button"
+                className={"btn btn--otp" + (otpSent ? " btn--otp-sent" : "")}
+                onClick={otpSent ? changeNumber : sendOtp}
+                disabled={otpPhase === "sending" || (!otpSent && !canRequestOtp)}
+                aria-disabled={otpPhase === "sending" || (!otpSent && !canRequestOtp)}
+              >
+                {otpPhase === "sending" ? "Sending..." :
+                 otpSent ? "Change" :
+                 "Get OTP"}
+              </button>
             </div>
             {showPhoneErr && <div className="field__err">{phoneErrMsg}</div>}
           </div>
+
+          {otpSent && (
+            <div className="field field--otp">
+              <label className="field__label">
+                Enter OTP <span className="field__req">*</span>
+                <span className="field__hint"> — sent to +91 {otpSentTo}</span>
+              </label>
+              <div className="otp-row" onPaste={handleOtpPaste}>
+                {digits.map((d, i) => (
+                  <input
+                    key={i}
+                    ref={(el) => (otpInputsRef.current[i] = el)}
+                    className="otp-cell"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={d}
+                    onChange={(e) => setDigit(i, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                    aria-label={`OTP digit ${i + 1}`}
+                  />
+                ))}
+              </div>
+              {otpErr && <div className="field__err">{otpErr}</div>}
+              <div className="otp-meta">
+                <span>Didn't get it? </span>
+                <a onClick={resendOtp} className={resending ? "otp-link otp-link--disabled" : "otp-link"}>Resend OTP</a>
+                {resendMsg && <span className="otp-meta__status"> — {resendMsg}</span>}
+              </div>
+            </div>
+          )}
 
           <TurnstileWidget onToken={setTurnstileToken} />
           {serverErr && <div className="field__err" style={{ marginTop: 4 }}>{serverErr}</div>}
 
           <button
             className="btn btn--primary btn--lg btn--block land-r__cta"
-            onClick={handleSubmit}
-            aria-disabled={!canStart || submitting}
-            disabled={submitting}
+            onClick={verifyAndStart}
+            aria-disabled={!otpSent || !otpComplete || otpPhase === "verifying"}
+            disabled={!otpSent || !otpComplete || otpPhase === "verifying"}
           >
-            {submitting ? "Sending OTP..." : "Start Assessment"}
+            {otpPhase === "verifying" ? "Verifying..." : "Start Assessment"}
             <Icon name="arrow_right" size={16} />
           </button>
 
@@ -1429,7 +1418,7 @@ function App() {
 
   return (
     <div className="page">
-      <div className={(stage === "landing" || stage === "otp" || stage === "bootstrap") ? "bar-wrap bar-wrap--landing" : "bar-wrap"}>
+      <div className={(stage === "landing" || stage === "bootstrap") ? "bar-wrap bar-wrap--landing" : "bar-wrap"}>
         <Bar user={sessionUser} onSignOut={handleSignOut} />
       </div>
 
@@ -1444,22 +1433,13 @@ function App() {
         <Landing
           initialValues={lead}
           initialTurnstileToken={turnstileToken}
-          onStart={(l) => {
+          onVerified={(l) => {
             const leadOnly = { name: l.name, email: l.email, phone: l.phone };
             setLead(leadOnly);
             setTurnstileTokenState(l.turnstileToken || "");
             setTrackingLead(leadOnly);
-            trackEvent("started");
-            setStage("otp");
+            setStage("role");
           }}
-        />
-      )}
-      {stage === "otp" && (
-        <OtpStep
-          lead={lead}
-          turnstileToken={turnstileToken}
-          onBack={() => setStage("landing")}
-          onVerified={() => setStage("role")}
         />
       )}
       {stage === "role" && (
