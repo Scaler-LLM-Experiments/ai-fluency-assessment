@@ -1129,7 +1129,25 @@
       .results-body { padding: 24px 16px 0; }
       .transition-card { padding: 20px; }
     }
+    /* ── OTP screen ── */
+    .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 18px 0 8px; }
+    .otp-digit {
+      width: 48px; height: 56px; border: 1.5px solid var(--gray-200); border-radius: 8px;
+      font-size: 22px; font-weight: 600; font-family: inherit; color: var(--gray-900);
+      text-align: center; outline: none; transition: border-color 0.15s; background: white;
+    }
+    .otp-digit:focus { border-color: var(--blue); }
+    .otp-error { color: #DC2626; font-size: 12px; margin-top: 6px; min-height: 16px; }
+    .otp-meta { font-size: 12px; color: var(--gray-500); margin-top: 10px; text-align: center; }
+    .otp-meta a { color: var(--blue); cursor: pointer; text-decoration: none; font-weight: 600; }
+    .otp-meta a[disabled] { color: var(--gray-400); cursor: not-allowed; pointer-events: none; }
+    .turnstile-wrap { margin: 12px 0 0; display: flex; justify-content: center; min-height: 65px; }
+    .login-btn:disabled { background: var(--gray-400); cursor: not-allowed; }
+    @media (max-width: 768px) {
+      .otp-digit { width: 40px; height: 48px; font-size: 18px; }
+    }
   </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad" async defer></script>
 </head>
 <body>
 
@@ -1210,10 +1228,57 @@
             <input class="login-input" id="inp-phone" type="tel" placeholder="98765 43210" autocomplete="tel" required />
           </div>
         </div>
-        <button type="submit" class="login-btn">START ASSESSMENT &rarr;</button>
+        <div class="turnstile-wrap" id="turnstile-container"></div>
+        <div class="otp-error" id="login-error"></div>
+        <button type="submit" class="login-btn" id="login-submit-btn">START ASSESSMENT &rarr;</button>
       </form>
 
-      <p class="login-footer-text">Your data is secure and never shared.</p>
+      <p class="login-footer-text">By continuing you agree to receive an OTP. Your data is secure and never shared.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 1B — OTP VERIFICATION
+══════════════════════════════════════════════════════ -->
+<div id="screen-otp" class="screen login-screen">
+  <div class="login-left">
+    <div class="login-left-inner">
+      <div class="logo-bar">
+        <img src="/ai-business-fluency-assessment/scaler-logo-white.svg" alt="Scaler" height="28" />
+      </div>
+      <div class="login-eyebrow">AI Fluency Assessment</div>
+      <h1 class="login-title">One quick step before we begin.</h1>
+      <p class="login-subtitle">We've sent a verification code to your phone. Enter it to unlock your assessment.</p>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-form-box">
+      <div class="login-form-icon">
+        <svg viewBox="0 0 26 26" fill="none"><path d="M5 10V8a8 8 0 1 1 16 0v2" stroke="#3940F0" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="18" height="12" rx="2" stroke="#3940F0" stroke-width="2"/></svg>
+      </div>
+      <div class="login-form-title">Verify your phone</div>
+      <div class="login-form-sub">Enter the 6-digit code sent to <span id="otp-phone-display"></span></div>
+
+      <form id="otp-form" onsubmit="handleOtpSubmit(event)">
+        <div class="otp-inputs" role="group" aria-label="OTP digits">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="0" aria-label="OTP digit 1" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="1" aria-label="OTP digit 2" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="2" aria-label="OTP digit 3" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="3" aria-label="OTP digit 4" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="4" aria-label="OTP digit 5" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-otp-index="5" aria-label="OTP digit 6" />
+        </div>
+        <div class="otp-error" id="otp-error"></div>
+        <button type="submit" class="login-btn" id="otp-submit-btn">VERIFY &amp; CONTINUE &rarr;</button>
+      </form>
+
+      <p class="otp-meta">
+        Didn't get it? <a id="otp-resend">Resend OTP</a>
+        <span id="otp-resend-status"></span>
+      </p>
+      <p class="otp-meta"><a id="otp-back">&larr; Change phone number</a></p>
     </div>
   </div>
 
@@ -1468,17 +1533,216 @@ function showScreen(id) {
 }
 
 /* ─────────────────────────────────────────────────────
-   SCREEN 1 — LOGIN
+   SCREEN 1 — LOGIN + OTP (Scaler auth)
 ───────────────────────────────────────────────────── */
-function handleLogin(e) {
+const TURNSTILE_SITEKEY = '0x4AAAAAAATOoPzNrSMFG9jp';
+const SCALER_SIGNUP_URL = '/users/v2/';
+const SCALER_VERIFY_URL = '/users/v2/verify';
+let turnstileWidgetId = null;
+let turnstileToken = '';
+
+function onTurnstileLoad() {
+  if (!window.turnstile) return;
+  const container = document.getElementById('turnstile-container');
+  if (!container) return;
+  turnstileWidgetId = window.turnstile.render(container, {
+    sitekey: TURNSTILE_SITEKEY,
+    appearance: 'interaction-only',
+    callback: function (token) { turnstileToken = token; },
+    'expired-callback': function () { turnstileToken = ''; },
+    'error-callback': function () { turnstileToken = ''; }
+  });
+}
+window.onTurnstileLoad = onTurnstileLoad;
+
+function setLoginError(msg) {
+  const el = document.getElementById('login-error');
+  if (el) el.textContent = msg || '';
+}
+function setOtpError(msg) {
+  const el = document.getElementById('otp-error');
+  if (el) el.textContent = msg || '';
+}
+
+async function callScalerAuth(url, payload) {
+  const res = await fetch(url, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Accept-Flash': 'true'
+    },
+    body: JSON.stringify(payload)
+  });
+  let json = null;
+  try { json = await res.json(); } catch (_) {}
+  return { ok: res.ok, status: res.status, json };
+}
+
+async function handleLogin(e) {
   e.preventDefault();
-  state.name  = document.getElementById('inp-name').value.trim();
-  state.email = document.getElementById('inp-email').value.trim();
-  state.phone = document.getElementById('inp-phone').value.trim();
+  setLoginError('');
+  const name  = document.getElementById('inp-name').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+
+  if (!/^\d{10}$/.test(phone)) {
+    setLoginError('Please enter a valid 10-digit phone number.');
+    return;
+  }
+  if (!turnstileToken) {
+    setLoginError('Please complete the verification check, then try again.');
+    if (window.turnstile && turnstileWidgetId !== null) {
+      window.turnstile.execute(turnstileWidgetId);
+    }
+    return;
+  }
+
+  state.name  = name;
+  state.email = email;
+  state.phone = phone;
+
+  const btn = document.getElementById('login-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'SENDING OTP…';
+
+  const payload = {
+    user: {
+      name: name,
+      email: email,
+      phone_number: '+91-' + phone,
+      skip_existing_user_check: true
+    },
+    'cf-turnstile-response': turnstileToken,
+    type: 'marketing'
+  };
+
+  const { ok, status, json } = await callScalerAuth(SCALER_SIGNUP_URL, payload);
+
+  btn.disabled = false;
+  btn.textContent = 'START ASSESSMENT →';
+  // Reset turnstile token after use (one-time)
+  if (window.turnstile && turnstileWidgetId !== null) {
+    window.turnstile.reset(turnstileWidgetId);
+  }
+  turnstileToken = '';
+
+  if (!ok) {
+    const msg = (json && (json.flashError || json.message)) ||
+                (status === 422 ? 'Please check your details and try again.' :
+                 status === 429 ? 'Too many attempts. Please wait a few minutes.' :
+                 'Could not send OTP. Please try again.');
+    setLoginError(msg);
+    return;
+  }
+
   trackEvent('started');
+  trackEvent('otp_sent');
+  document.getElementById('otp-phone-display').textContent = '+91 ' + phone;
+  showScreen('screen-otp');
+  setTimeout(function () {
+    const first = document.querySelector('#screen-otp .otp-digit');
+    if (first) first.focus();
+  }, 80);
+}
+
+function getOtpValue() {
+  return Array.from(document.querySelectorAll('#screen-otp .otp-digit'))
+    .map(function (i) { return i.value; }).join('');
+}
+
+async function handleOtpSubmit(e) {
+  e.preventDefault();
+  setOtpError('');
+  const otp = getOtpValue();
+  if (!/^\d{4,6}$/.test(otp)) {
+    setOtpError('Enter the code we sent to your phone.');
+    return;
+  }
+  const btn = document.getElementById('otp-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'VERIFYING…';
+
+  const payload = {
+    user: {
+      phone_number: '+91-' + state.phone,
+      otp: otp,
+      email: state.email,
+      type: 'marketing',
+      skip_existing_user_check: true
+    }
+  };
+  const { ok, status, json } = await callScalerAuth(SCALER_VERIFY_URL, payload);
+  btn.disabled = false;
+  btn.textContent = 'VERIFY & CONTINUE →';
+
+  if (!ok) {
+    const msg = (json && (json.flashError || json.message)) ||
+                (status === 422 ? 'Invalid OTP. Please try again.' :
+                 status === 406 ? 'OTP expired. Please resend a new code.' :
+                 'Verification failed. Please try again.');
+    trackEvent('otp_failed', { status: status });
+    setOtpError(msg);
+    return;
+  }
+
+  trackEvent('otp_verified');
   buildRoleScreen();
   showScreen('screen-role');
 }
+
+async function handleOtpResend() {
+  const link = document.getElementById('otp-resend');
+  const statusEl = document.getElementById('otp-resend-status');
+  if (!link || link.hasAttribute('disabled')) return;
+  link.setAttribute('disabled', 'true');
+  statusEl.textContent = ' — sending…';
+
+  const payload = {
+    user: {
+      name: state.name,
+      email: state.email,
+      phone_number: '+91-' + state.phone,
+      skip_existing_user_check: true
+    },
+    type: 'marketing'
+  };
+  const { ok } = await callScalerAuth(SCALER_SIGNUP_URL, payload);
+  statusEl.textContent = ok ? ' — OTP sent' : ' — failed, try again';
+  setTimeout(function () {
+    link.removeAttribute('disabled');
+    statusEl.textContent = '';
+  }, 30000);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // OTP auto-advance + backspace
+  const digits = document.querySelectorAll('#screen-otp .otp-digit');
+  digits.forEach(function (input, idx) {
+    input.addEventListener('input', function (e) {
+      const v = e.target.value.replace(/\D/g, '');
+      e.target.value = v.slice(0, 1);
+      if (v && idx < digits.length - 1) digits[idx + 1].focus();
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !input.value && idx > 0) digits[idx - 1].focus();
+    });
+    input.addEventListener('paste', function (e) {
+      const txt = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      if (!txt) return;
+      e.preventDefault();
+      digits.forEach(function (d, i) { d.value = txt[i] || ''; });
+      const next = Math.min(txt.length, digits.length - 1);
+      digits[next].focus();
+    });
+  });
+  const resend = document.getElementById('otp-resend');
+  if (resend) resend.addEventListener('click', handleOtpResend);
+  const back = document.getElementById('otp-back');
+  if (back) back.addEventListener('click', function () { showScreen('screen-login'); });
+});
 
 /* ─────────────────────────────────────────────────────
    SCREEN 2 — ROLE SELECTION
