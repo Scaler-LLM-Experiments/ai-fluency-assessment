@@ -676,7 +676,6 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
             <div className="field field--otp">
               <label className="field__label">
                 Enter OTP <span className="field__req">*</span>
-                <span className="field__hint"> — sent to +91 {otpSentTo}</span>
               </label>
               <div className="otp-row" onPaste={handleOtpPaste}>
                 {digits.map((d, i) => (
