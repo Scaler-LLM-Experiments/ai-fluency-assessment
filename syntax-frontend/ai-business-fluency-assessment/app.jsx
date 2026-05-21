@@ -264,7 +264,7 @@ function TurnstileWidget({ onToken }) {
       if (widgetIdRef.current !== null) return;
       widgetIdRef.current = window.turnstile.render(ref.current, {
         sitekey: TURNSTILE_SITEKEY,
-        appearance: "interaction-only",
+        appearance: "always",
         callback: (t) => onToken(t),
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),
