@@ -269,6 +269,21 @@ button {
   background: var(--surface-0);
 }
 .role__inner { max-width: 1080px; margin: 0 auto; }
+
+/* When RoleSelect is paired with the navy ContextPanel inside .land,
+   it occupies the right column (1fr) — narrower than the full-width
+   variant, so reduce padding and let the title scale down. */
+.land--role { align-items: stretch; }
+.role.role--paired {
+  padding: 56px 56px 80px;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+.role.role--paired .role__inner { max-width: 640px; margin: 0; }
+.role.role--paired .role__title { font-size: 44px; }
+.role.role--paired .role__sub { font-size: 17px; margin-bottom: 40px; }
+.role.role--paired .role__grid { grid-template-columns: 1fr; margin-bottom: 32px; }
 .role__eyebrow {
   font-size: 12px; font-weight: 500;
   letter-spacing: 0.14em;
@@ -942,6 +957,14 @@ button {
 
   .role { padding: 64px 32px 80px; }
   .role__grid { grid-template-columns: repeat(2, 1fr); }
+  .role.role--paired {
+    padding: 48px 32px 64px;
+    display: block;
+    min-height: 0;
+  }
+  .role.role--paired .role__inner { max-width: none; }
+  .role.role--paired .role__title { font-size: 36px; }
+  .role.role--paired .role__grid { grid-template-columns: repeat(2, 1fr); }
 
   .quiz { padding: 56px 32px 80px; }
 
