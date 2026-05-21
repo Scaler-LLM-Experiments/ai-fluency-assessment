@@ -302,6 +302,55 @@ app.post('/api/sync-failures/:id/retry', requireAuth, async (req, res) => {
   }
 });
 
+// Funnel counts by event, deduped by user_id. Optional ?days=N (default 30,
+// max 365) to scope to a recent window. Returns each step's distinct-user
+// count plus the implied drop-off between adjacent steps.
+app.get('/api/funnel', requireAuth, async (req, res) => {
+  if (!pool) return res.status(503).json({ error: 'db disabled' });
+  const days = Math.min(Math.max(Number(req.query.days) || 30, 1), 365);
+  try {
+    const { rows } = await pool.query(`
+      SELECT
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'page_loaded')       AS page_loaded,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'otp_sent')          AS otp_sent,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'otp_verified')      AS otp_verified,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'started')           AS started,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'role_selected')     AS role_selected,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'completed')         AS completed,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'requested_callback') AS requested_callback,
+        COUNT(DISTINCT user_id) FILTER (WHERE event = 'clicked_curriculum') AS clicked_curriculum
+      FROM events
+      WHERE created_at > NOW() - ($1 || ' days')::INTERVAL
+    `, [String(days)]);
+    const r = rows[0];
+    const num = (k) => Number(r[k] || 0);
+    const otpSent = num('otp_sent');
+    const otpVerified = num('otp_verified');
+    const roleSelected = num('role_selected');
+    const completed = num('completed');
+    res.json({
+      window_days: days,
+      counts: {
+        page_loaded:        num('page_loaded'),
+        otp_sent:           otpSent,
+        otp_verified:       otpVerified,
+        started:            num('started'),
+        role_selected:      roleSelected,
+        completed:          completed,
+        requested_callback: num('requested_callback'),
+        clicked_curriculum: num('clicked_curriculum'),
+      },
+      drop_off: {
+        otp_sent_to_verified:        Math.max(otpSent - otpVerified, 0),
+        verified_to_role_selected:   Math.max(otpVerified - roleSelected, 0),
+        role_selected_to_completed:  Math.max(roleSelected - completed, 0),
+      },
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/stats', requireAuth, async (req, res) => {
   if (!pool) return res.status(503).json({ error: 'db disabled' });
   try {
