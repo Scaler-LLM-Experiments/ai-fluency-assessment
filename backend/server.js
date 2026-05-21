@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const crmSync = require('./lib/sync-worker');
 const { verifyToken, renderReport } = require('./lib/report');
+const webengage = require('./lib/webengage');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -176,6 +177,13 @@ app.post('/api/track', async (req, res) => {
     );
 
     switch (d.event) {
+      case 'otp_verified':
+        webengage.trackEvent(
+          d.phone || d.user_id,
+          'ai_fluency_otp',
+          { phone: d.phone || '', email: d.email || '', name: d.name || '' }
+        );
+        break;
       case 'role_selected':
         await pool.query(
           `UPDATE leads SET role=$2, status='in_assessment', updated_at=NOW() WHERE user_id=$1`,
@@ -188,13 +196,37 @@ app.post('/api/track', async (req, res) => {
           [d.user_id, d.question_number || 0, `in_assessment (Q${d.question_number || 0}/10)`]
         );
         break;
-      case 'completed':
+      case 'completed': {
+        const score = d.score != null && d.score !== '' ? Number(d.score) : null;
+        const band = d.band || null;
         await pool.query(
           `UPDATE leads SET status='completed', score=$2, band=$3, last_question=10,
              completed=TRUE, updated_at=NOW() WHERE user_id=$1`,
-          [d.user_id, d.score != null && d.score !== '' ? Number(d.score) : null, d.band || null]
+          [d.user_id, score, band]
+        );
+        webengage.trackEvent(
+          d.phone || d.user_id,
+          'ai_fluency_submitted',
+          {
+            score, band,
+            current_role: d.role || '',
+            total_work_experience: d.work_experience || '',
+            career_goals: d.career_goals || '',
+            phone: d.phone || '',
+            email: d.email || '',
+            name: d.name || ''
+          },
+          {
+            current_role: d.role || '',
+            total_work_experience: d.work_experience || '',
+            career_goals: d.career_goals || '',
+            phone: d.phone || '',
+            email: d.email || '',
+            name: d.name || ''
+          }
         );
         break;
+      }
       case 'requested_callback':
         await pool.query(`UPDATE leads SET requested_callback=TRUE, updated_at=NOW() WHERE user_id=$1`, [d.user_id]);
         break;
