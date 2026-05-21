@@ -462,6 +462,11 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
       setServerErr(msg);
       return;
     }
+    // Hydrate TRACK_STATE before firing events — otherwise "started" /
+    // "otp_sent" rows land in the sheet with blank name/email/phone, even
+    // though the user just typed them. setTrackingLead is otherwise only
+    // called post-verification (line ~1464) or via auto-login.
+    setTrackingLead({ name: name.trim(), email: email.trim(), phone: cp });
     trackEvent("otp_sent");
     trackEvent("started");
     setOtpSentTo(cp);
