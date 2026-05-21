@@ -543,59 +543,7 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
   return (
     <section className="land">
       {/* LEFT - dark navy */}
-      <div className="land-l">
-        <div className="land-l__brand">
-          <img src="./assets/logo-white.svg" alt="Scaler" />
-          <span className="land-l__brand-divider"></span>
-          <span className="land-l__brand-sub">AI Fluency</span>
-        </div>
-
-        <div className="land-l__main">
-          <div className="land-l__eyebrow">Free · Takes 3 minutes</div>
-          <h1 className="land-l__title">Your AI Fluency Report</h1>
-          <p className="land-l__sub">
-            Find out exactly where you stand with AI - tailored to your role,
-            your workflows, and the tools you should be using.
-          </p>
-          <div className="land-l__mobile-eyebrow">Why it matters</div>
-
-          <div className="land-l__stats">
-            <div className="land-l__stat">
-              <div className="land-l__stat__n">2.5×</div>
-              <div className="land-l__stat__l">average career growth for AI-fluent professionals</div>
-            </div>
-            <div className="land-l__stat">
-              <div className="land-l__stat__n">73%</div>
-              <div className="land-l__stat__l">of business roles now require AI fluency</div>
-            </div>
-            <div className="land-l__stat">
-              <div className="land-l__stat__n">12 mo</div>
-              <div className="land-l__stat__l">before the gap becomes uncatchable</div>
-            </div>
-          </div>
-
-          <div className="land-l__checks">
-            <div className="land-l__check">
-              <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
-              Skill Gap Assessment
-            </div>
-            <div className="land-l__check">
-              <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
-              Personalized AI Roadmap
-            </div>
-            <div className="land-l__check">
-              <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
-              Curriculum Match Score
-            </div>
-            <div className="land-l__check">
-              <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
-              Career Transition Path
-            </div>
-          </div>
-        </div>
-
-        <div></div>
-      </div>
+      <ContextPanel />
 
       {/* RIGHT - white form */}
       <div className="land-r">
@@ -725,6 +673,73 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
 }
 
 /* ============================================================
+   Shared: navy context panel — reused on Landing + RoleSelect so
+   redirected (logged-in) users land on step 2 with full context.
+   `compact` trims stats/checks to keep the role grid prominent.
+   ============================================================ */
+function ContextPanel({ compact = false }) {
+  return (
+    <div className="land-l">
+      <div className="land-l__brand">
+        <img src="./assets/logo-white.svg" alt="Scaler" />
+        <span className="land-l__brand-divider"></span>
+        <span className="land-l__brand-sub">AI Fluency</span>
+      </div>
+
+      <div className="land-l__main">
+        <div className="land-l__eyebrow">Free · Takes 3 minutes</div>
+        <h1 className="land-l__title">Your AI Fluency Report</h1>
+        <p className="land-l__sub">
+          Find out exactly where you stand with AI - tailored to your role,
+          your workflows, and the tools you should be using.
+        </p>
+        <div className="land-l__mobile-eyebrow">Why it matters</div>
+
+        <div className="land-l__stats">
+          <div className="land-l__stat">
+            <div className="land-l__stat__n">2.5×</div>
+            <div className="land-l__stat__l">average career growth for AI-fluent professionals</div>
+          </div>
+          <div className="land-l__stat">
+            <div className="land-l__stat__n">73%</div>
+            <div className="land-l__stat__l">of business roles now require AI fluency</div>
+          </div>
+          {!compact && (
+            <div className="land-l__stat">
+              <div className="land-l__stat__n">12 mo</div>
+              <div className="land-l__stat__l">before the gap becomes uncatchable</div>
+            </div>
+          )}
+        </div>
+
+        <div className="land-l__checks">
+          <div className="land-l__check">
+            <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
+            Skill Gap Assessment
+          </div>
+          <div className="land-l__check">
+            <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
+            Personalized AI Roadmap
+          </div>
+          <div className="land-l__check">
+            <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
+            Curriculum Match Score
+          </div>
+          {!compact && (
+            <div className="land-l__check">
+              <span className="land-l__check__icon"><Icon name="check" size={12} /></span>
+              Career Transition Path
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div></div>
+    </div>
+  );
+}
+
+/* ============================================================
    STAGE 2 - ROLE SELECTION (verbatim from live site)
    ============================================================ */
 const ROLES = [
@@ -740,7 +755,9 @@ const ROLES = [
 function RoleSelect({ onBack, onContinue }) {
   const [selected, setSelected] = useState(null);
   return (
-    <section className="role">
+    <section className="land land--role">
+      <ContextPanel compact />
+      <div className="role role--paired">
       <div className="role__inner">
         <div className="role__eyebrow">Step 1 of 2</div>
         <h2 className="role__title">What do you do?</h2>
@@ -783,6 +800,7 @@ function RoleSelect({ onBack, onContinue }) {
             <Icon name="arrow_right" size={16} />
           </button>
         </div>
+      </div>
       </div>
     </section>
   );
