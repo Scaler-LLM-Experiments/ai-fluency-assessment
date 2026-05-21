@@ -413,7 +413,11 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
   const nameValid = name.trim().length > 1;
   const emailValid = /\S+@\S+\.\S+/.test(email.trim());
   const phoneValid = phone.replace(/\D/g, "").length >= 10;
-  const canRequestOtp = nameValid && emailValid && phoneValid && !!turnstileToken;
+  // Don't gate the CTA on turnstileToken — Brave/ad-blockers/network issues
+  // can prevent the widget from issuing a token, leaving the user stuck with
+  // a permanently-disabled button. Let them click; sendOtp() surfaces a
+  // visible error if the token is missing.
+  const canRequestOtp = nameValid && emailValid && phoneValid;
   const otpDigits = digits.join("");
   const otpComplete = /^\d{6}$/.test(otpDigits);
   const otpSent = otpPhase === "sent" || otpPhase === "verifying";
@@ -1409,18 +1413,21 @@ function App() {
         const user = await fetchLoggedInUser(jwt);
         if (cancelled) return;
         if (user) setSessionUser(user);
-        if (user && user.phoneVerified && user.phone) {
-          // Skip landing + OTP entirely. Hydrate identity and jump to role.
+        // An active scaler.com session is itself a verification — skip OTP
+        // for any logged-in user, matching career-profile-tool's behavior.
+        // We require a phone for downstream lead tracking; if missing, fall
+        // through to OTP so the user supplies one.
+        if (user && user.phone) {
           const hydrated = { name: user.name, email: user.email, phone: user.phone };
           setLead(hydrated);
           setTrackingLead(hydrated);
-          trackEvent("session_resumed", { phone_verified: true });
+          trackEvent("session_resumed", { phone_verified: user.phoneVerified });
           trackEvent("started");
           setStage("role");
           return;
         }
-        // Logged in but no verified phone — still treat as anonymous so the
-        // OTP step runs. Pre-fill what we know.
+        // Logged in but no phone on file — fall through to OTP. Pre-fill
+        // name/email so the user only types phone.
         if (user) {
           const partial = { name: user.name, email: user.email, phone: user.phone };
           setLead(partial);
