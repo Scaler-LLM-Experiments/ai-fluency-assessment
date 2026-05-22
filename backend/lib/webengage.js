@@ -38,7 +38,7 @@ async function trackEvent(userId, eventName, eventData = {}, userAttributes = {}
     return;
   }
 
-  const url = `https://api.webengage.com/v2/accounts/${LICENSE}/events`;
+  const url = `https://api.webengage.com/v1/accounts/~99198a91/events`;
   const payload = {
     userId,
     events: [
