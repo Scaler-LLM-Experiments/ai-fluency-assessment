@@ -1380,6 +1380,7 @@
    TRACKING
 ───────────────────────────────────────────────────── */
 const SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwWoIPtW0JbpmKFVv-QM7nafQtC_-zddafcNwoazpynvf9zCXWeNOdU0bLU9VxPFX7qUQ/exec';
+const BACKEND_TRACK_URL = 'https://ai-fluency-backend-production.up.railway.app/api/track';
 
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -1443,6 +1444,11 @@ function trackEvent(eventType, data = {}) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   }).catch(() => {});
+  fetch(BACKEND_TRACK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
 }
 
 /* ─────────────────────────────────────────────────────
@@ -1476,6 +1482,7 @@ function handleLogin(e) {
   state.email = document.getElementById('inp-email').value.trim();
   state.phone = document.getElementById('inp-phone').value.trim();
   trackEvent('started');
+  trackEvent('otp_verified');
   buildRoleScreen();
   showScreen('screen-role');
 }
@@ -1607,7 +1614,7 @@ function buildResultsScreen() {
   state._band  = band.label;
 
   // Fire completed event
-  const payload = { score: total, band: band.label };
+  const payload = { score: total, band: band.label, role: state.role };
   skills.forEach((s, i) => {
     payload[`skill_${i+1}_name`]  = s.area;
     payload[`skill_${i+1}_level`] = scores[i];
