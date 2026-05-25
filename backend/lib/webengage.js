@@ -38,28 +38,19 @@ async function trackEvent(userId, eventName, eventData = {}, userAttributes = {}
     return;
   }
 
-  const url = `https://api.webengage.com/v1/accounts/~99198a91/events`;
+  const url = `https://api.webengage.com/v1/accounts/~134105a60/events`;
   const payload = {
     userId,
-    events: [
-      {
-        eventName,
-        eventTime: new Date().toISOString(),
-        eventData,
-      },
-    ],
+    eventName,
+    eventData,
   };
-
-  if (Object.keys(userAttributes).length > 0) {
-    payload.userAttributes = userAttributes;
-  }
 
   try {
     const { status, body } = await post(url, payload);
     if (status < 200 || status >= 300) {
       console.error(`[webengage] "${eventName}" failed: HTTP ${status} — ${body}`);
     } else {
-      console.log(`[webengage] "${eventName}" sent successfully`);
+      console.log(`[webengage] "${eventName}" sent — ${body}`);
     }
   } catch (err) {
     console.error(`[webengage] "${eventName}" error:`, err.message);
