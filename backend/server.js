@@ -215,14 +215,6 @@ app.post('/api/track', async (req, res) => {
             phone: d.phone || '',
             email: d.email || '',
             name: d.name || ''
-          },
-          {
-            current_role: d.role || '',
-            total_work_experience: d.work_experience || '',
-            career_goals: d.career_goals || '',
-            phone: d.phone || '',
-            email: d.email || '',
-            name: d.name || ''
           }
         );
         break;
