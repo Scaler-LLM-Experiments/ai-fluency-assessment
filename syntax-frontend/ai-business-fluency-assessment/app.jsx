@@ -87,6 +87,154 @@ function setTrackingLead({ name, email, phone }) {
   TRACK_STATE.email = email || "";
   TRACK_STATE.phone = phone || "";
 }
+
+/* ============================================================
+   GTM Tracker — ported from career-profile-evaluation's
+   frontend/src/utils/tracker.js so the AI Fluency Assessment
+   shares the same dataLayer infrastructure. Only the product
+   identifier strings are renamed (career_profile_evaluation
+   -> ai_fluency_assessment); the structure, gating, and
+   server-event flow are identical.
+   ============================================================ */
+const GTMEventType = {
+  PAGE_VIEW: "we_page_load",
+  SECTION_VIEW: "gtm_section_view",
+  CLICK: "gtm_custom_click",
+  HOVER: "hover",
+  FORM_SUBMIT_STATUS: "form_submit_status",
+  FORM_INPUT: "ai_fluency_assessment_form_input_click",
+  CTA_CLICK: "ai_fluency_assessment_cta_click",
+  SET_USER_ATTRIBUTE: "set_user_attribute",
+};
+
+const PRODUCT_ID = "ai_fluency_assessment";
+const SUB_PRODUCT_ID = "free_evaluation";
+
+const Tracker = (function () {
+  function _initDataLayer() {
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+  }
+  function _pageAttrs() {
+    const url = new URL(window.location.href);
+    return {
+      page_title: document.title,
+      page_path: url.pathname,
+      page_url: url.href,
+      query_params: Object.fromEntries(url.searchParams.entries()),
+    };
+  }
+
+  const state = {
+    isEnabled: true,
+    shouldTrack: true,
+    isLoggedIn: false,
+    superAttributes: { attributes: {}, custom: {} },
+    pendingServerEvents: [],
+    pageViewFired: false,
+    product: PRODUCT_ID,
+    subProduct: SUB_PRODUCT_ID,
+  };
+
+  _initDataLayer();
+
+  function setSuperAttributes(next) {
+    state.superAttributes = {
+      attributes: { ...state.superAttributes.attributes, ...(next.attributes || {}) },
+      custom: { ...state.superAttributes.custom, ...(next.custom || {}) },
+    };
+  }
+  function setLoggedIn(v) { state.isLoggedIn = !!v; }
+
+  function _push(payload) {
+    if (!state.isEnabled || typeof window === "undefined") return;
+    window.dataLayer.push({ _clear: true, ...payload });
+  }
+
+  function _envelope(event, attrs = {}) {
+    const { custom: c1 = {}, attributes: a1 = {} } = state.superAttributes;
+    const { custom: c2, ...rest } = attrs || {};
+    return {
+      event,
+      attributes: {
+        is_logged_in: state.isLoggedIn,
+        product: state.product,
+        sub_product: state.subProduct,
+        ...a1,
+        ...rest,
+      },
+      custom_attributes: { ...c1, ...(c2 || {}) },
+    };
+  }
+
+  function _flushPending() {
+    if (!state.pendingServerEvents.length) return;
+    const q = state.pendingServerEvents;
+    state.pendingServerEvents = [];
+    q.forEach((fn) => { try { fn(); } catch (_) {} });
+  }
+
+  function trackEnvelope(event, attrs) {
+    if (!state.isEnabled) return;
+    _push(_envelope(event, attrs));
+    if (event === GTMEventType.PAGE_VIEW && !state.pageViewFired) {
+      state.pageViewFired = true;
+      _flushPending();
+    }
+  }
+
+  function pushRawEvent(evt) {
+    if (!state.isEnabled || typeof window === "undefined") return;
+    const fn = () => _push(evt);
+    if (!state.pageViewFired) { state.pendingServerEvents.push(fn); return; }
+    fn();
+  }
+
+  function pushServerEvent({ event, action, userAttributes = {} }) {
+    if (!state.isEnabled || typeof window === "undefined") return;
+    const filtered = Object.fromEntries(
+      Object.entries(userAttributes).filter(([, v]) => v !== null && v !== undefined)
+    );
+    const payload = {
+      event,
+      action,
+      label: undefined,
+      value: undefined,
+      category: undefined,
+      user_attributes: filtered,
+      attributes: { ...state.superAttributes.attributes, ...filtered },
+    };
+    const fn = () => window.dataLayer.push(payload);
+    if (!state.pageViewFired) { state.pendingServerEvents.push(fn); return; }
+    fn();
+  }
+
+  function pageview(extra = {}) {
+    setSuperAttributes({ attributes: _pageAttrs() });
+    trackEnvelope(GTMEventType.PAGE_VIEW, { ..._pageAttrs(), ...extra });
+  }
+  function click(attrs) { trackEnvelope(GTMEventType.CLICK, attrs); }
+  function sectionView(attrs) { trackEnvelope(GTMEventType.SECTION_VIEW, attrs); }
+  function hover(attrs) { trackEnvelope(GTMEventType.HOVER, attrs); }
+  function formSubmitStatus(attrs) { trackEnvelope(GTMEventType.FORM_SUBMIT_STATUS, attrs); }
+  function formInput(attrs) { trackEnvelope(GTMEventType.FORM_INPUT, attrs); }
+  function ctaClick(attrs) { trackEnvelope(GTMEventType.CTA_CLICK, attrs); }
+  function setUserAttribute(userAttributes = {}) {
+    pushServerEvent({
+      event: GTMEventType.SET_USER_ATTRIBUTE,
+      action: GTMEventType.SET_USER_ATTRIBUTE,
+      userAttributes,
+    });
+  }
+
+  return {
+    setSuperAttributes, setLoggedIn,
+    pageview, click, sectionView, hover, formSubmitStatus, formInput, ctaClick,
+    setUserAttribute, pushRawEvent, pushServerEvent,
+    EventType: GTMEventType,
+  };
+})();
+
 function trackEvent(event, data = {}) {
   const payload = {
     user_id: TRACK_STATE.userId,
@@ -116,10 +264,23 @@ function trackEvent(event, data = {}) {
       keepalive: true,
     }).catch(() => {});
   } catch (e) {}
-  try {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event, ...payload });
-  } catch (e) {}
+  // Mirror to dataLayer through the Tracker so superAttributes, page-view
+  // gating, and the standard envelope shape are applied uniformly.
+  try { Tracker.pushRawEvent({ event, ...payload }); } catch (e) {}
+}
+
+function identifyLead({ name, email, phone, role } = {}) {
+  setTrackingLead({ name, email, phone });
+  Tracker.setLoggedIn(true);
+  Tracker.setUserAttribute({
+    user_id: TRACK_STATE.userId,
+    name: name || "",
+    email: email || "",
+    phone: phone || "",
+    role: role || "",
+    product: PRODUCT_ID,
+    sub_product: SUB_PRODUCT_ID,
+  });
 }
 
 /* ---------- Scaler OTP auth (signup + verify) ---------- */
@@ -518,6 +679,7 @@ function Landing({ onVerified, initialValues, initialTurnstileToken }) {
       return;
     }
     trackEvent("otp_verified");
+    identifyLead({ name: name.trim(), email: email.trim(), phone: otpSentTo });
     onVerified({ name: name.trim(), email: email.trim(), phone: otpSentTo, turnstileToken });
   };
 
@@ -1401,6 +1563,7 @@ function App() {
   };
 
   React.useEffect(() => {
+    Tracker.pageview();
     trackEvent("page_loaded");
     let cancelled = false;
     (async () => {
@@ -1424,7 +1587,7 @@ function App() {
         if (user && user.phone) {
           const hydrated = { name: user.name, email: user.email, phone: user.phone };
           setLead(hydrated);
-          setTrackingLead(hydrated);
+          identifyLead(hydrated);
           trackEvent("session_resumed", { phone_verified: user.phoneVerified });
           trackEvent("started");
           setStage("role");
@@ -1435,7 +1598,7 @@ function App() {
         if (user) {
           const partial = { name: user.name, email: user.email, phone: user.phone };
           setLead(partial);
-          setTrackingLead(partial);
+          identifyLead(partial);
           trackEvent("session_resumed", { phone_verified: false });
         }
       }
@@ -1476,6 +1639,7 @@ function App() {
           onContinue={async (r) => {
             setRole(r);
             trackEvent("role_selected", { role: r });
+            try { Tracker.setUserAttribute({ role: r }); } catch (_) {}
             await loadRoleData(r);
             setStage("quiz");
           }}
