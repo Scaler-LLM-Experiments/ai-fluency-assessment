@@ -108,7 +108,84 @@ const GTMEventType = {
 };
 
 const PRODUCT_ID = "ai_fluency_assessment";
-const SUB_PRODUCT_ID = "free_evaluation";
+const SUB_PRODUCT_ID = "opgp";
+const PIXEL_ID = "opgp";
+const PROGRAM_ID = "opgp";
+const COMPANY_ID = "scaler";
+const REGION_ID = "india";
+const FORM_TYPE = "form_first";
+
+function _readCookie(name) {
+  if (typeof document === "undefined") return "";
+  const m = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"));
+  return m ? decodeURIComponent(m[1]) : "";
+}
+function _googleClientId() {
+  const ga = _readCookie("_ga");
+  if (!ga) return "";
+  const parts = ga.split(".");
+  return parts.length >= 4 ? parts.slice(-2).join(".") : ga;
+}
+function _device() {
+  if (typeof navigator === "undefined") return "desktop";
+  const ua = navigator.userAgent || "";
+  if (/Mobi|Android|iPhone|iPod/i.test(ua)) return "mobile";
+  if (/iPad|Tablet/i.test(ua)) return "tablet";
+  return "desktop";
+}
+function _isoDate() { return new Date().toISOString(); }
+function _tzOffset() { return new Date().getTimezoneOffset(); }
+function _isIframe() { try { return window.self !== window.top; } catch (_) { return true; } }
+function _utmPropagation() {
+  try {
+    const sp = new URL(window.location.href).searchParams;
+    const keys = ["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","fbclid"];
+    const out = {};
+    keys.forEach(k => { const v = sp.get(k); if (v) out[k] = v; });
+    return out;
+  } catch (_) { return {}; }
+}
+function _visitDetails() {
+  try {
+    const KEY = "afa_visit_details";
+    const raw = localStorage.getItem(KEY);
+    const now = new Date().toISOString();
+    let v = raw ? JSON.parse(raw) : { visit_count: 0, first_visit_at: now, last_visit_at: null };
+    v.visit_count = (v.visit_count || 0) + 1;
+    v.last_visit_at = now;
+    localStorage.setItem(KEY, JSON.stringify(v));
+    return v;
+  } catch (_) { return { visit_count: 1, first_visit_at: _isoDate(), last_visit_at: _isoDate() }; }
+}
+function buildStandardAttrs({ subproduct = SUB_PRODUCT_ID } = {}) {
+  const url = (typeof window !== "undefined") ? new URL(window.location.href) : null;
+  return {
+    pixel: PIXEL_ID,
+    program: PROGRAM_ID,
+    product: PRODUCT_ID,
+    subproduct,
+    company: COMPANY_ID,
+    region: REGION_ID,
+    request_source: "web",
+    isFreeProductUser: true,
+    form_type: FORM_TYPE,
+    device: _device(),
+    iframe: _isIframe(),
+    cu_date: _isoDate(),
+    cu_timezone_offset: _tzOffset(),
+    google_client_id: _googleClientId(),
+    utm_propagation_params: _utmPropagation(),
+    experiments: "",
+    ab_experiments: {},
+    "referrer-url": (typeof document !== "undefined" ? document.referrer : "") || "",
+    "referrer-host": (function () { try { return document.referrer ? new URL(document.referrer).host : ""; } catch (_) { return ""; } })(),
+    visit_details: _visitDetails(),
+    page_title: (typeof document !== "undefined") ? document.title : "",
+    page_path: url ? url.pathname : "",
+    page_url: url ? url.href : "",
+    query_params: url ? Object.fromEntries(url.searchParams.entries()) : {},
+  };
+}
 
 const Tracker = (function () {
   function _initDataLayer() {
@@ -210,8 +287,17 @@ const Tracker = (function () {
   }
 
   function pageview(extra = {}) {
-    setSuperAttributes({ attributes: _pageAttrs() });
-    trackEnvelope(GTMEventType.PAGE_VIEW, { ..._pageAttrs(), ...extra });
+    const subproduct = extra.subproduct || "details_page";
+    const std = buildStandardAttrs({ subproduct });
+    setSuperAttributes({ attributes: std });
+    const action = subproduct === "thank_you_page" ? "thank_you_page" : "details_page";
+    trackEnvelope(GTMEventType.PAGE_VIEW, { action, ...std, ...extra });
+    // Reset gate so a second pageview (e.g. thank-you) also flushes pending events.
+    if (subproduct === "thank_you_page") state.pageViewFired = true;
+  }
+  function thankYouPageview(extra = {}) {
+    state.pageViewFired = false; // allow re-fire
+    pageview({ subproduct: "thank_you_page", ...extra });
   }
   function click(attrs) { trackEnvelope(GTMEventType.CLICK, attrs); }
   function sectionView(attrs) { trackEnvelope(GTMEventType.SECTION_VIEW, attrs); }
@@ -222,14 +308,14 @@ const Tracker = (function () {
   function setUserAttribute(userAttributes = {}) {
     pushServerEvent({
       event: GTMEventType.SET_USER_ATTRIBUTE,
-      action: GTMEventType.SET_USER_ATTRIBUTE,
+      action: userAttributes.email || userAttributes.action || GTMEventType.SET_USER_ATTRIBUTE,
       userAttributes,
     });
   }
 
   return {
     setSuperAttributes, setLoggedIn,
-    pageview, click, sectionView, hover, formSubmitStatus, formInput, ctaClick,
+    pageview, thankYouPageview, click, sectionView, hover, formSubmitStatus, formInput, ctaClick,
     setUserAttribute, pushRawEvent, pushServerEvent,
     EventType: GTMEventType,
   };
@@ -272,14 +358,30 @@ function trackEvent(event, data = {}) {
 function identifyLead({ name, email, phone, role } = {}) {
   setTrackingLead({ name, email, phone });
   Tracker.setLoggedIn(true);
+  const firstName = (name || "").trim().split(/\s+/)[0] || "";
   Tracker.setUserAttribute({
     user_id: TRACK_STATE.userId,
-    name: name || "",
     email: email || "",
-    phone: phone || "",
+    we_email: email || "",
+    we_phone: phone || "",
+    we_first_name: firstName,
+    we_whatsapp_opt_in: false,
+    cu_full_name: name || "",
+    cu_user_type: "mentee",
+    cu_free_mentee: true,
+    cu_is_parent: "",
+    cu_is_ug_enrolled: false,
+    cu_twelfth_graduation_year: "",
+    cu_year_of_graduation: "",
+    cu_months_of_experience: "",
+    mentee_is_paid: false,
     role: role || "",
+    pixel: PIXEL_ID,
+    program: PROGRAM_ID,
     product: PRODUCT_ID,
-    sub_product: SUB_PRODUCT_ID,
+    subproduct: SUB_PRODUCT_ID,
+    company: COMPANY_ID,
+    region: REGION_ID,
   });
 }
 
@@ -1273,6 +1375,10 @@ function Result({ role, lead, answers, questions, onRestart }) {
   const data = getResultDataForRole(role);
   const hiring = getHiringForRole(role);
   const [showCallback, setShowCallback] = useState(false);
+
+  React.useEffect(() => {
+    try { Tracker.thankYouPageview(); } catch (_) {}
+  }, []);
 
   const onCallback = () => {
     trackEvent("requested_callback");
