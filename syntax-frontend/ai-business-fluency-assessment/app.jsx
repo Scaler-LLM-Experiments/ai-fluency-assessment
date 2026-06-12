@@ -116,6 +116,10 @@ function trackEvent(event, data = {}) {
       keepalive: true,
     }).catch(() => {});
   } catch (e) {}
+  try {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event, ...payload });
+  } catch (e) {}
 }
 
 /* ---------- Scaler OTP auth (signup + verify) ---------- */
